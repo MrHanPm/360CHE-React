@@ -23,60 +23,29 @@ export default class Home extends React.Component {
     state = {
         components: [{
             icon: <img src={IconButton}/>,
-            label: 'Button',
-            href: '#button'
+            label: '认证手机',
+            href: '#phone'
         }, {
             icon: <img src={IconCell}/>,
-            label: 'login',
+            label: 'VIP登陆',
             href: '#login'
         }, {
             icon: <img src={IconToast}/>,
-            label: 'Toast',
-            href: '#toast'
-        }, {
-            icon: <img src={IconDialog}/>,
-            label: 'Dialog',
-            href: '#dialog'
+            label: '销售信息',
+            href: '#name'
         }, {
             icon: <img src={IconProgress}/>,
-            label: 'Progress',
-            href: '#progress'
-        }, {
-            icon: <img src={IconMsg}/>,
-            label: 'Msg',
-            href: '#msg'
-        }, {
-            icon: <img src={IconArticle}/>,
-            label: 'Article',
-            href: '#article'
-        }, {
-            icon: <img src={IconActionSheet}/>,
-            label: 'ActionSheet',
-            href: '#actionsheet'
-        }, {
-            icon: <img src={IconIcons}/>,
-            label: 'Icons',
-            href: '#icons'
-        }, {
-            icon: <img src={IconPanel}/>,
-            label: 'Panel',
-            href: '#panel'
-        }, {
-            icon: <img src={IconTab}/>,
-            label: 'Tab',
-            href: '#tab'
-        }, {
-            icon: <img src={IconSearchBar}/>,
-            label: 'SearchBar',
-            href: '#searchbar'
+            label: '销售品牌',
+            href: '#brand'
         }]
     };
 
     render() {
         return (
-            <Page className="home" title="WeUI" subTitle="为微信Web服务量身设计">
+            <Page className="home" title="SAAS1.2" subTitle="页面路由入口">
                 <Grids data={this.state.components}/>
             </Page>
         );
     }
 };
+
