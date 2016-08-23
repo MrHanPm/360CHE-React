@@ -12,6 +12,7 @@ import Name from './pages/name/index';
 import Login from './pages/login/index';
 import Phone from './pages/testPhone/index';
 import Brand from './pages/brand/index';
+import Nav from './pages/nav/index';
 
 class App extends React.Component {
         render() {
@@ -39,6 +40,7 @@ ReactDOM.render((
             <Route path="login" component={Login}/>
             <Route path="name" component={Name}/>
             <Route path="brand" component={Brand}/>
+            <Route path="nav" component={Nav}/>
         </Route>
     </Router>
 ), document.getElementById('container'));

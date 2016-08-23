@@ -1,0 +1,56 @@
+.weui_tabbar{
+    background: #fff;
+}
+.weui_tabbar_icon+.weui_tabbar_label{
+    margin-bottom: 3px;
+    margin-top: 0;
+}
+.weui_article{padding: 0;}
+.weui_tabbar_icon{margin: 2px auto 0;}
+.weui_tabbar_icon i{
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-family: 'nav_ico';
+    &:before{
+        content: '\7ebf';
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        font-size: 20px;
+        line-height: 22px;
+        color: #979797;
+    }
+}
+.weui_tabbar_icon{
+    .crm_ico:before{
+        content: '\5ba2';
+        margin-left: 2px;
+    }
+    .count_ico:before{
+        content: '\7edf';
+    }
+    .find_ico:before{
+        content: '\53d1';
+    }
+}
+
+                    
+.weui_tabbar_item.weui_bar_item_on .weui_tabbar_icon i:before{
+    color: #09bb07;
+}
+.weui_tabbar_item.weui_bar_item_on{
+    .clue_ico:before{
+        content: '\7d22';
+    }
+    .crm_ico:before{
+        content: '\6237';
+    }
+    .count_ico:before{
+        content: '\8ba1';
+    }
+    .find_ico:before{
+        content: '\73b0';
+    }
+}

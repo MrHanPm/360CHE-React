@@ -1,0 +1,111 @@
+.clueNav{
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    li{
+        width: 25%;
+        height: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        line-height: 45px;
+        float: left;
+    }
+    .active{
+        border-bottom: 2px solid #00B800;
+    }
+}
+.clueBody{
+    padding-top: 20px;
+}
+.weui_media_hd{
+    float: right;
+    width: 30%;
+    height: 50px;
+    padding-left: 20px;
+    margin-top: 34px;
+    .weui_btn{
+        font-size: 14px;
+        line-height: 34px;
+        padding:0 10px;
+    }
+}
+
+.butX{
+    width: 45px;
+    height: 45px;
+    border-radius: 100px;
+    background: #09bb07;
+    box-shadow: 0 0 6px #ababab;
+    position: absolute;
+    bottom: 14%;
+    right: 20px;
+    z-index: 16;
+    font-family: 'user_ico';
+}
+.butX:before{
+    content: '\e600';
+    color: #fff;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    line-height: 45px;
+    text-align: center;
+    font-size: 20px;
+}
+.bgBox{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,.8);
+    z-index: 10;
+}
+.clueBtnX{
+    position: absolute;
+    width: 120px;
+    height: auto;
+    bottom: 20%;
+    right: 25px;
+    z-index: 16;
+    span{
+        display: block;
+        width: 100%;
+        height: 40px;
+        margin:15px 0;
+        font-family: 'user_ico';
+    }
+    span:before{
+        content: '速抢线索';
+        display:inline-block;
+        width: 60%;
+        height: 30px;
+        float: left;
+        color: #666;
+        background: #fff;
+        box-shadow: 0 0 6px #ccc;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 30px;
+        margin-top: 3px;
+    }
+    span:after{
+        content: '\e601';
+        display:inline-block;
+        width: 36px;
+        height: 36px;
+        color: #666;
+        font-size: 26px;
+        float: right;
+        background: #fff;
+        box-shadow: 0 0 6px #ccc;
+        border-radius: 100px;
+        text-align: center;
+        line-height: 36px;
+    }
+    .butX_add:before{
+        content: '添加线索';
+    }
+    .butX_add:after{
+        content: '\e602';
+        font-size: 24px;
+    }
+}

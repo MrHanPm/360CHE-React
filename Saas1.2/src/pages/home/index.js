@@ -37,6 +37,10 @@ export default class Home extends React.Component {
             icon: <img src={IconProgress}/>,
             label: '销售品牌',
             href: '#brand'
+        }, {
+            icon: <img src={IconMsg}/>,
+            label: '线索导航页',
+            href: '#nav'
         }]
     };
 

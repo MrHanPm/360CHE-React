@@ -19,5 +19,5 @@
 进入项目  cd 360CHE-React/Saas1.2
 加载插件  npm install
 启动服务  npm start
-打包生产  npm build:src
+打包生产  npm run build:src
 ```
