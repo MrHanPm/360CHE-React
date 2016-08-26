@@ -1,8 +1,8 @@
-import merged from 'obj-merged';
-import * as config from './Config/Config';
+import * as config from './config.js';
 
 const {target} = config;
 const Tool = {};
+Tool.HTTPs = target;
 /**
  * 发送ajax请求和服务器交互
  * @param {object} mySetting 配置ajax的配置
@@ -176,5 +176,25 @@ Tool.removeLocalItem = function (key) {
     }
     return localStorage.removeItem();
 }
+//验证手机号
+Tool.checkPhone = function (phone){
+    if((/^1[3|4|5|7|8]\d{9}$/.test(phone))){ return true; }else{return false;}
+}
 
-export {Tool, merged, config}
+
+//弹窗提示的封装
+var Alert = {};
+Alert.to = function(val) {
+        let t
+        t && clearTimeout(t)
+        let AlertCont = document.getElementById("AlertCont");
+        let AlertTxt = document.getElementById("AlertTxt");
+        AlertTxt.innerHTML = val;
+        AlertCont.setAttribute('class','notification notification-in');
+        t = setTimeout(() => Alert.out(),4000)
+}
+Alert.out = function(){
+    let AlertCont = document.getElementById("AlertCont");
+    AlertCont.setAttribute('class','notification');
+}
+export {Tool , Alert}

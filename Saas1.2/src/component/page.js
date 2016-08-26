@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './page.less';
+import ShowAlert from './Alert.js'
 
 export default class Page extends React.Component {
     render() {
@@ -16,6 +17,7 @@ export default class Page extends React.Component {
                 <div className={`bd ${spacing ? 'spacing' : ''}`}>
                     {children}
                 </div>
+                <ShowAlert />
             </section>
         );
     }
