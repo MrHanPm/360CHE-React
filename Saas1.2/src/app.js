@@ -13,6 +13,7 @@ import Login from './pages/login/index';
 import Phone from './pages/testPhone/index';
 import Brand from './pages/brand/index';
 import Nav from './pages/nav/index';
+import LoadMsg from './pages/msg/loading';
 
 class App extends React.Component {
         render() {
@@ -36,6 +37,7 @@ ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Home}/>
+            <Route path="loading" component={LoadMsg}/>
             <Route path="phone" component={Phone}/>
             <Route path="login" component={Login}/>
             <Route path="name" component={Name}/>

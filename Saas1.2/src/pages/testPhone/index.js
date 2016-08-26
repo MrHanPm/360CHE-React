@@ -4,6 +4,7 @@ import React from 'react';
 import { ButtonArea,
     Button,
     Cells,
+    Toast,
     CellsTitle,
     CellsTips,
     Cell,
@@ -22,7 +23,7 @@ import { ButtonArea,
     Select,
     Uploader
 } from 'react-weui';
-
+import { browserHistory } from 'react-router'
 import Page from '../../component/page';
 import {Tool,target,Alert} from '../../tool.js';
 
@@ -32,6 +33,9 @@ export default class CellDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            showToast: false,
+            toastTimer: null,
+            countdown:10,
             phone:'',
             vcode:'',
             mcode:'',
@@ -55,26 +59,18 @@ export default class CellDemo extends React.Component {
         this.goNext = this.goNext.bind(this);
     }
     componentDidMount() {
-        Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,captcha:this.state.vcode},
-            (res) => {
-                console.log(res)
-            },
-            (err) => {
-                
-            }
-        )
+        document.title="手机认证"
         this.getVcode();
-
     }
+
     //获取图形验证码
     getVcode(e){
         this.getvcodes(e);
-        let ji = Math.random();
-        //console.log(ji,"+1");
+        let numb = Math.random();
         let t
         t && clearTimeout(t)
         t = setTimeout(() => {
-            let srcs = Tool.HTTPs + 'Comm/Captcha.aspx?&'+ji;
+            let srcs = Tool.HTTPs + 'Comm/Captcha.aspx?&'+ numb;
             this.setState({
                 iscode: false,
                 vcodeSrc:srcs
@@ -101,13 +97,17 @@ export default class CellDemo extends React.Component {
         return true;
     }
     //获取验证码
-    getMcode(){
+    getMcode(e){
+        let Btns = e.target;
         if(Tool.checkPhone(this.state.phone)){
             if(this.state.vcode == '' || this.state.vcode.length == 0){
                 Alert.to("请输入图形码数字");
             }else if(this.state.vcode.length !== 4){
                 Alert.to("图形码位数不正确");
             }else{
+                
+                this.settime(Btns);
+                this.showToast();
                 Tool.get('User/SendSMSYanMa.aspx',{tel:this.state.phone,captcha:this.state.vcode},
                     (res) => {
                         if(res.status !== 1){
@@ -118,22 +118,61 @@ export default class CellDemo extends React.Component {
                         Alert.to(res.msg);
                     },
                     (err) => {
-                        Alert.to(res.msg);
+                        Alert.to(err.msg);
                     }
                 )
+
             }
         }else{
             Alert.to("请输入正确手机号");
+        }
+    }
+    showToast() {
+        this.setState({showToast: true});
+
+        this.state.toastTimer = setTimeout(()=> {
+            this.setState({showToast: false});
+        }, 2000);
+    }
+    settime(obj) {
+        let t
+        if (this.state.countdown == 0) { 
+            obj.removeAttribute("disabled");
+            obj.setAttribute('class','weui_btn weui_btn_primary weui_btn_mini');  
+            obj.innerHTML="重新获取"; 
+            this.setState({countdown:10})
+            clearTimeout(t)
+        } else {
+            obj.setAttribute("disabled", true); 
+            obj.setAttribute('class','weui_btn weui_btn_default weui_btn_disabled weui_btn_mini');
+            obj.innerHTML="重新发送(" + this.state.countdown + "s)"; 
+            let s = this.state.countdown;
+            s--;
+            this.setState({countdown:s});
+            t = setTimeout(() => this.settime(obj),1000);
         }
     }
     goNext(){
         if(this.checkForm()){
             Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,captcha:this.state.mcode},
                 (res) => {
-                    console.log(res)
+                    switch(res.status){
+                        case 1 :
+                            browserHistory.push('#nav')
+                            break;
+                        case 880 :
+                            Alert.to(res.msg);
+                            break;
+                        case 881 :
+                            Alert.to(res.msg);
+                            break;
+                        case 912 :
+                            browserHistory.push('#login')
+                            break;
+                    }
                 },
                 (err) => {
-                    
+                    Alert.to(err.msg);
                 }
             )
         }
@@ -181,6 +220,7 @@ export default class CellDemo extends React.Component {
                 <ButtonArea>
                     <Button onClick={this.goNext}>确定</Button>
                 </ButtonArea>
+                <Toast show={this.state.showToast}>验证码已发送</Toast>
                 <p className="FootTxt">验证手机号码，使用升级版营销助手<br/>手机号码仅用于登录和保护账号安全</p>
             </Page>
         );

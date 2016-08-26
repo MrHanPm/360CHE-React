@@ -22,6 +22,10 @@ export default class Home extends React.Component {
 
     state = {
         components: [{
+            icon: <img src={IconIcons}/>,
+            label: '初始加载页',
+            href: '#loading'
+        },{
             icon: <img src={IconButton}/>,
             label: '认证手机',
             href: '#phone'

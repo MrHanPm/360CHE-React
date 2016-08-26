@@ -22,24 +22,68 @@ import { ButtonArea,
     Select,
     Uploader
 } from 'react-weui';
+import { browserHistory } from 'react-router'
 import Page from '../../component/page';
+import {Tool,target,Alert} from '../../tool.js';
 
 export default class CellDemo extends React.Component {
-    state = {
-        
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            name:'',
+            pwd:'',
+            mcode:'',
+            iscode: false
+        };
+        this.nameInput = (e) => {
+            this.state.name = e.target.value;
+        }
+        this.pswInput = (e) => {
+            this.state.pwd = e.target.value;
+        }
 
+        this.goNext = this.goNext.bind(this);
+    }
+    componentDidMount() {
+        document.title="账号登陆"
+    }
+    checkForm(){
+        if(this.state.name == '' || this.state.name.length == 0){
+            Alert.to("请输入VIP账号");
+            return false;
+        }
+        if(this.state.pwd == '' || this.state.pwd.length == 0){
+            Alert.to("请输入密码");
+            return false;
+        }
+        return true;
+    }
+    goNext(){
+        if(this.checkForm()){
+            Tool.get('User/Login.aspx',{username:this.state.name,pwd:this.state.pwd,apptype:'weixin'},
+                (res) => {
+                    if(res.status === 1){
+                        browserHistory.push('#name');
+                    }else{
+                        Alert.to(res.msg);
+                    }
+                },
+                (err) => {
+                    Alert.to(err.msg);
+                }
+            )
+        }
+    }
     render() {
         return (
             <Page className="login" title="账号登录">
-
                 <Form>
                     <FormCell>
                         <CellHeader>
                             <Label>账号</Label>
                         </CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请输入您的VIP账号" />
+                            <Input type="text" placeholder="请输入您的VIP账号" onInput={this.nameInput} />
                         </CellBody>
                     </FormCell>
 
@@ -48,14 +92,14 @@ export default class CellDemo extends React.Component {
                             <Label>密码</Label>
                         </CellHeader>
                         <CellBody>
-                            <Input type="password" placeholder="请输入您的密码" />
+                            <Input type="password" placeholder="请输入您的密码" onInput={this.pswInput} />
                         </CellBody>
                     </FormCell>
 
                 </Form>
 
                 <ButtonArea>
-                    <Button>登录</Button>
+                    <Button onClick={this.goNext}>登录</Button>
                 </ButtonArea>
                 <p className="FootTxt">如遇登录问题，欢迎致电 <i>4006-136-188</i><br/>致电时间：周一至周日09:00~18:00</p>
             </Page>
