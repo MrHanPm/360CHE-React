@@ -22,18 +22,15 @@ import { ButtonArea,
     Select,
     Uploader
 } from 'react-weui';
-import { browserHistory } from 'react-router'
 import Page from '../../component/page';
-import {Tool,target,Alert} from '../../tool.js';
+import {Tool,Alert} from '../../tool.js';
 
-export default class CellDemo extends React.Component {
+class CellDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             name:'',
-            pwd:'',
-            mcode:'',
-            iscode: false
+            pwd:''
         };
         this.nameInput = (e) => {
             this.state.name = e.target.value;
@@ -47,6 +44,7 @@ export default class CellDemo extends React.Component {
     componentDidMount() {
         document.title="账号登陆"
     }
+
     checkForm(){
         if(this.state.name == '' || this.state.name.length == 0){
             Alert.to("请输入VIP账号");
@@ -63,7 +61,10 @@ export default class CellDemo extends React.Component {
             Tool.get('User/Login.aspx',{username:this.state.name,pwd:this.state.pwd,apptype:'weixin'},
                 (res) => {
                     if(res.status === 1){
-                        browserHistory.push('#name');
+                        Tool.localItem('vipLodData',res.data);
+                        this.context.router.push({
+                            pathname: '/name'
+                        });
                     }else{
                         Alert.to(res.msg);
                     }
@@ -106,3 +107,9 @@ export default class CellDemo extends React.Component {
         );
     }
 };
+
+CellDemo.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default CellDemo

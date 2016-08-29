@@ -23,13 +23,12 @@ import { ButtonArea,
     Select,
     Uploader
 } from 'react-weui';
-import { browserHistory } from 'react-router'
 import Page from '../../component/page';
 import {Tool,target,Alert} from '../../tool.js';
 
 import vcodeSrc from './images/vcode.jpg';
 
-export default class CellDemo extends React.Component {
+class CellDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -113,15 +112,14 @@ export default class CellDemo extends React.Component {
                         if(res.status !== 1){
                             this.setState({
                                 iscode: true
-                            })
+                            });
+                            Alert.to(res.msg);
                         }
-                        Alert.to(res.msg);
                     },
                     (err) => {
                         Alert.to(err.msg);
                     }
                 )
-
             }
         }else{
             Alert.to("请输入正确手机号");
@@ -154,21 +152,18 @@ export default class CellDemo extends React.Component {
     }
     goNext(){
         if(this.checkForm()){
-            Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,captcha:this.state.mcode},
+            Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,vercode:this.state.mcode},
                 (res) => {
-                    switch(res.status){
-                        case 1 :
-                            browserHistory.push('#nav')
-                            break;
-                        case 880 :
-                            Alert.to(res.msg);
-                            break;
-                        case 881 :
-                            Alert.to(res.msg);
-                            break;
-                        case 912 :
-                            browserHistory.push('#login')
-                            break;
+                    if(res.status === 1){
+                        this.context.router.push({
+                            pathname: '/nav'
+                        });
+                    }else if(res.status === 912){
+                        this.context.router.push({
+                            pathname: '/login'
+                        });
+                    }else{
+                        Alert.to(res.msg);
                     }
                 },
                 (err) => {
@@ -227,3 +222,8 @@ export default class CellDemo extends React.Component {
     }
 };
 
+CellDemo.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default CellDemo

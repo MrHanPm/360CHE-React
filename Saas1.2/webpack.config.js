@@ -47,7 +47,8 @@ module.exports = {
             mangle: false
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src/index.html')//模板文件所在地址
+            template: path.join(__dirname, 'src/index.html'),//模板文件所在地址
+            hash:true,
         }),
         new OpenBrowserPlugin({ url: 'http://localhost:8080' })
     ]

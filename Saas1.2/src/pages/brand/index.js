@@ -23,13 +23,25 @@ import { ButtonArea,
     Uploader
 } from 'react-weui';
 import Page from '../../component/page';
-
+import {Tool,Alert} from '../../tool.js';
 
 export default class CellDemo extends React.Component {
-    state = {
-        
-    };
-
+    constructor(props){
+        super(props);
+        this.state = {
+            brands:''
+        }
+    }
+    componentDidMount() {
+        Tool.get('WeiXin/GetWXDealerUserAddBrand.aspx',{},
+                (res) => {
+                   
+                },
+                (err) => {
+                    Alert.to(err.msg);
+                }
+            )
+    }
     render() {
         return (
             <Page className="brand" title="销售品牌">

@@ -1,28 +1,35 @@
 "use strict";
 
 import React from 'react';
-import { browserHistory } from 'react-router'
 import {Button, Msg} from 'react-weui';
 import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
 import './loading.less';
-export default class MsgDemo extends React.Component {
+class MsgDemo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
 
-    state = {
-
-    };
     componentDidMount() {
         document.title="Loading"
-        Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,captcha:this.state.vcode},
+        Tool.get('WeiXin/BindTel.aspx',{},
             (res) => {
                 if(res.status === 910){
-                    browserHistory.push('#phone')
+                    this.context.router.push({
+                        pathname: '/phone'
+                    });
+                }else if(res.status === 1){
+                    this.context.router.push({
+                        pathname: '/nav'
+                    });
                 }else{
-                    browserHistory.push('#nav')
+                    Alert.to(res.msg);
                 }
             },
             (err) => {
-                
+                Alert.to(err);
             }
         )
     }
@@ -36,3 +43,9 @@ export default class MsgDemo extends React.Component {
         );
     }
 };
+
+MsgDemo.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default MsgDemo
