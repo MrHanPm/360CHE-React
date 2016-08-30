@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>客户联系人</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/0.4.2/weui.min.css" />
+	<link rel="stylesheet" href="../css/wechat.css" />
+</head>
+<body>
+	<!-- loading -->
+	<div id="loadingToast" class="weui_loading_toast">
+	    <div class="weui_mask_transparent"></div>
+	    <div class="weui_toast">
+	        <div class="weui_loading">
+	            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+	        </div>
+	        <p class="weui_toast_content">数据加载中</p>
+	    </div>
+	</div>
+
+	<!-- Container -->
+	<div id="container"></div>
+
+	<!-- template -->
+    <script type="text/html" id="tel_home">
+   		<!-- tabs -->
+		<header class="sass-flipview-tabs" id="sass_tabs" data-current="0">
+			<span>最近联系</span>
+			<span>收藏</span>
+			<span>未购车</span>
+			<span>已购车</span>
+			<i class="selected"></i>
+		</header>
+		<div class="wrapper">
+			<div class="sass-contents" id="sass_flipview" data-loop="false">
+				<div class="container contacts">
+					<!-- 最近联系 -->
+					<div class="sass-flipview-item">
+					<!-- searchbar -->
+					<div class="weui_search_bar crm-search-bar" id="search_bar">
+				        <form class="weui_search_outer">
+				            <div class="weui_search_inner">
+				                <i class="weui_icon_search"></i>
+				                <input type="search" class="weui_search_input" id="search_input" placeholder="搜索" required="">
+				                <a href="javascript:" class="weui_icon_clear" id="search_clear"></a>
+				            </div>
+				            <label for="search_input" class="weui_search_text" id="search_text">
+				                <i class="weui_icon_search"></i>
+				                <span>搜索联系人 手机号</span>
+				            </label>
+				        </form>
+				        <a href="javascript:" class="weui_search_cancel" id="search_cancel">取消</a>
+				    </div>
+						<div class="weui_panel weui_panel_access">
+							<div class="weui_panel_bd">      
+					            <div class="weui_media_box weui_media_text">
+									<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div> 
+				        </div>
+				        <div class="weui_cells_title total">8位联系人</div> 
+					</div>
+					<!-- 收藏 -->
+					<div class="sass-flipview-item">
+						<div class="weui_cells_title">A</div>
+						<div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div> 
+				        </div>
+				        <div class="weui_cells_title">W</div>
+				        <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div>
+				        </div>
+				        <div class="weui_cells_title">Z</div>
+				        <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div>
+				        </div>
+					</div>
+
+					<!-- 未购车 -->
+					<div class="sass-flipview-item">
+					    <div class="weui_cells_title">A</div>
+					    <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div> 
+					        </div> 
+				        </div>
+				        <div class="weui_cells_title">W</div>
+				        <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div>
+				        </div>
+				        <div class="weui_cells_title">Z</div>
+				        <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div>
+				        </div>
+					</div>
+
+					<!-- 已购车 -->
+					<div class="sass-flipview-item">
+					    <div class="weui_cells_title">A</div>
+					    <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div> 
+				        </div>
+				        <div class="weui_cells_title">W</div>
+					    <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div>
+					        </div> 
+				        </div>
+				        <div class="weui_cells_title">Z</div>
+				        <div class="weui_panel weui_panel_access">
+						    <div class="weui_panel_bd contacts">                     
+					            <div class="weui_media_box weui_media_text">
+					            	<a href="#/detail"> 
+						                <h4 class="weui_media_title">王小川</h4>
+						                <p class="weui_media_desc">最近联系时间：2016年12月23日 12:00</p>
+					                </a>
+					                <a href="tel:13522668480" class="sass-tel">电</a>
+					            </div> 
+					        </div> 
+				        </div>
+					</div>
+				</div>
+			</div>	
+		</div>
+
+		<!-- Tabbar -->
+	    <footer class="weui_tabbar" id="tabbar_nav">
+	        <a href="clue.html#/home" class="weui_tabbar_item">
+	            <div class="weui_tabbar_icon">
+	          		<em>线</em><em>索</em>
+	            </div>
+	            <p class="weui_tabbar_label">线索</p>
+	        </a>
+	        <a href="crm.html#/home" class="weui_tabbar_item weui_bar_item_on">
+	            <div class="weui_tabbar_icon">
+	                <em>客</em><em>户</em>
+	            </div>
+	            <p class="weui_tabbar_label">CRM</p>
+	        </a>
+	        <a href="analysis.html" class="weui_tabbar_item">
+	            <div class="weui_tabbar_icon">
+	                <em>统</em><em>计</em>
+	            </div>
+	            <p class="weui_tabbar_label">统计</p>
+	        </a>
+	        <a href="other.html#/home" class="weui_tabbar_item">
+	            <div class="weui_tabbar_icon">
+	                <em>发</em><em>现</em>
+	            </div>
+	            <p class="weui_tabbar_label">发现</p>
+	        </a>
+	    </footer>	
+
+	    <a href="#/add" class="to-filter" id="to_add">添加</a> 	
+    </script>
+	<script type="text/html" id="tel_detail">
+   		<div class="wrapper">
+	   		<div class="weui_cells_title">联系人</div>
+			<div class="weui_cells">
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>客户姓名</p>
+		            </div>
+		            <div class="weui_cell_ft">王小川</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>客户电话</p>
+		            </div>
+		            <div class="weui_cell_ft"><a href="tel:13522668480">13522668480</a></div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所属省份</p>
+		            </div>
+		            <div class="weui_cell_ft">江苏</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所属城市</p>
+		            </div>
+		            <div class="weui_cell_ft">无锡</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>详细地址</p>
+		            </div>
+		            <div class="weui_cell_ft"></div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>工作单位</p>
+		            </div>
+		            <div class="weui_cell_ft"></div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>是否购车</p>
+		            </div>
+		            <div class="weui_cell_ft">未购车</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>备注</p>
+		            </div>
+		            <div class="weui_cell_ft"></div>
+		        </div>
+		    </div>
+		    <div class="weui_panel weui_panel_access">
+		        <a href="javascript:void(0);" class="weui_panel_ft">查看线索</a>
+		    </div>
+		    <div class="weui_btn_area">
+		        <a class="weui_btn weui_btn_primary" href="javascript:" id="showTooltips">修改</a>
+		    </div>
+	    </div>
+   	</script>
+
+   	<!-- 新建客户信息模板 -->
+   	<script type="text/html" id="tel_crm_add">
+   		<div class="wrapper">
+   			<form action="" id="add_infor">
+	   			<div class="weui_cells_title">新建客户信息</div>
+	   			<div class="weui_cells">
+			        <div class="weui_cell">
+			            <div class="weui_cell_bd weui_cell_primary">
+			                <p>客户姓名</p>
+			            </div>
+			            <div class="weui_cell_ft">
+			            	<input type="text" name="name" value="" />
+			            </div>
+			        </div>
+			    </div>
+			    <div class="weui_btn_area">
+			        <button type="submit" class="weui_btn weui_btn_primary">保存</button>
+			    </div>	
+		    </form>
+   		</div>	
+   	</script>
+
+   	<!-- 线索详情模板 -->
+   	<script type="text/html" id="tel_clue_detail">
+   		<div class="wrapper">
+	   		<div class="weui_cells_title">线索详情</div>
+			<div class="weui_cells cells-collapse">
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>意向车型</p>
+		            </div>
+		            <div class="weui_cell_ft">中国重汽HOWO中国重汽HOWO中国重汽HOWO中国重 统帅</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所属类别</p>
+		            </div>
+		            <div class="weui_cell_ft">牵引车</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所属品牌</p>
+		            </div>
+		            <div class="weui_cell_ft">一汽解放</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所属系列</p>
+		            </div>
+		            <div class="weui_cell_ft">佳宝</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>客户姓名</p>
+		            </div>
+		            <div class="weui_cell_ft">刘</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>客户电话</p>
+		            </div>
+		            <div class="weui_cell_ft"><a href="tel:010-85709703">010-85709703</a></div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>客户级别</p>
+		            </div>
+		            <div class="weui_cell_ft">H 有意向，2天后回访</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所在省份</p>
+		            </div>
+		            <div class="weui_cell_ft">广东</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>所在城市</p>
+		            </div>
+		            <div class="weui_cell_ft">深圳</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>线索来源</p>
+		            </div>
+		            <div class="weui_cell_ft">卡车之家</div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>车辆用途</p>
+		            </div>
+		            <div class="weui_cell_ft"></div>
+		        </div>
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>备注</p>
+		            </div>
+		            <div class="weui_cell_ft"></div>
+		        </div>
+		    </div>
+		    <div class="toggle-expand">展开详细信息</div>
+		    <div class="weui_btn_area">
+		        <a class="weui_btn weui_btn_plain_primary" href="javascript:">修改</a>
+		    </div>
+		    <div class="weui_panel trace-notes">
+		        <div class="weui_panel_hd">
+		        	<a href="#" class="add">添加记录</a>
+		        	跟进记录<var>4</var>条
+		        </div>
+		        <div class="weui_panel_bd">
+		            <div class="weui_media_box weui_media_small_appmsg">
+		                <div class="weui_cells weui_cells_access">
+		                    <a class="weui_cell" href="javascript:;">
+		                        <div class="weui_cell_bd weui_cell_primary">
+		                            <p>2016年4月23日 10:22</p>
+	                             	<p>设置客户级别为 F</p>
+		                        </div>
+		                        <span class="weui_cell_ft"></span>
+		                    </a>
+		                    <a class="weui_cell" href="javascript:;">
+		                        <div class="weui_cell_bd weui_cell_primary">
+		                            <p>2016年4月23日 10:22</p>
+	                    			<p>设置客户级别为 O</p>
+		                        </div>
+		                        <span class="weui_cell_ft"></span>
+		                    </a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>			
+   	</script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="http://static.360che.com/public/m/js/truckhome.weui.bundle.js"></script>
+    <script src="http://static.360che.com/public/m/js/t.min.js" data-options="t.flipview,../js/saas.js"></script>
+</body>
+</html>

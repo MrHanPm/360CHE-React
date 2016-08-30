@@ -19,11 +19,10 @@ import { ButtonArea,
     Switch,
     Radio,
     Checkbox,
-    Dialog,
     Select,
     Uploader
 } from 'react-weui';
-const {Confirm} = Dialog;
+
 import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
 
@@ -33,52 +32,33 @@ class CellDemo extends React.Component {
         this.state = {
             name:'',
             brands:[],
-            showConfirm: false,
-            confirm: {
-                title: '标题标题',
-                buttons: [
-                    {
-                        type: 'default',
-                        label: '取消',
-                        onClick: this.hideConfirm.bind(this)
-                    },
-                    {
-                        type: 'primary',
-                        label: '我知道了',
-                        onClick: this.hideConfirm.bind(this)
-                    }
-                ]
-            }
+            showBrands:false,
+            
         };
         this.nameInput = (e) => {
             this.state.name = e.target.value;
         }
         this.goNext = this.goNext.bind(this);
     }
-    showConfirm() {
-        this.setState({showConfirm: true});
-    }
 
-    hideConfirm() {
-        this.setState({showConfirm: false});
-    }
     componentDidMount() {
         document.title="销售信息"
-        let oldData = Tool.localItem('vipLodData');
-        console.log(oldData)
-        if(oldData.alermsg !== '' || oldData.alermsg.length !==0){
-            this.state.confirm.setState({
-                title: oldData.alermsg
+        let BrandKey = Tool.localItem('BrandKey');
+        if(BrandKey !== null){
+            this.setState({
+                showBrands:true,
+                brands: JSON.parse(BrandKey)
             });
-            this.showConfirm()
         }
+        
+        console.log(Tool.localItem('BrandKey'),BrandKey);
     }
     checkForm(){
         if(this.state.name == '' || this.state.name.length == 0){
             Alert.to("请输入姓名");
             return false;
         }
-        if(this.state.brands.length !== 0){
+        if(this.state.brands.length === 0){
             Alert.to("请选择品牌");
             return false;
         }
@@ -86,12 +66,19 @@ class CellDemo extends React.Component {
     }
     goNext(){
         if(this.checkForm()){
-            let oldData = Tool.localItem('vipLodData');
-            Tool.get('User/AddUser.aspx',{username:this.state.name,pwd:this.state.pwd},
+            let oldData = JSON.parse(Tool.localItem('vipLodData'));
+            let json = {};
+            json.subdealerids = this.state.brands;
+            json.realname = this.state.name;
+            json.tel = oldData.tel;
+            json.loginname =  oldData.tel;
+            Tool.get('User/AddUser.aspx',json,
                 (res) => {
                     if(res.status === 1){
-
-                    }else{
+                        this.context.router.push({
+                            pathname: '/nav'
+                        });
+                    }else if(res.status === 801){
                         Alert.to(res.msg);
                     }
                 },
@@ -102,6 +89,16 @@ class CellDemo extends React.Component {
         }
     }
     render() {
+        let list = this.state.brands.map(function(ele,index){
+            return(
+                <FormCell checkbox key={index}>
+                    <CellHeader>
+                        <Checkbox defaultChecked disabled={true}/>
+                    </CellHeader>
+                    <CellBody>{ele.txts}</CellBody>
+                </FormCell>
+            )
+        });
         return (
             <Page className="name" title="销售信息">
 
@@ -124,12 +121,14 @@ class CellDemo extends React.Component {
                     </Cell>
                 </Cells>
 
+                <Form checkbox style={{'display':this.state.showBrands ? 'block': 'none' }}>
+                    <p style={{'padding':'10px 15px'}}>已选择品牌</p>
+                    {list}
+                </Form>
                 
                 <ButtonArea>
                     <Button onClick={this.goNext}>进入营销助手</Button>
                 </ButtonArea>
-                <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
-                </Confirm>
                 <p className="FootTxt">如遇登录问题，欢迎致电 <i>4006-136-188</i><br/>致电时间：周一至周日09:00~18:00</p>
             </Page>
         );

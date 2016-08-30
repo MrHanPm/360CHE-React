@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>统计信息</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/0.4.2/weui.min.css" />
+	<link rel="stylesheet" href="../css/wechat.css" />
+</head>
+<body>
+	<div id="loadingToast" class="weui_loading_toast">
+	    <div class="weui_mask_transparent"></div>
+	    <div class="weui_toast">
+	        <div class="weui_loading">
+	            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+	        </div>
+	        <p class="weui_toast_content">数据加载中</p>
+	    </div>
+	</div>
+	<div id="container" style="visibility: hidden;">
+		<div class="analysis">
+			<div class="wrapper">
+				<div class="sass-contents" style="padding-top:0">
+				  	<div class="user-title">
+			        	<h3>波波</h3>
+			        </div>
+					<div class="weui_cells_title">请选择日期</div>
+					<div class="weui_cells">
+						<form action="" method="GET" id="filter">
+							<div class="weui_cell">
+					            <div class="weui_cell_hd"><label for="" class="weui_label">开始时间</label></div>
+					            <div class="weui_cell_bd weui_cell_primary">
+					                <input class="weui_input" type="date" name="start" value="2016-06-21">
+					            </div>
+					        </div>
+					        <div class="weui_cell">
+					            <div class="weui_cell_hd"><label for="" class="weui_label">结束时间</label></div>
+					            <div class="weui_cell_bd weui_cell_primary">
+					                <input class="weui_input" type="date" name="end" value="2016-06-29" max="2016-07-7">
+					            </div>
+					        </div>
+					        <input type="hidden" name="user" value="bobo" />
+				        </form>
+				        <div class="weui_cell weui_cell_select">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <select class="weui_select" name="select1">
+				                	<option value="">更多日期选项</option>
+				                    <option value="3">最近3天</option>
+				                    <option value="7">最近7天</option>
+				                    <option value="15">最近15天</option>
+				                </select>
+				            </div>
+				        </div>
+			        </div>
+
+					<!-- 销售简报 -->
+					<div class="weui_cells_title">销售简报</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <ul class="charts-list clearfix" id="pie_charts">
+									<li></li>	
+									<li></li>	
+									<li></li>	
+									<li></li>	
+								</ul>
+				            </div>
+				        </div>
+			        </div>
+
+					<!-- 成交线索量趋势 -->
+					<div class="weui_cells_title">成交线索量趋势</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart line" id="success_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+
+					<!-- 新增线索量趋势 -->
+					<div class="weui_cells_title">新增线索量趋势</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart line" id="add_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+					
+					<!-- 线索品牌统计 -->
+					<div class="weui_cells_title">线索品牌统计</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart pie" id="brand_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+
+					<!-- 销售漏斗 -->
+					<div class="weui_cells_title">销售漏斗</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart funnel" id="sales_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+					
+					<!-- 成交线索排行榜 -->
+					<div class="weui_cells_title">成交线索排行榜</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart bar" id="success_rank_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+
+					<!-- 抢线索排行榜 -->
+					<div class="weui_cells_title">抢线索排行榜</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart bar" id="try_rank_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+
+					<!-- 新增线索排行榜 -->
+					<div class="weui_cells_title">新增线索排行榜</div>
+					<div class="weui_cells">
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <div class="chart bar" id="add_rank_chart"></div>
+				            </div>
+				        </div>
+			        </div>
+		        </div>
+			</div>
+			<!-- Tabbar -->
+		    <div class="weui_tabbar" id="tabbar_nav">
+		        <a href="clue.html#/home" class="weui_tabbar_item">
+		            <div class="weui_tabbar_icon">
+		          		<em>线</em><em>索</em>
+		            </div>
+		            <p class="weui_tabbar_label">线索</p>
+		        </a>
+		        <a href="crm.html#/home" class="weui_tabbar_item">
+		            <div class="weui_tabbar_icon">
+		                <em>客</em><em>户</em>
+		            </div>
+		            <p class="weui_tabbar_label">CRM</p>
+		        </a>
+		        <a href="analysis.html" class="weui_tabbar_item weui_bar_item_on ">
+		            <div class="weui_tabbar_icon">
+		                <em>统</em><em>计</em>
+		            </div>
+		            <p class="weui_tabbar_label">统计</p>
+		        </a>
+		        <a href="other.html#/home" class="weui_tabbar_item">
+		            <div class="weui_tabbar_icon">
+		                <em>发</em><em>现</em>
+		            </div>
+		            <p class="weui_tabbar_label">发现</p>
+		        </a>
+		    </div>	
+		</div>
+	</div>
+	<script src="../js/echarts.min.js"></script>
+	<script src="../js/charts.min.js"></script>
+	<script>
+
+		// 销售简报数据
+		window.briefingData = [
+			{"title":"新增加线索","value":22},
+			{"title":"已成交线索","value":133},
+			{"title":"已战败线索","value":244},
+			{"title":"无效线索","value":355}
+		];
+
+		// 成交线索量趋势数据
+		window.successData = [120, 132, 101, 134, 90, 330, 210];
+
+		// 新增线索量趋势数据
+		window.addData = [120, 132, 101, 134, 90, 330, 210];
+
+		// 线索品牌数据
+		window.brandData = [
+			{"name":"四川现代","value":10},
+			{"name":"福田奥铃","value":20},
+			{"name":"重汽HOWO轻卡","value":15},
+			{"name":"比亚迪","value":25},
+			{"name":"奥驰汽车","value":30}
+		];
+
+		// 销售漏斗数据
+		window.salesData = [
+			{"name":"新增线索量","value":31},
+			{"name":"跟进线索量","value":25,"ratio":80.62},
+			{"name":"成交线索量","value":2,"ratio":8.0}
+		];
+
+		// 成交线索排行榜数据
+		window.successRankData = [
+			{"name":"张子琪","value":11},
+			{"name":"王小军","value":10},
+			{"name":"刘桌","value":8},
+			{"name":"刘新民","value":7},
+			{"name":"李嘉良","value":6},
+			{"name":"汤清","value":5},
+			{"name":"吴奇隆","value":4},
+			{"name":"视新","value":3},
+			{"name":"赵新宇","value":2},
+			{"name":"催柳清","value":1}
+		];
+
+		// 抢线索排行榜数据
+		window.tryRankData = [
+			{"name":"张子琪","value":11},
+			{"name":"王小军","value":10},
+			{"name":"刘桌","value":8},
+			{"name":"刘新民","value":7},
+			{"name":"李嘉良","value":6},
+			{"name":"汤清","value":5},
+			{"name":"吴奇隆","value":4},
+			{"name":"视新","value":3},
+			{"name":"赵新宇","value":2},
+			{"name":"催柳清","value":1}
+		];
+
+		// 新增线索排行榜
+		window.addRankData = [
+			{"name":"张子琪","value":11},
+			{"name":"王小军","value":10},
+			{"name":"刘桌","value":8},
+			{"name":"刘新民","value":7},
+			{"name":"李嘉良","value":6},
+			{"name":"汤清","value":5},
+			{"name":"吴奇隆","value":4},
+			{"name":"视新","value":3},
+			{"name":"赵新宇","value":2},
+			{"name":"催柳清","value":1}
+		];
+
+		// 销售简报图形	
+		[].forEach.call(document.querySelector('#pie_charts').children,function(chart,index){
+			var data = briefingData[index];
+			echarts.init(chart).setOption(chartOptions.pie(data['title'],data['value'],index));	
+		});
+
+		// 趋势图形
+		echarts.init(document.querySelector('#success_chart')).setOption(chartOptions.line(successData));
+		echarts.init(document.querySelector('#add_chart')).setOption(chartOptions.line(addData));
+
+		// 线索品牌图形
+		echarts.init(document.querySelector('#brand_chart')).setOption(chartOptions.cicle(brandData));
+
+		// 销售漏斗图形
+		chartOptions.funnel(document.querySelector('#sales_chart'),salesData);
+
+		// 排行榜图形
+		echarts.init(document.querySelector('#success_rank_chart')).setOption(chartOptions.bar(successRankData));
+		echarts.init(document.querySelector('#try_rank_chart')).setOption(chartOptions.bar(tryRankData));
+		echarts.init(document.querySelector('#add_rank_chart')).setOption(chartOptions.bar(addRankData));
+		
+		window.addEventListener('load',function(){
+			loadingToast.style.display = 'none';
+			container.style.visibility = 'visible'	
+		});
+	</script>
+
+</body>
+</html>

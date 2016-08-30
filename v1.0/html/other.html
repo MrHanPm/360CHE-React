@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>发现</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/0.4.2/weui.min.css" />
+	<link rel="stylesheet" href="../css/wechat.css" />
+</head>
+<body>
+	<div id="loadingToast" class="weui_loading_toast">
+	    <div class="weui_mask_transparent"></div>
+	    <div class="weui_toast">
+	        <div class="weui_loading">
+	            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+	            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+	        </div>
+	        <p class="weui_toast_content">数据加载中</p>
+	    </div>
+	</div>
+	<!-- Container -->
+	<div id="container"></div>
+
+	 <!-- template -->
+    <script type="text/html" id="tel_home" data-title="发现">
+    	<div class="wrapper">
+			<div class="saas-contents other">
+				<div class="weui_cells weui_cells_access">
+				    <a class="weui_cell" href="#/filter">
+				        <div class="weui_cell_hd">铃</div>
+				        <div class="weui_cell_bd weui_cell_primary">
+				            <p>速抢线索</p>
+				        </div>
+				        <div class="weui_cell_ft">322条线索<em></em></div>
+				    </a>
+				    <a class="weui_cell" href="#/setup">
+				        <div class="weui_cell_hd">设</div>
+				        <div class="weui_cell_bd weui_cell_primary">
+				            <p>账号管理</p>
+				        </div>
+				        <div class="weui_cell_ft"></div>
+				    </a>
+				    <a class="weui_cell" href="#/feedback">
+				        <div class="weui_cell_hd">馈</div>
+				        <div class="weui_cell_bd weui_cell_primary">
+				            <p>意见反馈</p>
+				        </div>
+				        <div class="weui_cell_ft"></div>
+				    </a>
+				</div>	
+			</div>
+		</div>
+			
+		<!-- Tabbar -->
+	    <div class="weui_tabbar" id="tabbar_nav">
+	        <a href="clue.html#/home" class="weui_tabbar_item">
+	            <div class="weui_tabbar_icon">
+	          		<em>线</em><em>索</em>
+	            </div>
+	            <p class="weui_tabbar_label">线索</p>
+	        </a>
+	        <a href="crm.html#/home" class="weui_tabbar_item">
+	            <div class="weui_tabbar_icon">
+	                <em>客</em><em>户</em>
+	            </div>
+	            <p class="weui_tabbar_label">CRM</p>
+	        </a>
+	        <a href="analysis.html" class="weui_tabbar_item">
+	            <div class="weui_tabbar_icon">
+	                <em>统</em><em>计</em>
+	            </div>
+	            <p class="weui_tabbar_label">统计</p>
+	        </a>
+	        <a href="other.html#/home" class="weui_tabbar_item weui_bar_item_on">
+	            <div class="weui_tabbar_icon">
+	                <em>发</em><em>现</em>
+	            </div>
+	            <p class="weui_tabbar_label">发现</p>
+	        </a>
+	    </div>
+    </script>
+
+    <!-- 速抢线索模板 -->
+   	<script type="text/html" id="tel_filter" data-title="速抢线索">
+   		<div class="filter-bar">
+   			<span id="brand" class="selected">品牌</span>
+   			<span id="region">地区</span>
+   		</div>
+   		<div class="notice"><i class="weui_icon_info_circle"></i>当前共有<var id="total">1</var>条线索等待被抢</div>
+   		<div class="wrapper">
+		 	<div class="weui_panel weui_panel_access">
+			    <div class="weui_panel_bd"> 
+			        <a href="#/detail" class="weui_media_box weui_media_appmsg">
+			            <div class="weui_media_bd">
+			                <p>中国重汽HOWO 统帅141马力3280轴距单排轻卡</p>
+			                <p class="weui_media_desc">
+			                	2016年07月13日 07:45
+			                	<span>安徽 合肥</span>
+			                </p>
+			            </div>
+			            <span class="weui_btn weui_btn_mini weui_btn_primary">立即抢</span>
+			        </a>
+			    </div>
+			</div>
+		    <div class="weui_cells_title is-end">没有更多了</div>	
+		</div>	
+   		<form action="" id="filter">
+	   		<div class="sidebar-brand" id="sidebar_brand">
+	   			<div class="weui_cells weui_cells_radio">
+			        <label class="weui_cell weui_check_label" for="all">
+			            <div class="weui_cell_bd weui_cell_primary">
+			                <p>全部品牌</p>
+			            </div>
+			            <div class="weui_cell_ft">
+			                <input type="radio" class="weui_check" name="brandid" id="all"/>
+			                <span class="weui_icon_checked"></span>
+			            </div>
+			        </label>
+			    </div>
+			    <div class="weui_cells_title">A</div>
+	   			<div class="weui_cells weui_cells_radio">
+			        <label class="weui_cell weui_check_label" for="a1">
+			            <div class="weui_cell_bd weui_cell_primary">
+			                <p>奥驰汽车</p>
+			            </div>
+			            <div class="weui_cell_ft">
+			                <input type="radio" class="weui_check" name="brandid" id="a1">
+			                <span class="weui_icon_checked"></span>
+			            </div>
+			        </label>
+			    </div>
+	   		</div>
+	   		<div class="sidebar-region" id="sidebar_region">
+	   			<div class="provinces">
+	   				<div class="weui_cells">
+				        <div class="weui_cell selected">
+				            <div class="weui_cell_bd weui_cell_primary" data-pid="all">
+				            	<p>全部省份</p>
+				            </div>
+				        </div>
+				        <div class="weui_cell">
+				            <div class="weui_cell_bd weui_cell_primary" data-pid="1001">
+				            	<p>北京</p>
+				            </div>
+				        </div>
+				    </div>	
+	   			</div>
+	   			<div class="cities">
+	   				<div class="weui_cells weui_cells_radio">
+				    	<label class="weui_cell weui_check_label" for="x11">
+				            <div class="weui_cell_bd weui_cell_primary">
+				                <p>全部城市</p>
+				            </div>
+				            <div class="weui_cell_ft">
+				                <input type="radio" class="weui_check" name="radio1" id="x11" checked="">
+				                <span class="weui_icon_checked"></span>
+				            </div>
+				        </label>   
+				    </div>		
+	   			</div>
+	   		</div>
+   		</form>	
+   	</script>
+
+   	<!-- 账号管理模板 -->
+    <script type="text/html" id="tel_setup">
+    </script>
+
+    <!-- 意见反馈模板 -->
+    <script type="text/html" id="tel_feedback" data-title="意见反馈">
+    	<form action="" method="" id="feedback">
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <textarea id="textarea" class="weui_textarea" placeholder="您的想法对我们非常重要，请提出宝贵意见"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="limit">
+                <var id="number">0</var>/500字              
+            </div> 
+            <div class="weui_btn_area">
+            	<button type="submit" class="weui_btn weui_btn_primary">保存</button>
+            </div>
+        </form>
+        <div class="contact">
+            <p>使用问题请拨打卡车之家服务热线</p>
+            <a href="tel:4008-800-8888">4008-800-8888</a>
+        </div>
+    </script>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="http://static.360che.com/public/m/js/truckhome.weui.bundle.js"></script>
+	<script src="http://static.360che.com/public/m/js/t.min.js"></script>
+	<script src="../js/other.js"></script>
+</body>
+</html>

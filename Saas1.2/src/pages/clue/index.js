@@ -13,55 +13,95 @@ import {
     MediaBoxDescription,
     MediaBoxInfo,
     MediaBoxInfoMeta,
+    ActionSheet,
     Button,
 } from 'react-weui';
 
-
 import './index.less';
 
-export default class Clues extends React.Component {
-    state={
+import Already from '../clueAlready/index.js';
+import Defeat from '../clueDefeat/index.js';
+import FollowUp from '../clueFollowUp/index.js';
+import Pending from '../cluePending/index.js';
 
-    };
+class Clues extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            tab:0,
+            show: false,
+            menus: [{
+                label: '速抢线索',
+                onClick: ()=> {
 
+                }
+            }, {
+                label: '添加线索',
+                onClick: ()=> {
+
+                }
+            }],
+            actions: [
+                {
+                    label: '取消',
+                    onClick: this.hide.bind(this)
+                }
+            ]
+        }
+        this.show = this.show.bind(this);
+        this.hide = this.hide.bind(this);
+    }
+    show() {
+        this.setState({show: true});
+    }
+
+    hide() {
+        this.setState({show: false});
+    }
+    componentDidMount() {
+
+    }
     render() {
+        let Pages;
+        switch(this.state.tab){
+            case 0 :
+                Pages = <Pending />;
+                break;
+            case 1 :
+                Pages = <FollowUp />;
+                break;
+            case 2 :
+                Pages = <Already />;
+                break;
+            case 3 :
+                Pages = <Defeat />;
+                break;
+        }
         return (
-            <div>
+            <div style={{height:'100%'}}>
                 <ul className="clueNav">
-                    <li className="active">待处理</li>
-                    <li>跟进中</li>
-                    <li>已成交</li>
-                    <li>已战败</li>
+                    <li className={this.state.tab == 0 ? 'active':''} onClick={e=>this.setState({tab:0})}>待处理</li>
+                    <li className={this.state.tab == 1 ? 'active':''} onClick={e=>this.setState({tab:1})}>跟进中</li>
+                    <li className={this.state.tab == 2 ? 'active':''} onClick={e=>this.setState({tab:2})}>已成交</li>
+                    <li className={this.state.tab == 3 ? 'active':''} onClick={e=>this.setState({tab:3})}>已战败</li>
                 </ul>
-                <section className="clueBody">
-                    <Panel>
-                        <PanelBody>
-                            <MediaBox type="text">
-                                <MediaBoxHeader>
-                                    <Button type="primary" plain>立即抢</Button>
-                                </MediaBoxHeader>
-                                <MediaBoxBody>
-                                    <MediaBoxTitle>标题一</MediaBoxTitle>
-                                    <MediaBoxDescription>
-                                        由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。
-                                    </MediaBoxDescription>
-                                    <MediaBoxInfo>
-                                        <MediaBoxInfoMeta>3分钟前</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>湖南</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta extra>长沙</MediaBoxInfoMeta>
-                                    </MediaBoxInfo>
-                                </MediaBoxBody>
-                            </MediaBox>
-                        </PanelBody>
-                    </Panel>
-                </section>
-                <span className="butX"></span>
-                <div className="clueBtnX">
-                    <span></span>
-                    <span className="butX_add"></span>
-                </div>
-                <div className="bgBox"></div>
+                {Pages}
+                <span className="butX" onClick={this.show}></span>
+                <ActionSheet menus={this.state.menus} actions={this.state.actions} show={this.state.show} onRequestClose={this.hide} />
             </div>
         );
     }
 };
+
+
+Clues.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default Clues
+
+//弹窗小标志
+// <div className="clueBtnX">
+//     <span></span>
+//     <span className="butX_add"></span>
+// </div>
