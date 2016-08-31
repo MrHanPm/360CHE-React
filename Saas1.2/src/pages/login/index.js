@@ -61,8 +61,7 @@ class CellDemo extends React.Component {
             Tool.get('User/Login.aspx',{username:this.state.name,pwd:this.state.pwd,apptype:'weixin'},
                 (res) => {
                     if(res.status === 1){
-                        let txt = JSON.stringify(res.data);
-                        Tool.localItem('vipLodData',txt);
+                        Tool.localItem('vipLodData',JSON.stringify(res.data));
                         this.context.router.push({
                             pathname: '/name'
                         });

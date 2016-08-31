@@ -5,6 +5,12 @@ import './page.less';
 import ShowAlert from './Alert.js'
 
 export default class Page extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    componentWillUnmount() {
+        clearTimeout(t)
+    }
     render() {
         const {title, subTitle, spacing, className, children} = this.props;
 

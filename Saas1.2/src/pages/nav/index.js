@@ -24,6 +24,7 @@ import Count from '../count/index.js';
 export default class TabBarDemo extends React.Component {
     state={
         tab:0,
+        initData:true,
         showConfirm: false,
         confirm: {
             title: '标题标题',
@@ -47,29 +48,87 @@ export default class TabBarDemo extends React.Component {
     hideConfirm() {
         this.setState({showConfirm: false});
     }
-    componentDidMount(){
-        let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        console.log(oldData)
-        if(oldData.alermsg !== null || oldData.alermsg.length !== 0){
-            this.setState({
-                confirm:{
-                    title: oldData.alermsg,
-                    buttons: [
-                        {
-                            type: 'default',
-                            label: '取消',
-                            onClick: this.hideConfirm.bind(this)
-                        },
-                        {
-                            type: 'primary',
-                            label: '我知道了',
-                            onClick: this.hideConfirm.bind(this)
-                        }
-                    ]
-                }
-            });
-            this.showConfirm()
+    initData(asid){
+        let i = 0;
+        let time;
+        let h ;
+        let urlKey = Tool.localItem('fingerprint');
+        // Tool.get('Comm/GetAllCategoryDownUrl.aspx',{sessionid:asid,fingerprint:urlKey},
+        //     (res) => {
+        //         if(res.status == 1){
+        //             this.forAjax(res.listdata);
+        //         }else{
+        //             Alert.to(res.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         Alert.to('网络异常，稍后重试。。');
+        //     }
+        // );
+
+        let check = [
+            {
+                name: 'failurecaselist',
+                fingerprint:'customtopmenulist-fb9e3f2950a575110588370265efb4d4dd004c3a',
+                url:'Comm/GetAllCategory.aspx?sessionid=36859_3f4469a95e968d1c37fe8a55cb3d6b938b34178f&categoryname=customtopmenulist',
+                ischange:1
+            },{
+                name: 'carusagelist',
+                fingerprint:'customtopmenulist-fb9e3f2950a575110588370265efb4d4dd004c3a',
+                url:'Comm/GetAllCategory.aspx?sessionid=36859_3f4469a95e968d1c37fe8a55cb3d6b938b34178f&categoryname=carusagelist',
+                ischange:1
+            }
+        ];
+
+        this.forAjax(check);
+
+    }
+
+
+
+
+    forAjax(listdata){
+        let ajaxUrls = [];
+        let nameKey ='';
+        for(let i=0;i<listdata.length;i++){
+            if(listdata[i].ischange == 1){
+                ajaxUrls.push(listdata[i].url);
+                nameKey += listdata[i].fingerprint + '_';
+            }
         }
+        console.log(ajaxUrls);
+        console.log(nameKey);
+    }
+    componentDidMount(){
+        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        // console.log(oldData)
+
+        //this.initData(oldData.sessionid);
+
+        this.initData();
+
+
+        // if(oldData.alermsg !== null || oldData.alermsg.length !== 0){
+        //     this.setState({
+        //         confirm:{
+        //             title: oldData.alermsg,
+        //             buttons: [
+        //                 {
+        //                     type: 'default',
+        //                     label: '取消',
+        //                     onClick: this.hideConfirm.bind(this)
+        //                 },
+        //                 {
+        //                     type: 'primary',
+        //                     label: '我知道了',
+        //                     onClick: this.hideConfirm.bind(this)
+        //                 }
+        //             ]
+        //         }
+        //     });
+        //     this.showConfirm()
+        // }
+
     }
     render() {
         let Pages;
@@ -122,6 +181,7 @@ export default class TabBarDemo extends React.Component {
                 </TabBar>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
+                <div className="initUrlKey" style={{'display':this.state.initData?'block':'none'}}>初始数据加载中…</div>
             </Tab>
         );
     }

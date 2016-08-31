@@ -50,8 +50,6 @@ class CellDemo extends React.Component {
                 brands: JSON.parse(BrandKey)
             });
         }
-        
-        console.log(Tool.localItem('BrandKey'),BrandKey);
     }
     checkForm(){
         if(this.state.name == '' || this.state.name.length == 0){
@@ -65,13 +63,18 @@ class CellDemo extends React.Component {
         return true;
     }
     goNext(){
+        //console.log(this.state.brands);
         if(this.checkForm()){
-            let oldData = JSON.parse(Tool.localItem('vipLodData'));
             let json = {};
-            json.subdealerids = this.state.brands;
+            let brandArry = '';
+            for(let i=0;i<this.state.brands.length;i++){
+                brandArry += this.state.brands[i].keys+','
+            }
+            //console.log(brandArry);
+            json.subdealerid = brandArry;
             json.realname = this.state.name;
-            json.tel = oldData.tel;
-            json.loginname =  oldData.tel;
+            json.tel = Tool.localItem('Uphone');
+            json.loginname =  Tool.localItem('Uphone');
             Tool.get('User/AddUser.aspx',json,
                 (res) => {
                     if(res.status === 1){

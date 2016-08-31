@@ -24,7 +24,7 @@ import { ButtonArea,
     Uploader
 } from 'react-weui';
 import Page from '../../component/page';
-import {Tool,target,Alert} from '../../tool.js';
+import {Tool,Alert} from '../../tool.js';
 
 import vcodeSrc from './images/vcode.jpg';
 
@@ -48,7 +48,6 @@ class CellDemo extends React.Component {
             this.state.vcode = e.target.value;
         }
         this.mcodeInput = (e) => {
-
             this.state.mcode = e.target.value;
         }
         this.getvcodes = (e) => {this.state.vcodeSrc = vcodeSrc}
@@ -152,9 +151,11 @@ class CellDemo extends React.Component {
     }
     goNext(){
         if(this.checkForm()){
+            Tool.localItem('Uphone',this.state.phone);
             Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,vercode:this.state.mcode},
                 (res) => {
                     if(res.status === 1){
+                        Tool.localItem('vipLodData',JSON.stringify(res.data));
                         this.context.router.push({
                             pathname: '/nav'
                         });

@@ -14,6 +14,9 @@ import Phone from './pages/testPhone/index';
 import Brand from './pages/brand/index';
 import Nav from './pages/nav/index';
 import LoadMsg from './pages/msg/loading';
+import Feedback from './pages/msg/feedback';
+import Account from './pages/account/index';
+import MdfPwd from './pages/mdfPwd/index';
 
 class App extends React.Component {
         render() {
@@ -32,7 +35,7 @@ class App extends React.Component {
                 );
         }
 }
-var history = process.env.NODE_ENV !== 'production' ? browserHistory : hashHistory;
+
 ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
@@ -43,6 +46,9 @@ ReactDOM.render((
             <Route path="name" component={Name}/>
             <Route path="brand" component={Brand}/>
             <Route path="nav" component={Nav}/>
+            <Route path="feedback" component={Feedback}/>
+            <Route path="account" component={Account}/>
+            <Route path="mdfPwd" component={MdfPwd}/>
         </Route>
     </Router>
 ), document.getElementById('container'));

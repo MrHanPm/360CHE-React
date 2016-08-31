@@ -14,6 +14,7 @@ import {
     MediaBoxInfo,
     MediaBoxInfoMeta,
     ActionSheet,
+    CellFooter,
     Button,
 } from 'react-weui';
 import './index.less';
