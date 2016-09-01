@@ -33,12 +33,16 @@ class Clues extends React.Component {
             menus: [{
                 label: '速抢线索',
                 onClick: ()=> {
-
+                    this.context.router.push({
+                        pathname: '/rob'
+                    });
                 }
             }, {
                 label: '添加线索',
                 onClick: ()=> {
-
+                    this.context.router.push({
+                        pathname: '/addClue'
+                    });
                 }
             }],
             actions: [

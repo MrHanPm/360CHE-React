@@ -46,7 +46,7 @@ class MsgDemo extends React.Component {
         this.showConfirm = this.showConfirm.bind(this);
     }
     componentDidMount() {
-
+        document.title = '账号管理';
     }
     showConfirm() {
         this.setState({showConfirm: true});

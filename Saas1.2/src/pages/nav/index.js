@@ -14,7 +14,7 @@ import {
     Article
 } from 'react-weui';
 const {Confirm} = Dialog;
-import {Tool} from '../../tool.js';
+import {Tool,Alert} from '../../tool.js';
 import './index.less';
 import Clues from '../clue/index.js';
 import Crms from '../crm/index.js';
@@ -24,6 +24,7 @@ import Count from '../count/index.js';
 export default class TabBarDemo extends React.Component {
     state={
         tab:0,
+        countdown: 0,
         initData:true,
         showConfirm: false,
         confirm: {
@@ -53,34 +54,34 @@ export default class TabBarDemo extends React.Component {
         let time;
         let h ;
         let urlKey = Tool.localItem('fingerprint');
-        // Tool.get('Comm/GetAllCategoryDownUrl.aspx',{sessionid:asid,fingerprint:urlKey},
-        //     (res) => {
-        //         if(res.status == 1){
-        //             this.forAjax(res.listdata);
-        //         }else{
-        //             Alert.to(res.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         Alert.to('网络异常，稍后重试。。');
-        //     }
-        // );
-
-        let check = [
-            {
-                name: 'failurecaselist',
-                fingerprint:'customtopmenulist-fb9e3f2950a575110588370265efb4d4dd004c3a',
-                url:'Comm/GetAllCategory.aspx?sessionid=36859_3f4469a95e968d1c37fe8a55cb3d6b938b34178f&categoryname=customtopmenulist',
-                ischange:1
-            },{
-                name: 'carusagelist',
-                fingerprint:'customtopmenulist-fb9e3f2950a575110588370265efb4d4dd004c3a',
-                url:'Comm/GetAllCategory.aspx?sessionid=36859_3f4469a95e968d1c37fe8a55cb3d6b938b34178f&categoryname=carusagelist',
-                ischange:1
+        Tool.get('Comm/GetAllCategoryDownUrl.aspx',{sessionid:asid,fingerprint:urlKey},
+            (res) => {
+                if(res.status == 1){
+                    this.forAjax(res.listdata);
+                }else{
+                    Alert.to(res.msg)
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
             }
-        ];
+        );
 
-        this.forAjax(check);
+        // let check = [
+        //     {
+        //         name: 'failurecaselist',
+        //         fingerprint:'customtopmenulist-fb9e3f2950a575110588370265efb4d4dd004c3a',
+        //         url:'Comm/GetAllCategory.aspx?sessionid=36859_3f4469a95e968d1c37fe8a55cb3d6b938b34178f&categoryname=customtopmenulist',
+        //         ischange:1
+        //     },{
+        //         name: 'carusagelist',
+        //         fingerprint:'customtopmenulist-fb9e3f2950a575110588370265efb4d4dd004c3a',
+        //         url:'Comm/GetAllCategory.aspx?sessionid=36859_3f4469a95e968d1c37fe8a55cb3d6b938b34178f&categoryname=carusagelist',
+        //         ischange:1
+        //     }
+        // ];
+
+        // this.forAjax(check);
 
     }
 
@@ -89,45 +90,82 @@ export default class TabBarDemo extends React.Component {
 
     forAjax(listdata){
         let ajaxUrls = [];
+        let ajaxDataName = [];
         let nameKey ='';
         for(let i=0;i<listdata.length;i++){
             if(listdata[i].ischange == 1){
                 ajaxUrls.push(listdata[i].url);
+                ajaxDataName.push(listdata[i].name);
                 nameKey += listdata[i].fingerprint + '_';
             }
         }
         console.log(ajaxUrls);
-        console.log(nameKey);
+        this.setState({
+            countdown:ajaxUrls.length
+        });
+
+        if(ajaxDataName.length > 0){
+            this.loadAllData(ajaxDataName,ajaxUrls);
+        }else{
+            this.showConfirm();
+        }
+        //Tool.localItem('fingerprint',nameKey);
+    }
+    loadAllData(names,urls){
+        let t;
+        if (this.state.countdown == 0) {
+            console.log(urls.length);
+            this.setState({countdown:urls.length,initData:false,});
+            this.showConfirm();
+            clearTimeout(t);
+        } else {
+            let s = this.state.countdown;
+            let k = s-1;
+            Tool.get(urls[k],'',
+                (res) => {
+                    if(res.status === 1){
+                        Tool.localItem(names[k],JSON.stringify(res));
+                        console.log(Tool.localItem(names[k]),names[k]);
+                    }else{
+                        Alert.to(res.msg);
+                    }
+                },
+                (err) => {
+                    Alert.to(err.msg);
+                }
+            )
+            s--;
+            this.setState({countdown:s});
+            t = setTimeout(() => this.loadAllData(names,urls),10);
+        }
     }
     componentDidMount(){
-        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        // console.log(oldData)
-
+        let oldData =[];//测试用具
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //this.initData(oldData.sessionid);
 
-        this.initData();
+        this.initData('42037_65c548069fa7c7ed35d32c43a0e18f1790d2723c');
 
 
-        // if(oldData.alermsg !== null || oldData.alermsg.length !== 0){
-        //     this.setState({
-        //         confirm:{
-        //             title: oldData.alermsg,
-        //             buttons: [
-        //                 {
-        //                     type: 'default',
-        //                     label: '取消',
-        //                     onClick: this.hideConfirm.bind(this)
-        //                 },
-        //                 {
-        //                     type: 'primary',
-        //                     label: '我知道了',
-        //                     onClick: this.hideConfirm.bind(this)
-        //                 }
-        //             ]
-        //         }
-        //     });
-        //     this.showConfirm()
-        // }
+        if(oldData.alermsg !== null || oldData.alermsg.length !== 0){
+            this.setState({
+                confirm:{
+                    title: oldData.alermsg,
+                    buttons: [
+                        {
+                            type: 'default',
+                            label: '取消',
+                            onClick: this.hideConfirm.bind(this)
+                        },
+                        {
+                            type: 'primary',
+                            label: '我知道了',
+                            onClick: this.hideConfirm.bind(this)
+                        }
+                    ]
+                }
+            });
+        }
 
     }
     render() {

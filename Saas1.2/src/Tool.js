@@ -35,7 +35,12 @@ Tool.ajax = function (mySetting) {
     var xhr = new XMLHttpRequest();
     try {
         if (setting.type == 'GET') { //get方式请求
-            sData = setting.url + '?' + sData;
+            if(setting.url.indexOf('?') > 0){
+                sData = setting.url + sData;
+            }else{
+                sData = setting.url + '?' + sData;
+            }
+            
             xhr.open(setting.type, sData + '&' + new Date().getTime(), setting.async);
             xhr.send();
         } else { //post方式请求
@@ -185,16 +190,19 @@ Tool.checkPhone = function (phone){
 //弹窗提示的封装
 var Alert = {};
 Alert.to = function(val) {
-        let t
-        t && clearTimeout(t)
+        let t;
+        t && clearTimeout(t);
         let AlertCont = document.getElementById("AlertCont");
         let AlertTxt = document.getElementById("AlertTxt");
         AlertTxt.innerHTML = val;
         AlertCont.setAttribute('class','notification notification-in');
-        t = setTimeout(() => Alert.out(),4000)
+        t = setTimeout(() => Alert.out(),4000);
 }
 Alert.out = function(){
     let AlertCont = document.getElementById("AlertCont");
     AlertCont.setAttribute('class','notification');
 }
+
+
+
 export {Tool , Alert}

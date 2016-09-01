@@ -20,8 +20,35 @@ export const target = 'http://192.168.0.247:804/';
 //
 //fingerprint          初始指纹包
 //
-//
-//
+//Pactive               点击储存的值
+
+appresourcelist
+
+carusagelist
+
+failurecaselist
+
+cluelevellist
+
+cluefollowuptypelist
+
+clueresourcelist
+
+productlist
+
+serieslist
+
+subcategorylist
+
+allbrandlist
+
+brandlist
+
+citylist
+
+provincelist
+
+cluestopmenulist
 //
 //
 //
@@ -29,3 +56,4 @@ export const target = 'http://192.168.0.247:804/';
 //
 //
 */
+

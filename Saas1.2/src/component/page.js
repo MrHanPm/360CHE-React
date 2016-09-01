@@ -9,7 +9,7 @@ export default class Page extends React.Component {
         super(props);
     }
     componentWillUnmount() {
-        clearTimeout(t)
+        //clearTimeout()
     }
     render() {
         const {title, subTitle, spacing, className, children} = this.props;
