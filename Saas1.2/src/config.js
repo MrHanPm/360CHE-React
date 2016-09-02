@@ -20,35 +20,37 @@ export const target = 'http://192.168.0.247:804/';
 //
 //fingerprint          初始指纹包
 //
-//Pactive               点击储存的值
+//Pactive               组件一级点击储存的值
+//PactiveT              组件二级点击储存的值
 
-appresourcelist
 
-carusagelist
+appresourcelist         取得资源列表(系统用说明文字)
 
-failurecaselist
+carusagelist            购车用途列表
 
-cluelevellist
+failurecaselist         失败原因列表
 
-cluefollowuptypelist
+cluelevellist           线索级别取得 HFABCFO 取得
 
-clueresourcelist
+cluefollowuptypelist    销售线索跟踪记录方式取得
 
-productlist
+clueresourcelist        线索来源取得
 
-serieslist
+productlist             产品取得
 
-subcategorylist
+serieslist              系列取得
 
-allbrandlist
+subcategorylist         子类取得
 
-brandlist
+allbrandlist            取得所有品牌列表
 
-citylist
+brandlist               品牌取得
 
-provincelist
+citylist                市份取得
 
-cluestopmenulist
+provincelist            省份取得
+
+cluestopmenulist        销售线索顶部菜单取得
 //
 //
 //

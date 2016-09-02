@@ -34,6 +34,8 @@ class MsgDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            SFCSrandoms:'',
+            SFCSv:'',
             showConfirm: false,
             confirm: {
                 title: '信息没保存，是否放弃？',
@@ -50,7 +52,7 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-
+        this.SFCS = this.SFCS.bind(this);
         this.onSaves = this.onSaves.bind(this);
         let self = this;
         window.addEventListener("popstate", function(e) {
@@ -59,21 +61,18 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '添修线索';
-        Tool.localItem('Pactive',0);
-        let star = {
-            title: "title",
-            url: window.location.href
-        };
+        Tool.localItem('Pactive','A');
+        Tool.localItem('PactiveT','0');
+        let star = {title: "title",url: window.location.href};
         window.history.pushState(star,"title",window.location.href);
-
-    }
-    showConfirm() {
-        this.setState({showConfirm: true});
     }
 
-    hideConfirm() {
-        this.setState({showConfirm: false});
+    SFCS(){
+       this.setState({SFCSrandoms: Math.random()});
     }
+
+    showConfirm(){this.setState({showConfirm: true});}
+    hideConfirm(){this.setState({showConfirm: false});}
     goWell(){ this.context.router.push({pathname: '/nav'});}
     onSaves(){
 
@@ -100,6 +99,12 @@ class MsgDemo extends React.Component {
     render() {
         // let oldData = JSON.parse(Tool.localItem('vipLodData'));
         // const {realname,tel,dealername} = oldData;
+        let SFCSval;
+        if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincename) !== 'undefined'){
+             SFCSval = this.state.SFCSv.provincename +' '+this.state.SFCSv.cityname;
+        }else{
+            SFCSval = '';
+        }
         return (
             <Page className="account">
                 <Cells access>
@@ -158,8 +163,8 @@ class MsgDemo extends React.Component {
                     </Cell>
                     <Cell>
                         <CellHeader><Label>省份城市</Label></CellHeader>
-                        <CellBody>
-                            <Input type="text" placeholder="请选择省份城市" disabled={true}/>
+                        <CellBody onClick={this.SFCS}>
+                            <Input type="text" placeholder="请选择省份城市" value={SFCSval} disabled={true}/>
                         </CellBody>
                         <CellFooter />
                     </Cell>
@@ -208,7 +213,7 @@ class MsgDemo extends React.Component {
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <SF Datas={this.state}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:val})}/>
                 <LB Datas={this.state}/>
                 <PP Datas={this.state}/>
                 <XL Datas={this.state}/>
