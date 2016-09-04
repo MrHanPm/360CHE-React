@@ -36,6 +36,8 @@ class MsgDemo extends React.Component {
         this.state = {
             SFCSrandoms:'',
             SFCSv:'',
+            KHJBrandoms:'',
+            KHJBv:'',
             showConfirm: false,
             confirm: {
                 title: '信息没保存，是否放弃？',
@@ -53,6 +55,7 @@ class MsgDemo extends React.Component {
             },
         };
         this.SFCS = this.SFCS.bind(this);
+        this.KHJB = this.KHJB.bind(this);
         this.onSaves = this.onSaves.bind(this);
         let self = this;
         window.addEventListener("popstate", function(e) {
@@ -70,7 +73,9 @@ class MsgDemo extends React.Component {
     SFCS(){
        this.setState({SFCSrandoms: Math.random()});
     }
-
+    KHJB(){
+       this.setState({KHJBrandoms: Math.random()});
+    }
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
     goWell(){ this.context.router.push({pathname: '/nav'});}
@@ -100,10 +105,16 @@ class MsgDemo extends React.Component {
         // let oldData = JSON.parse(Tool.localItem('vipLodData'));
         // const {realname,tel,dealername} = oldData;
         let SFCSval;
+        let KHJBval;
         if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincename) !== 'undefined'){
              SFCSval = this.state.SFCSv.provincename +' '+this.state.SFCSv.cityname;
         }else{
             SFCSval = '';
+        }
+        if(this.state.KHJBv !== '' && typeof(this.state.KHJBv.key) !== 'undefined'){
+             KHJBval = this.state.KHJBv.key +' '+this.state.KHJBv.adddayname;
+        }else{
+            KHJBval = '';
         }
         return (
             <Page className="account">
@@ -156,8 +167,8 @@ class MsgDemo extends React.Component {
                 <Cells access>
                     <Cell>
                         <CellHeader><Label>客户级别</Label></CellHeader>
-                        <CellBody>
-                            <Input type="text" placeholder="请填写客户级别" disabled={true}/>
+                        <CellBody onClick={this.KHJB}>
+                            <Input type="text" placeholder="请填写客户级别" value={KHJBval} disabled={true}/>
                         </CellBody>
                         <CellFooter />
                     </Cell>
@@ -218,7 +229,7 @@ class MsgDemo extends React.Component {
                 <PP Datas={this.state}/>
                 <XL Datas={this.state}/>
                 <CX Datas={this.state}/>
-                <JB Datas={this.state}/>
+                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:val})}/>
                 <XS Datas={this.state}/>
                 <YT Datas={this.state}/>
                 <ZB Datas={this.state}/>

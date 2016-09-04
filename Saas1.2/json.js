@@ -29,12 +29,13 @@
 }
 //failurecaselist  失败原因列表
  {"status":1,"msg":"",
-    "cluelevellist":[{"key":"A  重点","value":"2","isdropdownshow":1},
-                    {"key":"B  一般","value":"3","isdropdownshow":1},
-                    {"key":"C  潜在","value":"4","isdropdownshow":1},
-                    {"key":"O  已成交","value":"5","isdropdownshow":1},
-                    {"key":"F  战败","value":"6","isdropdownshow":1},
-                    {"key":"N  无效线索","value":"7","isdropdownshow":1}],
+    "cluelevellist":[
+    {"key":"A  重点","value":"2","isdropdownshow":1},
+    {"key":"B  一般","value":"3","isdropdownshow":1},
+    {"key":"C  潜在","value":"4","isdropdownshow":1},
+    {"key":"O  已成交","value":"5","isdropdownshow":1},
+    {"key":"F  战败","value":"6","isdropdownshow":1},
+    {"key":"N  无效线索","value":"7","isdropdownshow":1}],
     "cluelevellist_fingerprint":"cluelevellist-d68b5d0d621741cd52f4ce3ba0ead430a1b28928"
 } 
 //cluelevellist 线索级别取得 HFABCFO 取得
