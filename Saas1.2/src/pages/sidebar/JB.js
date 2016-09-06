@@ -30,7 +30,7 @@ class Sidebar extends React.Component{
     let citylistData = [];
     if(e.target.title == '2' || e.target.title == '3' || e.target.title == '4'){
       for(let i=0;i < 30; i++){
-        let gd ={'addday':[i],'adddayname':[i+1]+'天后提醒'};
+        let gd ={'addday':[i+1],'adddayname':[i+1]+'天后回访'};
         citylistData.push(gd);
       }
       this.setState({

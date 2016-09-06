@@ -98,7 +98,7 @@ class Sidebar extends React.Component{
       return(
           <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"}>
               <header>
-                  <span>品牌筛选</span>
+                  <span>省份城市</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
               </header>
               <ul className="Fnav">

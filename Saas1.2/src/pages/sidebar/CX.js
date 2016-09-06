@@ -4,53 +4,90 @@ import React from 'react';
 import {Icon} from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
 import './sidebar.less';
+
 class Sidebar extends React.Component{
-    constructor(props) {
-          super(props);
+  constructor(props) {
+      super(props);
+          
           this.state ={
             visible:false,
             active:false,
-            DATE:{
-              'L':['A','B','C','F','O','P'],
-              'R':[0,1,2,3,4,5,6]
-            }
+            productid:'',
+            productname:'',
+            L:[]
           }
-          this.closeSold = this.closeSold.bind(this);
-    }
-  componentDidMount(){
-    this.setState({
+      this.closeSold = this.closeSold.bind(this);
+      this.upDatas = this.upDatas.bind(this);
+  }
 
-    });
+  upDatas(e){
+    let citylistData = [];
+      let Ad = {
+        'productid':e.target.title,
+        'productname':e.target.innerHTML
+      };
+      this.setState({
+        productid:e.target.title,
+        productname:e.target.innerHTML,
+        visible:false
+      }, ()=> this.props.onChange(Ad));
   }
-  closeSold(){
+  componentDidMount(){
+    let self = this;
+    [].forEach.call(document.querySelectorAll('.PubSidebar'), function (el){  
+      el.addEventListener('touchend', function(e) {
+        var x = e.changedTouches[0].pageX;
+        if( x < 68 ){
+            self.closeSold();
+        }
+      }, false);
+    });
     this.setState({
-      visible:false
     });
   }
+  componentWillReceiveProps(nextProps) {
+    let productlist = JSON.parse(Tool.localItem('productlist'));
+    let subid = nextProps.seriesid;
+    // let productlist =[
+      // {"seriesextendid":333,"cateid":2,"subcategoryid":60,"brandid":155,"seriesid":1038,"seriesname":"财运300"}];
+    let DAtas = [];
+    for(let i=0;i<productlist.productlist.length;i++){
+        if(productlist.productlist[i].seriesid == subid){
+          DAtas.push(productlist.productlist[i]);
+        }
+    }
+    this.setState({
+      L:DAtas
+    });
+    if(typeof(nextProps.Datas) == 'number'){
+      this.setState({
+        visible: true
+      });
+    }
+  }
+  closeSold(){this.setState({visible:false});}
   render(){
-      let Datas = this.state.DATE;
-      let acts = Tool.localItem('Pactive');
+    let self = this;
+    let Fes = this.state.productname;
       return(
           <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"}>
               <header>
-                  <span>品牌筛选</span>
+                  <span>选择车型</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
               </header>
-              <ul className="Fnav">
-                {Datas.L.map(function(e,indexs){
+              <ul className="Fnav CXlist">
+                {this.state.L.map(function(e,indexs){
                   return(
-                    <li key={indexs} className={e == acts ? "active" :''}
-                        >
-                      {e}
-                    </li>
-                  )
-                })}
-              </ul>
-              <ul className="Lnav" style={{'display':this.state.active?'block':'none'}}>
-                {Datas.R.map(function(e,indexs){
-                  return(
-                    <li key={indexs} className={e == acts ? "active" :''}>
-                      {e}<Icon value="success" />
+                    <li key={indexs} 
+                    className={e.productname == Fes ? "active" :''}
+                    >
+                      <span 
+                      title={e.productid}
+                      onClick={self.upDatas}
+                      >
+                        {e.productname}
+                      </span>
+                      <Icon value="success" />
                     </li>
                   )
                 })}

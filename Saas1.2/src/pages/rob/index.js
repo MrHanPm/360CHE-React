@@ -1,6 +1,6 @@
 "use strict";
 
-import React from 'react';
+import React,{Component} from 'react';
 import {
     Panel,
     PanelHeader,
@@ -16,43 +16,209 @@ import {
     ActionSheet,
     Button,
 } from 'react-weui';
-
+import Brand from '../sidebar/brand';//品牌
+import Page from '../../component/page';
+import {Tool,Alert} from '../../tool.js';
+import SF from '../sidebar/SF';//省份
 import './index.less';
 
-export default class Clues extends React.Component {
+//PublicClues/GetCluesList.aspx
+export default class Clues extends Component {
     constructor(props){
         super(props);
         this.state = {
-           
+            loadingS:true,
+            showBrand:'',
+            brandid:'',
+            SFCSrandoms:'',
+            SFCSv:'',
+            size:'',
+            nowpage:1,
+            DATA:[],
+            topnotice:'',
+            maxrobnum:'',//最大能抢线索数量
+            todayrobnum:''//今天已经抢的线索数量pagecount
         }
+        this.showBrand = this.showBrand.bind(this);
+        this.Alts = this.Alts.bind(this);
+        this.SFCS = this.SFCS.bind(this);
+        this.upBrand = this.upBrand.bind(this);
+        this.upSF = this.upSF.bind(this);
+        this.inits = this.inits.bind(this);
+        this.RobLine = this.RobLine.bind(this);
     }
+    Alts(){Alert.to('每个经销商每天只能抢500条线索');}
+    SFCS(){this.setState({SFCSrandoms: Math.random(),showBrand:'showBrand'});}
+    upBrand(val){
+        this.setState({brandid: val,showBrand:'showBrand'})
+        this.upDATA(val);
+    }
+    upSF(val){
+        this.setState({
+            SFCSv: val,
+            SFCSrandoms:'SFCSrandoms'
+        });
+        this.upDATA(val);
+    }
+    upDATA(val){
+        console.log(val,'val');
+        let json={};
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //json.sessionid = oldData.sessionid;
+        json.sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+        if(typeof(val) == 'undefined'){
+            json.brandid = this.state.brandid;
+            json.nowpage = this.state.nowpage;
+            if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincesn) !== 'undefined'){
+                 json.provincesn = this.state.SFCSv.provincesn;
+                 json.citysn = this.state.SFCSv.citysn;
+            }else{
+                json.provincesn = '';
+                json.citysn = '';
+            }
+        }else if(typeof(val) == 'string'){
+            json.nowpage = 1;
+            json.brandid = val;
+            if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincesn) !== 'undefined'){
+                 json.provincesn = this.state.SFCSv.provincesn;
+                 json.citysn = this.state.SFCSv.citysn;
+            }else{
+                json.provincesn = '';
+                json.citysn = '';
+            }
+        }else if(typeof(val) == 'object'){
+            json.nowpage = 1;
+            json.brandid = this.state.brandid;
+            json.provincesn = val.provincesn;
+            json.citysn = val.citysn;
+        }
 
+        Tool.get('PublicClues/GetCluesList.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                    let page = this.state.nowpage;
+                    page++;
+                    for(let i=0; i<res.listdata.length;i++){
+                        this.state.DATA.push(res.listdata[i]);
+                    }
+                    console.log(page,this.state.DATA);
+                    if(res.pagecount == page){this.setState({loadingS:false});}
+                    this.setState({
+                        topnotice:res.topnotice,
+                        maxrobnum:res.maxrobnum,
+                        todayrobnum:res.todayrobnum,
+                        nowpage:page
+                    });
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
+    RobLine(e){
+        Tool.get('PublicClues/RobCustomer.aspx',{cluesid:e.target.title},
+            (res) => {
+                if(res.status == 1){
+                    
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
+    inits(){
+      let self = this;
+      let BodyMin = document.getElementById('clueBody');
+      
+      let DataMin,Hit,LastLi,goNumb;
+      BodyMin.addEventListener('scroll',function(e) {
+          DataMin = BodyMin.scrollHeight - 45;
+          Hit  = window.screen.height;
+          LastLi = BodyMin.scrollTop;
+          goNumb = DataMin - Hit - LastLi;
+          console.log(DataMin,goNumb,'goNumb');
+          if(goNumb < 10){
+            BodyMin.scrollTop = DataMin;
+            if(self.state.loadingS){
+                self.upDATA()
+            }
+          }
+      },false)
+      console.log(BodyMin);
+    }
     componentDidMount() {
-
+        this.upDATA();
+        this.inits();
     }
+    showBrand(){this.setState({showBrand: Math.random(),SFCSrandoms:'SFCSrandoms'});}
     render() {
+        const { DATA, topnotice,loadingS} = this.state;
+        let self = this;
         return (
-            <div className="clueBody cluePending">
-                <Panel>
-                    <PanelBody>
-                        <MediaBox type="text">
-                            <MediaBoxHeader>
-                                <Button type="primary" plain>立即抢</Button>
-                            </MediaBoxHeader>
-                            <MediaBoxBody>
-                                <MediaBoxDescription>
-                                    由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。
-                                </MediaBoxDescription>
-                                <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>3分钟前</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta>湖南</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta extra>长沙</MediaBoxInfoMeta>
-                                </MediaBoxInfo>
-                            </MediaBoxBody>
-                        </MediaBox>
-                    </PanelBody>
-                </Panel>
-            </div>
+            <Page className="robBody">
+                <ul className="robNav">
+                    <li onClick={this.showBrand}>品牌</li>
+                    <li onClick={this.SFCS}>地区</li>
+                </ul>
+                <div className="clueBody cluePending" id="clueBody">
+                    <div className="robMsg">
+                        <p>{topnotice}</p>
+                        <i onClick={this.Alts}></i>
+                    </div>
+                    {DATA.map(function(e,index){
+                        return(
+                        <Panel key={index}>
+                            <PanelBody>
+                                <MediaBox type="text">
+                                    <MediaBoxHeader>
+                                        <Button type="primary" title={e.maincluesid} onClick={self.RobLine} plain>立即抢</Button>
+                                    </MediaBoxHeader>
+                                    <MediaBoxBody>
+                                        <MediaBoxDescription>
+                                            {e.truckname}
+                                        </MediaBoxDescription>
+                                        <MediaBoxInfo>
+                                            <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
+                                            <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
+                                            <MediaBoxInfoMeta extra>{e.cityname}</MediaBoxInfoMeta>
+                                        </MediaBoxInfo>
+                                    </MediaBoxBody>
+                                </MediaBox>
+                            </PanelBody>
+                        </Panel>
+                    )})
+                }
+                {loadingS ? <LoadAd /> : <NoMor />}  
+                </div>
+                <Brand Datas={this.state.showBrand}  onChange={val =>this.upBrand(val)}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)}/>
+            </Page>
         );
     }
 };
+
+class LoadAd extends Component{
+  render(){
+    return(
+        <div className="spinner">
+          <div className="bounce1"></div>
+          <div className="bounce2"></div>
+          <div className="bounce3"></div>
+        </div>
+    )
+  }
+}
+
+class NoMor extends Component{
+  render(){
+    return(
+        <p className="noMor">没有更多了...</p>
+    )
+  }
+}

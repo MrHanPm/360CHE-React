@@ -6,52 +6,86 @@ import {Tool,Alert} from '../../tool.js';
 import './sidebar.less';
 
 class Sidebar extends React.Component{
-    constructor(props) {
-          super(props);
+  constructor(props) {
+      super(props);
+          
           this.state ={
             visible:false,
             active:false,
-            DATE:{
-              'L':['A','B','C','F','O','P'],
-              'R':[0,1,2,3,4,5,6]
-            }
+            values:'',
+            key:'',
+            L:[]
           }
-          this.closeSold = this.closeSold.bind(this);
-    }
-  componentDidMount(){
-    this.setState({
+      this.closeSold = this.closeSold.bind(this);
+      this.upDatas = this.upDatas.bind(this);
+  }
 
-    });
+  upDatas(e){
+    let citylistData = [];
+      let Ad = {
+        'values':e.target.title,
+        'key':e.target.innerHTML
+      };
+      this.setState({
+        values:e.target.title,
+        key:e.target.innerHTML,
+        visible:false
+      }, ()=> this.props.onChange(Ad));
   }
-  closeSold(){
+  componentDidMount(){
+    let self = this;
+    [].forEach.call(document.querySelectorAll('.PubSidebar'), function (el){  
+      el.addEventListener('touchend', function(e) {
+        var x = e.changedTouches[0].pageX;
+        if( x < 68 ){
+            self.closeSold();
+        }
+      }, false);
+    });
     this.setState({
-      visible:false
     });
   }
+  componentWillReceiveProps(nextProps) {
+    let carusagelist = JSON.parse(Tool.localItem('carusagelist'));
+    // let carusagelist =[
+      // {"key":"渣土运输","value":"1","isdropdownshow":1},
+      // {"key":"快递","value":"2","isdropdownshow":1},
+      // {"key":"蔬菜水果","value":"3","isdropdownshow":1},
+      // {"key":"日用百货","value":"4","isdropdownshow":1},
+      // {"key":"集装箱","value":"5","isdropdownshow":1},
+      // {"key":"其它","value":"6","isdropdownshow":1}];
+    this.setState({
+      L:carusagelist.carusagelist
+    });
+    if(typeof(nextProps.Datas) == 'number'){
+      this.setState({
+        visible: true
+      });
+    }
+  }
+  closeSold(){this.setState({visible:false});}
   render(){
-      let Datas = this.state.DATE;
-      let acts = Tool.localItem('Pactive');
+    let self = this;
+    let Fes = this.state.key;
       return(
           <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"}>
               <header>
-                  <span>品牌筛选</span>
+                  <span>车辆用途</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
               </header>
               <ul className="Fnav">
-                {Datas.L.map(function(e,indexs){
+                {this.state.L.map(function(e,indexs){
                   return(
-                    <li key={indexs} className={e == acts ? "active" :''}
-                        >
-                      {e}
-                    </li>
-                  )
-                })}
-              </ul>
-              <ul className="Lnav" style={{'display':this.state.active?'block':'none'}}>
-                {Datas.R.map(function(e,indexs){
-                  return(
-                    <li key={indexs} className={e == acts ? "active" :''}>
-                      {e}<Icon value="success" />
+                    <li key={indexs} 
+                    className={e.key == Fes ? "active" :''}
+                    >
+                      <span 
+                      title={e.value}
+                      onClick={self.upDatas}
+                      >
+                        {e.key}
+                      </span>
+                      <Icon value="success" />
                     </li>
                   )
                 })}
