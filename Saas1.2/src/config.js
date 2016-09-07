@@ -21,6 +21,8 @@ export const target = 'http://192.168.0.247:804/';
 //fingerprint          初始指纹包
 //
 
+ RobClues  抢到的线索
+
 
 appresourcelist         取得资源列表(系统用说明文字)
 

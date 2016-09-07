@@ -18,7 +18,9 @@ import Feedback from './pages/msg/feedback';
 import Account from './pages/account/index';
 import MdfPwd from './pages/mdfPwd/index';
 import Rob from './pages/rob/index';
+import RobClue from './pages/robClue/index';
 import AddClue from './pages/addClue/index';
+import AlterClue from './pages/alterClue/index';
 
 class App extends React.Component {
         render() {
@@ -52,7 +54,9 @@ ReactDOM.render((
             <Route path="account" component={Account}/>
             <Route path="mdfPwd" component={MdfPwd}/>
             <Route path="rob" component={Rob}/>
+            <Route path="robClue" component={RobClue}/>
             <Route path="addClue" component={AddClue}/>
+            <Route path="alterClue" component={AlterClue}/>
         </Route>
     </Router>
 ), document.getElementById('container'));

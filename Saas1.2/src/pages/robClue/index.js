@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {Button,
+    Toast,
     TextArea,
     ButtonArea,
     Form,
@@ -60,6 +61,7 @@ class MsgDemo extends React.Component {
             faildate:'',
             Checkbox:1,
             showConfirm: false,
+            showToast: false,
             confirm: {
                 title: '信息没保存，是否放弃？',
                 buttons: [
@@ -99,12 +101,12 @@ class MsgDemo extends React.Component {
         }, false);
     }
     componentDidMount() {
-        document.title = '添加线索';
+        document.title = '线索详情';
         document.getElementById('FailDate').valueAsDate = new Date();
         document.getElementById('DealDate').valueAsDate = new Date();
         this.setState({
-            pay:document.getElementById('DealDate').value,
-            faildate:document.getElementById('FailDate').value
+            pay:document.getElementById('FailDate').value,
+            faildate:document.getElementById('DealDate').value
         });
         let star = {title: "title",url: window.location.href};
         window.history.pushState(star,"title",window.location.href);
@@ -188,6 +190,16 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
+    showToast() {
+        this.setState({showToast: true});
+
+        this.state.toastTimer = setTimeout(()=> {
+            this.setState({showToast: false});
+            this.context.router.push({
+                pathname: '/nav'
+            });
+        }, 1000);
+    }
     onSaves(){
         if(this.checkForm()){
             let json = {};
@@ -243,13 +255,10 @@ class MsgDemo extends React.Component {
             json.isrelationcustomer = this.state.Checkbox;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
-            console.log(JSON.stringify(this.state));
             Tool.get('Clues/AddClues.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        this.context.router.push({
-                            pathname: '/nav'
-                        });
+                        this.showToast();
                     }else{
                         Alert.to(res.msg);
                     }
@@ -475,6 +484,7 @@ class MsgDemo extends React.Component {
                 <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:val})}/>
                 <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:val})}/>
                 <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:val})}/>
+                <Toast show={this.state.showToast}>线索添加成功</Toast>
             </Page>
         );
     }

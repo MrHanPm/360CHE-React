@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {Button,
+    Toast,
     TextArea,
     ButtonArea,
     Form,
@@ -60,8 +61,9 @@ class MsgDemo extends React.Component {
             faildate:'',
             Checkbox:1,
             showConfirm: false,
+            showToast: false,
             confirm: {
-                title: '信息没保存，是否放弃？',
+                title: '跟进24小时内未设置客户级别的线索将返回到公共线索池',
                 buttons: [
                     {
                         type: 'default',
@@ -69,7 +71,7 @@ class MsgDemo extends React.Component {
                         onClick: this.hideConfirm.bind(this)
                     },{
                         type: 'primary',
-                        label: '确定退出',
+                        label: '知道了',
                         onClick: this.goWell.bind(this)
                     }
                 ],
@@ -93,21 +95,156 @@ class MsgDemo extends React.Component {
         this.CLYT = this.CLYT.bind(this);
         this.ZB = this.ZB.bind(this);
         this.onSaves = this.onSaves.bind(this);
-        let self = this;
-        window.addEventListener("popstate", function(e) {
-            self.showConfirm();
-        }, false);
     }
     componentDidMount() {
-        document.title = '添加线索';
-        document.getElementById('FailDate').valueAsDate = new Date();
-        document.getElementById('DealDate').valueAsDate = new Date();
+        document.title = '修改线索';
+        let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
+        console.log(RobClueVal);
+        if(RobClueVal.rob == 1){
+            this.showConfirm();
+        }
+        
+        let CPLBd = JSON.parse(Tool.localItem('subcategorylist'));
+        let subcategoryname = '';
+        for(let i=0;i<CPLBd.subcategorylist.length;i++){
+            if(CPLBd.subcategorylist[i].subcategoryid == RobClueVal.subcategoryid){
+                subcategoryname = CPLBd.subcategorylist[i].subcategoryname
+            }
+        }
+
+        let QCPPd = JSON.parse(Tool.localItem('brandlist'));
+        let brandname = '';
+        for(let i=0;i<QCPPd.brandlist.length;i++){
+            if(QCPPd.brandlist[i].brandid == RobClueVal.brandid){
+                brandname = QCPPd.brandlist[i].brandname
+            }
+        }
+
+        let QCXLd = JSON.parse(Tool.localItem('serieslist'));
+        let seriesname = '';
+        for(let i=0;i<QCXLd.serieslist.length;i++){
+            if(QCXLd.serieslist[i].seriesid == RobClueVal.seriesid){
+                seriesname = QCXLd.serieslist[i].seriesname
+            }
+        }
+
+        let QCCXd = JSON.parse(Tool.localItem('productlist'));
+        let productname = '';
+        for(let i=0;i<QCCXd.productlist.length;i++){
+            if(QCCXd.productlist[i].productid == RobClueVal.productid){
+                productname = QCCXd.productlist[i].productname
+            }
+        }
+
+        let SFp = JSON.parse(Tool.localItem('provincelist'));
+        let provincename = '';
+        for(let i=0;i<SFp.provincelist.length;i++){
+            if(SFp.provincelist[i].provincesn == RobClueVal.provincesn){
+                provincename = SFp.provincelist[i].provincename
+            }
+        }
+
+        let SFc = JSON.parse(Tool.localItem('citylist'));
+        let cityname = '';
+        for(let i=0;i<SFc.citylist.length;i++){
+            if(SFc.citylist[i].citysn == RobClueVal.citysn){
+                cityname = SFc.citylist[i].cityname
+            }
+        }
+
+        let KHJBd = JSON.parse(Tool.localItem('cluelevellist'));
+        let keyJB = '';
+        for(let i=0;i<KHJBd.cluelevellist.length;i++){
+            if(KHJBd.cluelevellist[i].value == RobClueVal.clueslevel){
+                keyJB = KHJBd.cluelevellist[i].key
+            }
+        }
+
+        let XSLYd = JSON.parse(Tool.localItem('clueresourcelist'));
+        let keyLY = '';
+        for(let i=0;i<XSLYd.clueresourcelist.length;i++){
+            if(XSLYd.clueresourcelist[i].value == RobClueVal.clueresourceid){
+                keyLY = XSLYd.clueresourcelist[i].key
+            }
+        }
+
+        let CLYTd = JSON.parse(Tool.localItem('carusagelist'));
+        let keyYT = '';
+        for(let i=0;i<CLYTd.carusagelist.length;i++){
+            if(CLYTd.carusagelist[i].value == RobClueVal.cheliangyongtuid){
+                keyYT = CLYTd.carusagelist[i].key
+            }
+        }
+
+        let ZBvd = JSON.parse(Tool.localItem('failurecaselist'));
+        let keyZB = '';
+        for(let i=0;i<ZBvd.failurecaselist.length;i++){
+            if(ZBvd.failurecaselist[i].value == RobClueVal.fail){
+                keyZB = ZBvd.failurecaselist[i].key
+            }
+        }
         this.setState({
-            pay:document.getElementById('DealDate').value,
-            faildate:document.getElementById('FailDate').value
+            CPLBv:{
+                subcategoryid:RobClueVal.subcategoryid,
+                subcategoryname:subcategoryname
+            },
+            QCPPv:{
+                brandid:RobClueVal.brandid,
+                brandname:brandname
+            },
+            QCXLv:{
+                seriesid:RobClueVal.seriesid,
+                seriesname:seriesname
+            },
+            QCCXv:{
+                productid:RobClueVal.productid,
+                productname:productname
+            },
+            SFCSv:{
+                provincesn:RobClueVal.provincesn,
+                provincename:provincename,
+                citysn:RobClueVal.citysn,
+                cityname:cityname
+            },
+            KHJBv:{
+                values:RobClueVal.clueslevel,
+                key:keyJB,
+                addday:'',
+                adddayname:''
+            },
+            XSLYv:{
+                values:RobClueVal.clueresourceid,
+                key:keyLY
+            },
+            CLYTv:{
+                values:RobClueVal.cheliangyongtuid,
+                key:keyYT
+            },
+            ZBv:{
+                values:RobClueVal.fail,
+                key:keyZB
+            },
+            name:RobClueVal.realname,
+            phone:RobClueVal.tel,
+            numb:RobClueVal.expectedbycarnum,
+            msg:RobClueVal.remark,
+            deal:RobClueVal.dealtprice,
+            pay:RobClueVal.dealtdate,
+            faildate:RobClueVal.faildate,
         });
-        let star = {title: "title",url: window.location.href};
-        window.history.pushState(star,"title",window.location.href);
+        if(RobClueVal.dealtdate == ''){
+            document.getElementById('DealDate').valueAsDate = new Date();
+            this.setState({
+                pay:document.getElementById('DealDate').value,
+            });
+        }
+        if(RobClueVal.faildate == ''){
+            document.getElementById('FailDate').valueAsDate = new Date();
+            this.setState({
+                faildate:document.getElementById('FailDate').value
+            });
+        }
+        console.log(this.state);
     }
     Checkbox(e){
         if(e.target.checked){
@@ -188,6 +325,16 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
+    showToast() {
+        this.setState({showToast: true});
+
+        this.state.toastTimer = setTimeout(()=> {
+            this.setState({showToast: false});
+            this.context.router.push({
+                pathname: '/nav'
+            });
+        }, 1000);
+    }
     onSaves(){
         if(this.checkForm()){
             let json = {};
@@ -243,13 +390,10 @@ class MsgDemo extends React.Component {
             json.isrelationcustomer = this.state.Checkbox;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
-            console.log(JSON.stringify(this.state));
             Tool.get('Clues/AddClues.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        this.context.router.push({
-                            pathname: '/nav'
-                        });
+                        this.showToast();
                     }else{
                         Alert.to(res.msg);
                     }
@@ -475,6 +619,7 @@ class MsgDemo extends React.Component {
                 <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:val})}/>
                 <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:val})}/>
                 <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:val})}/>
+                <Toast show={this.state.showToast}>线索添加成功</Toast>
             </Page>
         );
     }

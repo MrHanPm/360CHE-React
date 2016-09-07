@@ -29,13 +29,13 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="javascript:;">
+                            <Cell href="#rob">
                                 <CellHeader><i className='findIcos knock'></i></CellHeader>
                                 <CellBody>
                                     <p>速抢线索</p>
                                 </CellBody>
                                 <CellFooter>
-                                    最新152条
+                                    
                                 </CellFooter>
                             </Cell>
                         </Cells>

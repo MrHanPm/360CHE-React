@@ -22,8 +22,7 @@ import {Tool,Alert} from '../../tool.js';
 import SF from '../sidebar/SF';//省份
 import './index.less';
 
-//PublicClues/GetCluesList.aspx
-export default class Clues extends Component {
+class Clues extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -44,7 +43,7 @@ export default class Clues extends Component {
         this.SFCS = this.SFCS.bind(this);
         this.upBrand = this.upBrand.bind(this);
         this.upSF = this.upSF.bind(this);
-        this.inits = this.inits.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
     Alts(){Alert.to('每个经销商每天只能抢500条线索');}
@@ -60,7 +59,8 @@ export default class Clues extends Component {
         });
         this.upDATA(val);
     }
-    upDATA(val){
+    upDATA(val,typ){
+        console.log(typ,'typ');
         console.log(val,'val');
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
@@ -119,10 +119,18 @@ export default class Clues extends Component {
         )
     }
     RobLine(e){
-        Tool.get('PublicClues/RobCustomer.aspx',{cluesid:e.target.title},
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //sessionid = oldData.sessionid;
+        let sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+        Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
             (res) => {
                 if(res.status == 1){
-                    
+                    let Data = res.data;
+                    Data.rob = '1';
+                    Tool.localItem('RobClues',JSON.stringify(Data));
+                    this.context.router.push({
+                        pathname: '/robClue'
+                    });
                 }else{
                     Alert.to(res.msg);
                 }
@@ -132,41 +140,38 @@ export default class Clues extends Component {
             }
         )
     }
-    inits(){
-      let self = this;
-      let BodyMin = document.getElementById('clueBody');
-      
+    handleScroll(e){
+      let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
-      BodyMin.addEventListener('scroll',function(e) {
-          DataMin = BodyMin.scrollHeight - 45;
-          Hit  = window.screen.height;
-          LastLi = BodyMin.scrollTop;
-          goNumb = DataMin - Hit - LastLi;
-          console.log(DataMin,goNumb,'goNumb');
-          if(goNumb < 10){
-            BodyMin.scrollTop = DataMin;
-            if(self.state.loadingS){
-                self.upDATA()
-            }
-          }
-      },false)
-      console.log(BodyMin);
+      DataMin = BodyMin.scrollHeight;
+      Hit  = window.screen.height;
+      LastLi = BodyMin.scrollTop;
+      goNumb = DataMin - Hit - LastLi;
+      if(goNumb == 0){
+        // BodyMin.scrollTop = DataMin;
+        if(this.state.loadingS){
+            let t
+            t && clearTimeout(t);
+            t = setTimeout(function(){
+                this.upDATA(undefined,'handleScroll');
+            }.bind(this),800);
+        }
+      }
     }
     componentDidMount() {
-        this.upDATA();
-        this.inits();
+        this.upDATA(undefined,'componentDidMount');
     }
     showBrand(){this.setState({showBrand: Math.random(),SFCSrandoms:'SFCSrandoms'});}
     render() {
-        const { DATA, topnotice,loadingS} = this.state;
+        const {loadingS, DATA, topnotice} = this.state;
         let self = this;
         return (
-            <Page className="robBody">
+            <Page className="robBody" >
                 <ul className="robNav">
                     <li onClick={this.showBrand}>品牌</li>
                     <li onClick={this.SFCS}>地区</li>
                 </ul>
-                <div className="clueBody cluePending" id="clueBody">
+                <div className="clueBody cluePending" id="clueBody" onScroll={this.handleScroll}>
                     <div className="robMsg">
                         <p>{topnotice}</p>
                         <i onClick={this.Alts}></i>
@@ -186,7 +191,7 @@ export default class Clues extends Component {
                                         <MediaBoxInfo>
                                             <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
-                                            <MediaBoxInfoMeta extra>{e.cityname}</MediaBoxInfoMeta>
+                                            <MediaBoxInfoMeta>{e.cityname}</MediaBoxInfoMeta>
                                         </MediaBoxInfo>
                                     </MediaBoxBody>
                                 </MediaBox>
@@ -194,7 +199,7 @@ export default class Clues extends Component {
                         </Panel>
                     )})
                 }
-                {loadingS ? <LoadAd /> : <NoMor />}  
+                {loadingS ? <LoadAd /> : <NoMor />}
                 </div>
                 <Brand Datas={this.state.showBrand}  onChange={val =>this.upBrand(val)}/>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)}/>
@@ -222,3 +227,9 @@ class NoMor extends Component{
     )
   }
 }
+
+
+Clues.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+export default Clues

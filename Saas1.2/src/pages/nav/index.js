@@ -114,7 +114,6 @@ export default class TabBarDemo extends React.Component {
     loadAllData(names,urls){
         let t;
         if (this.state.countdown == 0) {
-            console.log(urls.length);
             this.setState({countdown:urls.length,initData:false,});
             this.showConfirm();
             clearTimeout(t);
@@ -125,7 +124,7 @@ export default class TabBarDemo extends React.Component {
                 (res) => {
                     if(res.status === 1){
                         Tool.localItem(names[k],JSON.stringify(res));
-                        console.log(Tool.localItem(names[k]),names[k]);
+                        //console.log(Tool.localItem(names[k]),names[k]);
                     }else{
                         Alert.to(res.msg);
                     }
@@ -144,7 +143,7 @@ export default class TabBarDemo extends React.Component {
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //this.initData(oldData.sessionid);
 
-        this.initData('42037_65c548069fa7c7ed35d32c43a0e18f1790d2723c');
+        this.initData('42037_f4140da144bb5eccd803e06360d916d1842bc06e');
 
 
         if(oldData.alermsg !== null || oldData.alermsg.length !== 0){
