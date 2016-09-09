@@ -41,15 +41,21 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
-                    page++;
+                    if(res.listdata.length < 10){
+                        this.setState({loadingS:false});
+                    }
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
                     }
                     console.log(page,this.state.DATA);
-                    if(res.pagecount == page){this.setState({loadingS:false});}
-                    this.setState({
-                        nowpage:page
-                    });
+                    if(res.pagecount == page){
+                        this.setState({loadingS:false});
+                    }else{
+                        page++;
+                        this.setState({
+                            nowpage:page
+                        });
+                    }
                 }else{
                     Alert.to(res.msg);
                 }

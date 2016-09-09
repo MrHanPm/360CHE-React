@@ -106,7 +106,7 @@ class MsgDemo extends React.Component {
             pay:document.getElementById('DealDate').value,
             faildate:document.getElementById('FailDate').value
         });
-        let star = {title: "title",url: window.location.href};
+        let star = {title:"title",url: window.location.href};
         window.history.pushState(star,"title",window.location.href);
     }
     Checkbox(e){
@@ -261,8 +261,6 @@ class MsgDemo extends React.Component {
         }
     }
     render() {
-        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        // const {realname,tel,dealername} = oldData;
         let CPLBval;
         let QCPPval;
         let QCXLval;

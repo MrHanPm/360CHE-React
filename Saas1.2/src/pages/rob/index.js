@@ -97,18 +97,19 @@ class Clues extends Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
-                    page++;
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
                     }
                     console.log(page,this.state.DATA);
-                    if(res.pagecount == page){this.setState({loadingS:false});}
-                    this.setState({
-                        topnotice:res.topnotice,
-                        maxrobnum:res.maxrobnum,
-                        todayrobnum:res.todayrobnum,
-                        nowpage:page
-                    });
+                    if(res.pagecount == page){
+                        this.setState({loadingS:false});
+                    }else{
+                        page++;
+                        this.setState({
+                            topnotice:res.topnotice,
+                            nowpage:page
+                        });
+                    }
                 }else{
                     Alert.to(res.msg);
                 }

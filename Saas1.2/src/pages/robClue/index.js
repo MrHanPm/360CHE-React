@@ -146,7 +146,7 @@ class MsgDemo extends React.Component {
     CLYT(){this.setState({CLYTrandoms: Math.random()});}
     ZB(){this.setState({ZBrandoms: Math.random()});}
     showConfirm(){this.setState({showConfirm: true});}
-    hideConfirm(){this.setState({showConfirm: false});}
+    hideConfirm(){this.state.showConfirm = false}
     goWell(){ this.context.router.push({pathname: '/nav'});}
 
     checkForm(){

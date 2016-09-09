@@ -18,7 +18,7 @@ import {
 } from 'react-weui';
 
 import './index.less';
-
+import ShowAlert from '../../component/Alert.js'
 import Already from '../clueAlready/index.js';
 import Defeat from '../clueDefeat/index.js';
 import FollowUp from '../clueFollowUp/index.js';
@@ -62,9 +62,7 @@ class Clues extends React.Component {
     hide() {
         this.setState({show: false});
     }
-    componentDidMount() {
 
-    }
     render() {
         let Pages;
         switch(this.state.tab){
@@ -92,6 +90,7 @@ class Clues extends React.Component {
                 {Pages}
                 <span className="butX" onClick={this.show}></span>
                 <ActionSheet menus={this.state.menus} actions={this.state.actions} show={this.state.show} onRequestClose={this.hide} />
+                <ShowAlert />
             </div>
         );
     }
@@ -104,8 +103,3 @@ Clues.contextTypes = {
 
 export default Clues
 
-//弹窗小标志
-// <div className="clueBtnX">
-//     <span></span>
-//     <span className="butX_add"></span>
-// </div>
