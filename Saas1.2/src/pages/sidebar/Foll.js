@@ -26,6 +26,11 @@ class Sidebar extends React.Component{
             LY:[],
             YT:[]
           }
+
+      this.min_follInput = (e) => {this.state.s_follownummin = e.target.value;}
+      this.max_follInput = (e) => {this.state.s_follownummax = e.target.value;}
+      this.min_expeInput = (e) => {this.state.s_expectedbycarnummin = e.target.value;}
+      this.max_expeInput = (e) => {this.state.s_expectedbycarnummax = e.target.value;}
       this.closeSold = this.closeSold.bind(this);
       this.upDatas = this.upDatas.bind(this);
   }
@@ -118,10 +123,10 @@ class Sidebar extends React.Component{
                     <p>已跟进次数</p>
                   </dt>
                   <dd>
-                    <input type="number" placeholder="最低次数"/>
+                    <input type="number" placeholder="最低次数" onInput={this.min_follInput}/>
                   </dd>
                   <dd>
-                    <input type="number" placeholder="最高次数"/>
+                    <input type="number" placeholder="最高次数" onInput={this.max_follInput}/>
                   </dd>
                 </dl>
                 <dl className="PPstyle">
@@ -138,10 +143,10 @@ class Sidebar extends React.Component{
                     <p>购买台数</p>
                   </dt>
                   <dd>
-                    <input type="number" placeholder="最低台数"/>
+                    <input type="number" placeholder="最低台数" onInput={this.min_expeInput}/>
                   </dd>
                   <dd>
-                    <input type="number" placeholder="最高台数"/>
+                    <input type="number" placeholder="最高台数" onInput={this.max_expeInput}/>
                   </dd>
                 </dl>
                 <dl className="PPstyle">

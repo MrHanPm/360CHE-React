@@ -35,7 +35,6 @@ export default class Clues extends React.Component {
            s_sorttype:1,
            s_sortfield:'zh',
            FollV:'',
-           FOLLrandoms:'',
            DATA:[],
         }
         this.handleScroll = this.handleScroll.bind(this);
@@ -206,7 +205,7 @@ export default class Clues extends React.Component {
                 }
                 {loadingS ? <LoadAd /> : <NoMor />}
             </div>
-            <Foll onChange={val => this.setState({FollV: val,XSLYrandoms:'XSLYrandoms'})}/>
+            <Foll onChange={val => this.setState({FollV: val})}/>
         </div>
         );
     }
