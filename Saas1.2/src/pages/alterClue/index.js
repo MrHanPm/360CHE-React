@@ -340,7 +340,7 @@ class MsgDemo extends React.Component {
             let json = {};
             //let oldData = JSON.parse(Tool.localItem('vipLodData'));
             //json.sessionid = oldData.sessionid;
-            json.sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+            json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
             json.subcategoryid = this.state.CPLBv.subcategoryid;
             json.brandid = this.state.QCPPv.brandid;
             json.seriesid = this.state.QCXLv.seriesid;

@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {Button,
-    Toast,
     TextArea,
     ButtonArea,
     Form,
@@ -19,51 +18,20 @@ import {Button,
 } from 'react-weui';
 const { Confirm } = Dialog;
 import Page from '../../component/page';
-import SF from '../sidebar/SF';//省份
-import LB from '../sidebar/LB';//类别
-import PP from '../sidebar/PP';//品牌
-import XL from '../sidebar/XL';//系列
-import CX from '../sidebar/CX';//车型
-import JB from '../sidebar/JB';//客户级别
-import XS from '../sidebar/XS';//线索
-import YT from '../sidebar/YT';//用途
-import ZB from '../sidebar/ZB';//战败原因
 import {Tool,Alert} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            CPLBrandoms:'',
-            CPLBv:'',
-            QCPPrandoms:'',
-            QCPPv:'',
-            QCXLrandoms:'',
-            QCXLv:'',
-            QCCXrandoms:'',
-            QCCXv:'',
-            SFCSrandoms:'',
-            SFCSv:'',
-            KHJBrandoms:'',
-            KHJBv:'',
-            XSLYrandoms:'',
-            XSLYv:'',
-            CLYTrandoms:'',
-            CLYTv:'',
-            ZBrandoms:'',
-            ZBv:'',
-            name:'',
-            phone:'',
-            numb:0,
-            msg:'',
-            deal:'',
-            pay:'',
-            faildate:'',
-            Checkbox:1,
+            DATArob:'',
+            Messrob:[],
+            reccount:0,
             showConfirm: false,
-            showToast: false,
+            showDonwn:true,
+            SDSrandoms:'',
             confirm: {
-                title: '信息没保存，是否放弃？',
+                title: '确认放弃这条线索？',
                 buttons: [
                     {
                         type: 'default',
@@ -71,424 +39,409 @@ class MsgDemo extends React.Component {
                         onClick: this.hideConfirm.bind(this)
                     },{
                         type: 'primary',
-                        label: '确定退出',
-                        onClick: this.goWell.bind(this)
+                        label: '确定',
+                        onClick: this.goBeac.bind(this)
                     }
                 ],
             },
         };
-        this.nameInput = (e) => {this.state.name = e.target.value;}
-        this.phoneInput = (e) => {this.state.phone = e.target.value;}
-        this.numbInput = (e) => {this.state.numb = e.target.value;}
-        this.msgInput = (e) => {this.state.msg = e.target.value;}
-        this.dealInput = (e) => {this.state.deal = e.target.value;}
-        this.payInput = (e) => {this.state.pay = e.target.value;}
-        this.failInput = (e) => {this.state.faildate = e.target.value;}
-        this.Checkbox = this.Checkbox.bind(this);
-        this.SFCS = this.SFCS.bind(this);
-        this.QCPP = this.QCPP.bind(this);
-        this.QCXL = this.QCXL.bind(this);
-        this.QCCX = this.QCCX.bind(this);
-        this.CPLB = this.CPLB.bind(this);
-        this.KHJB = this.KHJB.bind(this);
-        this.XSLY = this.XSLY.bind(this);
-        this.CLYT = this.CLYT.bind(this);
-        this.ZB = this.ZB.bind(this);
-        this.onSaves = this.onSaves.bind(this);
+        
         let self = this;
-        window.addEventListener("popstate", function(e) {
-            self.showConfirm();
-        }, false);
+        this.showConfirm = this.showConfirm.bind(this);
+        this.ShoDonwn = this.ShoDonwn.bind(this);
+        this.HidDonwn = this.HidDonwn.bind(this);
+        this.goChengs = this.goChengs.bind(this);
+        this.addPursue = this.addPursue.bind(this);
+        this.SDS = this.SDS.bind(this);
     }
+    ShoDonwn(){this.setState({showDonwn:true});}
+    HidDonwn(){this.setState({showDonwn:false});}
+    SDS(e){
+        let st = parseInt(e.target.title);
+        this.setState({SDSrandoms:st});
+    }
+    goBeac(){
+        let persId = this.getQueryString('id');
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //sessionid = oldData.sessionid;
+        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        Tool.get('Clues/ChangeCluesStatus.aspx',{sessionid:sessionid,cluesextendid:persId},
+            (res) => {
+                if(res.status == 1){
+                    this.context.router.push({
+                        pathname: '/nav'
+                    });
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
+    getQueryString(name) {
+        let conts = window.location.hash.split("?");
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = conts[1].match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        else {
+            return null;
+        }
+    }
+
     componentDidMount() {
         document.title = '线索详情';
-        document.getElementById('FailDate').valueAsDate = new Date();
-        document.getElementById('DealDate').valueAsDate = new Date();
-        this.setState({
-            pay:document.getElementById('FailDate').value,
-            faildate:document.getElementById('DealDate').value
-        });
-        let star = {title: "title",url: window.location.href};
-        window.history.pushState(star,"title",window.location.href);
+        let persId = this.getQueryString('id');
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //sessionid = oldData.sessionid;
+        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid:persId},
+            (res) => {
+                if(res.status == 1){
+                    this.setState({DATArob:res.data});
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+        Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
+            (res) => {
+                if(res.status == 1){
+                    console.log(JSON.stringify(res.listdata[0]));
+                    if(res.reccount > 0){
+                        this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
+                    }else{
+                        this.setState({Messrob:res.listdata});
+                    }
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
     }
-    Checkbox(e){
-        if(e.target.checked){
-            this.setState({Checkbox:1});
-        }else{
-            this.setState({Checkbox:0});
-        }
-    }
-    CPLB(){this.setState({CPLBrandoms: Math.random()});}
-    QCPP(){
-        if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryid) !== 'undefined'){
-             this.setState({QCPPrandoms: Math.random()});
-        }else{
-            Alert.to('请选择类别');
-        }
-    }
-    QCXL(){
-        if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandid) !== 'undefined'){
-             this.setState({QCXLrandoms: Math.random()});
-        }else{
-            Alert.to('请选择品牌');
-        }
-    }
-    QCCX(){
-        if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesid) !== 'undefined'){
-             this.setState({QCCXrandoms: Math.random()});
-        }else{
-            Alert.to('请选择系列');
-        }
-    }
-    SFCS(){this.setState({SFCSrandoms: Math.random()});}
-    KHJB(){this.setState({KHJBrandoms: Math.random()});}
-    XSLY(){this.setState({XSLYrandoms: Math.random()});}
-    CLYT(){this.setState({CLYTrandoms: Math.random()});}
-    ZB(){this.setState({ZBrandoms: Math.random()});}
+
     showConfirm(){this.setState({showConfirm: true});}
-    hideConfirm(){this.state.showConfirm = false}
-    goWell(){ this.context.router.push({pathname: '/nav'});}
-
-    checkForm(){
-        if(this.state.CPLBv == '' || typeof(this.state.CPLBv.subcategoryid) == 'undefined'){
-            Alert.to("卡车类别不能为空");
-            return false;
-        }
-        if(this.state.QCPPv == '' || typeof(this.state.QCPPv.brandid) == 'undefined'){
-            Alert.to("卡车品牌不能为空");
-            return false;
-        }
-        if(this.state.QCXLv == '' || typeof(this.state.QCXLv.seriesid) == 'undefined'){
-            Alert.to("卡车系列不能为空");
-            return false;
-        }
-        let nam = (this.state.name).replace(/\s+$|^\s+/g,"");
-        if(nam == ''){
-            Alert.to("姓名不能为空");
-            return false;
-        }
-        if(this.state.phone == ''){
-            Alert.to("电话不能为空");
-            return false;
-        }
-        if(!(/^1[3|4|5|7|8]\d{9}$/.test(this.state.phone))){
-            Alert.to("手机号码格式有误");
-            return false;
-        }
-        if(this.state.XSLYv == '' || typeof(this.state.XSLYv.values) == 'undefined'){
-            Alert.to("线索来源不能为空");
-            return false;
-        }
-
-        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
-            Alert.to("客户级别不能为空");
-            return false;
-        }
-        if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
-            Alert.to("省份城市不能为空");
-            return false;
-        }
-        return true;
+    hideConfirm(){this.setState({showConfirm: false});}
+    goChengs(e){
+        let data = JSON.stringify(this.state.DATArob);
+        Tool.localItem('RobClues',data);
+        this.context.router.push({pathname: '/alterClue'});
     }
-    showToast() {
-        this.setState({showToast: true});
-
-        this.state.toastTimer = setTimeout(()=> {
-            this.setState({showToast: false});
-            this.context.router.push({
-                pathname: '/nav'
-            });
-        }, 1000);
-    }
-    onSaves(){
-        if(this.checkForm()){
-            let json = {};
-            //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-            //json.sessionid = oldData.sessionid;
-            json.sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
-            json.subcategoryid = this.state.CPLBv.subcategoryid;
-            json.brandid = this.state.QCPPv.brandid;
-            json.seriesid = this.state.QCXLv.seriesid;
-            json.truckid = this.state.QCCXv.productid;
-            json.realname = this.state.name;
-            json.tel = this.state.phone;
-            json.clueresourceid = this.state.XSLYv.values;
-
-            if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
-                json.clueslevel = '';
-            }else{
-                json.clueslevel = this.state.KHJBv.values;
-                if(this.state.KHJBv.values == 5){
-                    json.dealtprice = this.state.deal;
-                    json.dealtdate = this.state.pay;
-                }
-                if(this.state.KHJBv.values == 6){
-                    if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
-                        json.fail = '';
-                    }else{
-                        json.fail = this.state.ZBv.values;
-                    }
-                    json.faildate = this.state.faildate;
-                }
-            }
-            if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
-                json.provincesn = '';
-            }else{
-                json.provincesn = this.state.SFCSv.provincesn;
-            }
-            if(this.state.SFCSv == '' || typeof(this.state.SFCSv.citysn) == 'undefined'){
-                json.citysn = '';
-            }else{
-                json.citysn = this.state.SFCSv.citysn;
-            }
-            if(this.state.CLYTv == '' || typeof(this.state.CLYTv.values) == 'undefined'){
-                json.cheliangyongtuid = '';
-            }else{
-                json.cheliangyongtuid = this.state.CLYTv.values;
-            }
-            if(this.state.KHJBv == '' || typeof(this.state.KHJBv.addday) == 'undefined'){
-                json.addday = '';
-            }else{
-                json.addday = this.state.KHJBv.addday;
-            }
-
-            json.isrelationcustomer = this.state.Checkbox;
-            json.remark = this.state.msg;
-            json.expectedbycarnum = this.state.numb;
-            Tool.get('Clues/AddClues.aspx',json,
-                (res) => {
-                    if(res.status == 1){
-                        this.showToast();
-                    }else{
-                        Alert.to(res.msg);
-                    }
-                },
-                (err) => {
-                    Alert.to('网络异常，稍后重试。。');
-                }
-            )
-        }
+    addPursue(e){
+        let urlTxt = '/addPursue?id=' + e.target.title;
+        this.context.router.push({pathname: urlTxt});
     }
     render() {
-        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        // const {realname,tel,dealername} = oldData;
-        let CPLBval;
-        let QCPPval;
-        let QCXLval;
-        let QCCXval;
-        let SFCSval;
-        let KHJBval;
-        let XSLYval;
-        let CLYTval;
-        let ZBval;
-        let showDeal = false;
-        let showFail = false;
-        if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryname) !== 'undefined'){
-             CPLBval = this.state.CPLBv.subcategoryname;
+        let showBtns = false;
+        let self = this;
+        if(this.state.DATArob !== '' && typeof(this.state.DATArob.realname) !== 'undefined'){
+             
         }else{
-            CPLBval = '';
+            
         }
-        if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandname) !== 'undefined'){
-             QCPPval = this.state.QCPPv.brandname;
-        }else{
-            QCPPval = '';
-        }
-        if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesname) !== 'undefined'){
-             QCXLval = this.state.QCXLv.seriesname;
-        }else{
-            QCXLval = '';
-        }
-        if(this.state.QCCXv !== '' && typeof(this.state.QCCXv.productname) !== 'undefined'){
-             QCCXval = this.state.QCCXv.productname;
-        }else{
-            QCCXval = '';
-        }
-        if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincename) !== 'undefined'){
-             SFCSval = this.state.SFCSv.provincename +' '+this.state.SFCSv.cityname;
-        }else{
-            SFCSval = '';
-        }
-        if(this.state.KHJBv !== '' && typeof(this.state.KHJBv.key) !== 'undefined'){
-             KHJBval = this.state.KHJBv.key +' '+this.state.KHJBv.adddayname;
-             if(this.state.KHJBv.values == 5){showDeal = true;}else{showDeal = false;}
-             if(this.state.KHJBv.values == 6){showFail = true;}else{showFail = false;}
-        }else{
-            KHJBval = '';
-        }
-        if(this.state.XSLYv !== '' && typeof(this.state.XSLYv.key) !== 'undefined'){
-             XSLYval = this.state.XSLYv.key;
-        }else{
-            XSLYval = '';
-        }
-        if(this.state.CLYTv !== '' && typeof(this.state.CLYTv.key) !== 'undefined'){
-             CLYTval = this.state.CLYTv.key;
-        }else{
-            CLYTval = '';
-        }
-        if(this.state.ZBv !== '' && typeof(this.state.ZBv.key) !== 'undefined'){
-             ZBval = this.state.ZBv.key;
-        }else{
-            ZBval = '';
-        }
+        const {showDonwn,reccount,Messrob} = this.state;
+        const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid} = this.state.DATArob;
+        if(clueslevelname !== '' && typeof(clueslevelname) !== 'undefined'){showBtns = true;}
         return (
-            <Page className="account">
-                <Cells access>
-                    <Cell>
-                        <CellHeader><Label>选择类别</Label></CellHeader>
-                        <CellBody onClick={this.CPLB}>
-                            <Input type="text" placeholder="请选择类别" value={CPLBval} disabled={true}/>
-                        </CellBody>
-                        <CellFooter />
-                    </Cell>
-                    <Cell>
-                        <CellHeader><Label>选择品牌</Label></CellHeader>
-                        <CellBody onClick={this.QCPP}>
-                            <Input type="text" placeholder="请选择品牌" value={QCPPval} disabled={true}/>
-                        </CellBody>
-                        <CellFooter />
-                    </Cell>
-                    <Cell>
-                        <CellHeader><Label>选择系列</Label></CellHeader>
-                        <CellBody onClick={this.QCXL}>
-                            <Input type="text" placeholder="请选择系列" value={QCXLval} disabled={true}/>
-                        </CellBody>
-                        <CellFooter />
-                    </Cell>
-                    <Cell>
-                        <CellHeader><Label>选择车型</Label></CellHeader>
-                        <CellBody onClick={this.QCCX}>
-                            <Input type="text" placeholder="请选择车型" value={QCCXval} disabled={true}/>
-                        </CellBody>
-                        <CellFooter />
-                    </Cell>
-                </Cells>
+            <Page className="account robClues">
                 <Form>
+                    <FormCell>
+                        <CellHeader><Label>意向车型</Label></CellHeader>
+                        <CellBody>
+                            {truckname}
+                        </CellBody>
+                    </FormCell>
                     <FormCell>
                         <CellHeader><Label>客户姓名</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写客户姓名" onInput={this.nameInput}/>
+                            {realname}
                         </CellBody>
-                        <CellFooter/>
                     </FormCell>
                     <FormCell>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请填写客户电话" onInput={this.phoneInput}/>
+                            {tel}
                         </CellBody>
-                        <CellFooter />
+                        <CellFooter>A</CellFooter>
                     </FormCell>
                 </Form>
-                <Cells access>
-                    <Cell>
+                <Form style={{'display':showDonwn?'block':'none'}}>
+                    <FormCell>
+                        <CellHeader><Label>所属类别</Label></CellHeader>
+                        <CellBody>
+                            {subcategoryname}
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader><Label>所属品牌</Label></CellHeader>
+                        <CellBody>
+                            {brandname}
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader><Label>所属系列</Label></CellHeader>
+                        <CellBody>
+                            {seriesname}
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
                         <CellHeader><Label>客户级别</Label></CellHeader>
-                        <CellBody onClick={this.KHJB}>
-                            <Input type="text" placeholder="请填写客户级别" value={KHJBval} disabled={true}/>
+                        <CellBody>
+                            {clueslevelname}
                         </CellBody>
-                        <CellFooter />
-                    </Cell>
-                    <Cell>
+                    </FormCell>
+                    <FormCell>
                         <CellHeader><Label>省份城市</Label></CellHeader>
-                        <CellBody onClick={this.SFCS}>
-                            <Input type="text" placeholder="请选择省份城市" value={SFCSval} disabled={true}/>
+                        <CellBody>
+                            {provincename +' '+cityname}
                         </CellBody>
-                        <CellFooter />
-                    </Cell>
-                    <Cell>
+                    </FormCell>
+                    <FormCell>
                         <CellHeader><Label>线索来源</Label></CellHeader>
-                        <CellBody onClick={this.XSLY}>
-                            <Input type="text" placeholder="请选择线索来源" value={XSLYval} disabled={true}/>
+                        <CellBody>
+                            {clueresourcename}
                         </CellBody>
-                        <CellFooter />
-                    </Cell>
-                    <Cell>
+                    </FormCell>
+                    <FormCell>
                         <CellHeader><Label>车辆用途</Label></CellHeader>
-                        <CellBody onClick={this.CLYT}>
-                            <Input type="text" placeholder="请选择车辆用途" value={CLYTval} disabled={true}/>
+                        <CellBody>
+                            {cheliangyongtuname}
                         </CellBody>
-                        <CellFooter />
-                    </Cell>
-                </Cells>
-
-                <Form>
+                    </FormCell>
                     <FormCell>
                         <CellHeader><Label>购车数量</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请填写购车数量"onInput={this.numbInput}/>
+                            {expectedbycarnum}
                         </CellBody>
-                        <CellFooter />
                     </FormCell>
-                    <div className="showDeal" style={{'display':showDeal ? 'block':'none'}}>
+
+                    <Form style={{'display':clueslevel == 5?'block':'none'}}>
+                        <FormCell>
+                            <CellHeader><Label>成交车型</Label></CellHeader>
+                            <CellBody>
+                                {dealttruckname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交类别</Label></CellHeader>
+                            <CellBody>
+                                {dealtsubcategoryname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交品牌</Label></CellHeader>
+                            <CellBody>
+                                {dealtbrandname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交系列</Label></CellHeader>
+                            <CellBody>
+                                {dealtseriesname}
+                            </CellBody>
+                        </FormCell>
                         <FormCell>
                             <CellHeader><Label>成交价格</Label></CellHeader>
                             <CellBody>
-                                <Input type="number" placeholder="请填写成交价格" onInput={this.dealInput}/>
+                                {transactionprice}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交时间</Label></CellHeader>
+                            <CellBody>
+                                {dealtdate}
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <Form style={{'display':clueslevel == 6?'block':'none'}}>
+                        <FormCell>
+                            <CellHeader><Label>战败原因</Label></CellHeader>
+                            <CellBody>
+                                {failname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>战败时间</Label></CellHeader>
+                            <CellBody>
+                                {faildate}
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <FormCell>
+                        <CellHeader><Label>备注</Label></CellHeader>
+                        <CellBody>
+                            {remark}
+                        </CellBody>
+                    </FormCell>
+                </Form>
+                <div style={{'display':reccount > 0?'block':'none'}}>
+                    <div className="openClue" style={{'display':showDonwn?'none':'block'}} onClick={this.ShoDonwn}>展开详细信息</div>
+                    <div className="openClue UP" style={{'display':showDonwn?'block':'none'}} onClick={this.HidDonwn}>收起详细信息</div>
+                    <dl className="MessClues">
+                        <dt>跟进记录{reccount}条</dt>
+                        {Messrob.map(function(e,index){
+                        return(
+                            <dd key={index}>
+                                <div title={e.id} onClick={self.SDS}></div>
+                                <p>{e.createdate}</p>
+                                <h4>{e.followuptypename}</h4>
+                            </dd>
+                        )})}
+                    </dl>
+                </div>
+                <ul className="FollBtn" style={{'display':showBtns?'none':'block'}}>
+                  <li title={cluesextendid} onClick={this.showConfirm}>放弃这条线索</li>
+                  <li onClick={this.addPursue}>添加跟进记录</li>
+                </ul>
+                <ul className="FollBtn Rightrob" style={{'display':showBtns?'block':'none'}}>
+                  <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
+                </ul>
+                <span className="ChengClues" title={cluesextendid} onClick={this.goChengs}></span>
+                <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
+                </Confirm>
+                <SideRob data={this.state.Messrob} showD={this.state.SDSrandoms} onChange={val => this.setState({SDSrandoms: val})}/>
+            </Page>
+        );
+    }
+};
+
+class SideRob extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            DATA:{
+                "price":15,"dealtsubcategoryid":64,"dealtsubcategoryname":"载货车","dealtbrandid":155,"dealtbrandname":"广汽吉奥","dealtseriesid":1233,"dealtseriesname":"星旺","dealttruckid":15169,"dealttruckname":"2012款广汽吉奥 星旺M2 精英版 1.0L 60马力 汽油 微卡","dealtdate":"2016/08/25","fail":0,"failname":"","faildate":"","clueslevelcode":"O","id":0,"maincluesid":233,"cluesextendid":314340,"followuptypeid":2,"followuptypename":"上门拜访","expectedprice":0,"clueslevelid":5,"clueslevelname":"O  已成交","followupdate":"2016-08-25 17:25:14","createdate":"2016-08-25 17:25:59","remark":""
+            },
+            showSid:false
+        }
+        this.closeSold = this.closeSold.bind(this);
+    }
+    componentWillReceiveProps(nextProps) {
+        let ints;
+        for(let i=0;i<nextProps.data.length;i++){
+            if(nextProps.data[i].id == nextProps.showD){
+                ints = i;
+                break;
+            }
+        }
+        let datas = nextProps.data[ints];
+        console.log(ints,datas,'bbbbb');
+        if(typeof(nextProps.showD) == 'number'){
+          this.setState({
+            showSid: true,
+            DATA:datas,
+          });
+        }
+    }
+    closeSold(){this.setState({showSid:false},()=> this.props.onChange('SDSrandoms'));}
+    render() {
+        const {showSid}=this.state;
+        const {followupdate,followuptypename,price,dealtsubcategoryname,clueslevelname,dealtbrandname,dealtseriesname,expectedprice,dealtdate,faildate,dealttruckname,clueslevelid,failname,remark}=this.state.DATA;
+        return(
+            <div className={showSid?"SideRobClue visible":"SideRobClue"}>
+                <header>
+                  <span>跟进记录</span>
+                  <span className="closeBtn" onClick={this.closeSold}></span>
+                </header>
+                <Form>
+                    <FormCell>
+                        <CellHeader><Label>跟进时间</Label></CellHeader>
+                        <CellBody>
+                            {followupdate}
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader><Label>跟进方式</Label></CellHeader>
+                        <CellBody>
+                            {followuptypename}
+                        </CellBody>
+                    </FormCell>
+                    <FormCell style={{'display':clueslevelid !== 5 && clueslevelid !== 6?'block':'none'}}>
+                        <CellHeader><Label>预期价格</Label></CellHeader>
+                        <CellBody>
+                            {price}
+                        </CellBody>
+                        <CellFooter>万元</CellFooter>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader><Label>客户级别</Label></CellHeader>
+                        <CellBody>
+                            {clueslevelname}
+                        </CellBody>
+                    </FormCell>
+                    <Form style={{'display':clueslevelid == 5?'block':'none'}}>
+                        <FormCell>
+                            <CellHeader><Label>成交类别</Label></CellHeader>
+                            <CellBody>
+                                {dealtsubcategoryname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交品牌</Label></CellHeader>
+                            <CellBody>
+                                {dealtbrandname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交系列</Label></CellHeader>
+                            <CellBody>
+                                {dealtseriesname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交车型</Label></CellHeader>
+                            <CellBody>
+                                {dealttruckname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>成交价格</Label></CellHeader>
+                            <CellBody>
+                                {expectedprice}
                             </CellBody>
                             <CellFooter>万元</CellFooter>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>成交时间</Label></CellHeader>
                             <CellBody>
-                                <Input type="date" id="DealDate" onChange={this.payInput}/>
+                                {dealtdate}
                             </CellBody>
-                            <CellFooter />
                         </FormCell>
-                    </div>
-                    <Cells className="showFail" style={{'display':showFail ? 'block':'none'}}>
-                        <Cell>
+                    </Form>
+                    <Form style={{'display':clueslevelid == 6?'block':'none'}}>
+                        <FormCell>
                             <CellHeader><Label>战败原因</Label></CellHeader>
-                            <CellBody onClick={this.ZB}>
-                                <Input type="text" placeholder="请选择战败原因" value={ZBval} disabled={true}/>
+                            <CellBody>
+                                {failname}
                             </CellBody>
-                            <CellFooter />
-                        </Cell>
-                        <Cell>
+                        </FormCell>
+                        <FormCell>
                             <CellHeader><Label>战败时间</Label></CellHeader>
                             <CellBody>
-                                <Input type="date" id="FailDate" onChange={this.failInput}/>
+                                {faildate}
                             </CellBody>
-                        </Cell>
-                    </Cells>
+                        </FormCell>
+                    </Form>
                     <FormCell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字"onInput={this.msgInput}/>
+                            {remark}
                         </CellBody>
-                        <CellFooter></CellFooter>
                     </FormCell>
                 </Form>
-                <Form checkbox>
-                    <FormCell checkbox>
-                        <CellHeader>
-                            <Checkbox onChange={this.Checkbox} defaultChecked/>
-                        </CellHeader>
-                        <CellBody>关联已有用户</CellBody>
-                    </FormCell>
-                </Form>
-                <ButtonArea>
-                    <Button onClick={this.onSaves}  style={{'marginBottom':'100px'}}>保存</Button>
-                </ButtonArea>
-                <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
-                </Confirm>
-                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:val})}/>
-                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:val,QCPPv:'',QCXLv:'',QCCXv:''})}/>
-                <PP Datas={this.state.QCPPrandoms}
-                    subcategoryid={this.state.CPLBv.subcategoryid}
-                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:val,QCXLv:'',QCCXv:''})}/>
-                <XL Datas={this.state.QCXLrandoms}
-                    brandid={this.state.QCPPv.brandid}
-                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:val,QCCXv:''})}/>
-                <CX Datas={this.state.QCCXrandoms}
-                    seriesid={this.state.QCXLv.seriesid}
-                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:val})}/>
-                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:val})}/>
-                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:val})}/>
-                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:val})}/>
-                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:val})}/>
-                <Toast show={this.state.showToast}>线索添加成功</Toast>
-            </Page>
+            </div>
         );
     }
-};
+}
 
 
 MsgDemo.contextTypes = {

@@ -65,7 +65,7 @@ class Clues extends Component {
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //json.sessionid = oldData.sessionid;
-        json.sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
         if(typeof(val) == 'undefined'){
             json.brandid = this.state.brandid;
             json.nowpage = this.state.nowpage;
@@ -122,16 +122,12 @@ class Clues extends Component {
     RobLine(e){
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //sessionid = oldData.sessionid;
-        let sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
         Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
             (res) => {
                 if(res.status == 1){
-                    let Data = res.data;
-                    Data.rob = '1';
-                    Tool.localItem('RobClues',JSON.stringify(Data));
-                    this.context.router.push({
-                        pathname: '/robClue'
-                    });
+                    let urlTxt = '/robClue?id=' + res.data.cluesextendid;
+                    this.context.router.push({pathname: urlTxt});
                 }else{
                     Alert.to(res.msg);
                 }

@@ -143,7 +143,7 @@ export default class TabBarDemo extends React.Component {
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //this.initData(oldData.sessionid);
 
-        this.initData('42037_f4140da144bb5eccd803e06360d916d1842bc06e');
+        this.initData('42018_422bdaf3ca2073292e335c8f507812bd5df94093');
 
 
         if(oldData.alermsg !== null || oldData.alermsg.length !== 0){

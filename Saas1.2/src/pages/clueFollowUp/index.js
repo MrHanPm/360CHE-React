@@ -41,16 +41,31 @@ export default class Clues extends React.Component {
         this.RobLine = this.RobLine.bind(this);
         this.FilterS = this.FilterS.bind(this);
         this.FOLL = this.FOLL.bind(this);
+        this.FollSidebar = this.FollSidebar.bind(this);
     }
     upDATA(){
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //json.sessionid = oldData.sessionid;
-        json.sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
         json.nowpage = this.state.nowpage;
         json.cluesstatus = 1;
         json.s_sortfield = this.state.s_sortfield;
         json.s_sorttype = this.state.s_sorttype;
+        if(this.state.FollV !== '' && typeof(this.state.FollV.s_brandids) !== 'undefined'){
+            json.s_levelsetstatus = this.state.FollV.s_levelsetstatus;//级别状态
+            json.s_followstatus = this.state.FollV.s_followstatus;//跟进状态
+            json.s_follownummin = this.state.FollV.s_follownummin;//跟进次数
+            json.s_follownummax = this.state.FollV.s_follownummax;
+            json.s_expectedbycarnummin = this.state.FollV.s_expectedbycarnummin;//台数开始
+            json.s_expectedbycarnummax = this.state.FollV.s_expectedbycarnummax;
+            json.s_lastlinktimemin = this.state.FollV.s_lastlinktimemin;//时间开始
+            json.s_lastlinktimemax = this.state.FollV.s_lastlinktimemax;
+            json.s_brandids = this.state.FollV.s_brandids;//品牌id
+            json.s_clueslevel = this.state.FollV.s_clueslevel;//级别
+            json.s_clueresource = this.state.FollV.s_clueresource;//线索
+            json.s_cheliangyongtuid = this.state.FollV.s_cheliangyongtuid;//用途
+        }
         console.log(json);
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
@@ -83,6 +98,17 @@ export default class Clues extends React.Component {
             }
         )
     }
+    FollSidebar(val){
+        console.log(val);
+        if(val.s_levelsetstatus.length == 0 && val.s_followstatus.length == 0 && val.s_brandids.length ==0 && val.s_clueslevel.length ==0 && val.s_cheliangyongtuid.length ==0 && val.s_clueresource.length ==0 && val.s_expectedbycarnummax == -1 &&
+            val.s_expectedbycarnummin == -1 && val.s_follownummax == -1 && val.s_follownummin == -1 && val.s_lastlinktimemin == '' && val.s_lastlinktimemax == ''){
+            this.setState({pf:0});
+        }else{
+            this.setState({pf:1});
+        }
+        this.state.FollV = val;
+        this.upDATA();
+    }
     FilterS(e){
         if(e.target.title == 'zh'){
             this.state.p=1;
@@ -114,31 +140,13 @@ export default class Clues extends React.Component {
         this.upDATA();
     }
     FOLL(){
-        this.state.pf=1;
         document.getElementById('Folls').setAttribute('class','PubSidebar visible');
     }
     RobLine(e){
-        console.log(e.target);
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
-        let sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
-        Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid:e.target.title},
-            (res) => {
-                if(res.status == 1){
-                    let Data = res.data;
-                    Data.rob = '1';
-                    Tool.localItem('RobClues',JSON.stringify(Data));
-                    this.context.router.push({
-                        pathname: '/robClue'
-                    });
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('网络异常，稍后重试。。');
-            }
-        )
+        let urlTxt = '/robClue?id=' + e.target.title;
+        this.context.router.push({
+            pathname: urlTxt
+        });
     }
     handleScroll(e){
       let BodyMin = e.target;
@@ -205,7 +213,7 @@ export default class Clues extends React.Component {
                 }
                 {loadingS ? <LoadAd /> : <NoMor />}
             </div>
-            <Foll onChange={val => this.setState({FollV: val})}/>
+            <Foll onChange={val => this.FollSidebar(val)}/>
         </div>
         );
     }

@@ -35,7 +35,7 @@ export default class Clues extends React.Component {
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //json.sessionid = oldData.sessionid;
-        json.sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
         json.nowpage = this.state.nowpage;
         json.cluesstatus = 5;
         Tool.get('Clues/GetCluesList.aspx',json,
@@ -67,27 +67,8 @@ export default class Clues extends React.Component {
         )
     }
     RobLine(e){
-        console.log(e.target);
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
-        let sessionid = '42037_f4140da144bb5eccd803e06360d916d1842bc06e';
-        Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid:e.target.title},
-            (res) => {
-                if(res.status == 1){
-                    let Data = res.data;
-                    Data.rob = '1';
-                    Tool.localItem('RobClues',JSON.stringify(Data));
-                    this.context.router.push({
-                        pathname: '/robClue'
-                    });
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('网络异常，稍后重试。。');
-            }
-        )
+        let urlTxt = '/robClue?id=' + e.target.title;
+        this.context.router.push({pathname: urlTxt});
     }
     handleScroll(e){
       let BodyMin = e.target;
