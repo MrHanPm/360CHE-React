@@ -24,6 +24,12 @@ import LB from '../sidebar/LB';//类别
 import PP from '../sidebar/PP';//品牌
 import XL from '../sidebar/XL';//系列
 import CX from '../sidebar/CX';//车型
+
+import DLB from '../sidebar/DLB';//类别
+import DPP from '../sidebar/DPP';//品牌
+import DXL from '../sidebar/DXL';//系列
+import DCX from '../sidebar/DCX';//车型
+
 import JB from '../sidebar/JB';//客户级别
 import XS from '../sidebar/XS';//线索
 import YT from '../sidebar/YT';//用途
@@ -42,6 +48,16 @@ class MsgDemo extends React.Component {
             QCXLv:'',
             QCCXrandoms:'',
             QCCXv:'',
+
+            DcPLBrandoms:'',
+            DcPLBv:'',
+            DqCPPrandoms:'',
+            DqCPPv:'',
+            DqCXLrandoms:'',
+            DqCXLv:'',
+            DqCCXrandoms:'',
+            DqCCXv:'',
+
             SFCSrandoms:'',
             SFCSv:'',
             KHJBrandoms:'',
@@ -56,12 +72,12 @@ class MsgDemo extends React.Component {
             phone:'',
             numb:0,
             msg:'',
-            deal:'',
+            dealdate:'',
             pay:'',
             faildate:'',
+            id:'',
             Checkbox:1,
             showConfirm: false,
-            showToast: false,
             confirm: {
                 title: '跟进24小时内未设置客户级别的线索将返回到公共线索池',
                 buttons: [
@@ -77,19 +93,25 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-        this.nameInput = (e) => {this.state.name = e.target.value;}
-        this.phoneInput = (e) => {this.state.phone = e.target.value;}
-        this.numbInput = (e) => {this.state.numb = e.target.value;}
-        this.msgInput = (e) => {this.state.msg = e.target.value;}
-        this.dealInput = (e) => {this.state.deal = e.target.value;}
-        this.payInput = (e) => {this.state.pay = e.target.value;}
-        this.failInput = (e) => {this.state.faildate = e.target.value;}
+        this.nameInput = (e) => {this.setState({name:e.target.value});}
+        this.phoneInput = (e) => {this.setState({phone:e.target.value});}
+        this.numbInput = (e) => {this.setState({numb:e.target.value});}
+        this.msgInput = (e) => {this.setState({msg:e.target.value});}
+        this.dealInput = (e) => {this.setState({dealdate:e.target.value});}
+        this.payInput = (e) => {this.setState({pay:e.target.value});}
+        this.failInput = (e) => {this.setState({faildate:e.target.value});}
         this.Checkbox = this.Checkbox.bind(this);
         this.SFCS = this.SFCS.bind(this);
         this.QCPP = this.QCPP.bind(this);
         this.QCXL = this.QCXL.bind(this);
         this.QCCX = this.QCCX.bind(this);
         this.CPLB = this.CPLB.bind(this);
+
+        this.DQCPP = this.DQCPP.bind(this);
+        this.DQCXL = this.DQCXL.bind(this);
+        this.DQCCX = this.DQCCX.bind(this);
+        this.DCPLB = this.DCPLB.bind(this);
+
         this.KHJB = this.KHJB.bind(this);
         this.XSLY = this.XSLY.bind(this);
         this.CLYT = this.CLYT.bind(this);
@@ -100,142 +122,76 @@ class MsgDemo extends React.Component {
         document.title = '修改线索';
         let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
         console.log(RobClueVal);
-        if(RobClueVal.rob == 1){
-            this.showConfirm();
-        }
-        
-        let CPLBd = JSON.parse(Tool.localItem('subcategorylist'));
-        let subcategoryname = '';
-        for(let i=0;i<CPLBd.subcategorylist.length;i++){
-            if(CPLBd.subcategorylist[i].subcategoryid == RobClueVal.subcategoryid){
-                subcategoryname = CPLBd.subcategorylist[i].subcategoryname
-            }
-        }
-
-        let QCPPd = JSON.parse(Tool.localItem('brandlist'));
-        let brandname = '';
-        for(let i=0;i<QCPPd.brandlist.length;i++){
-            if(QCPPd.brandlist[i].brandid == RobClueVal.brandid){
-                brandname = QCPPd.brandlist[i].brandname
-            }
-        }
-
-        let QCXLd = JSON.parse(Tool.localItem('serieslist'));
-        let seriesname = '';
-        for(let i=0;i<QCXLd.serieslist.length;i++){
-            if(QCXLd.serieslist[i].seriesid == RobClueVal.seriesid){
-                seriesname = QCXLd.serieslist[i].seriesname
-            }
-        }
-
-        let QCCXd = JSON.parse(Tool.localItem('productlist'));
-        let productname = '';
-        for(let i=0;i<QCCXd.productlist.length;i++){
-            if(QCCXd.productlist[i].productid == RobClueVal.productid){
-                productname = QCCXd.productlist[i].productname
-            }
-        }
-
-        let SFp = JSON.parse(Tool.localItem('provincelist'));
-        let provincename = '';
-        for(let i=0;i<SFp.provincelist.length;i++){
-            if(SFp.provincelist[i].provincesn == RobClueVal.provincesn){
-                provincename = SFp.provincelist[i].provincename
-            }
-        }
-
-        let SFc = JSON.parse(Tool.localItem('citylist'));
-        let cityname = '';
-        for(let i=0;i<SFc.citylist.length;i++){
-            if(SFc.citylist[i].citysn == RobClueVal.citysn){
-                cityname = SFc.citylist[i].cityname
-            }
-        }
-
-        let KHJBd = JSON.parse(Tool.localItem('cluelevellist'));
-        let keyJB = '';
-        for(let i=0;i<KHJBd.cluelevellist.length;i++){
-            if(KHJBd.cluelevellist[i].value == RobClueVal.clueslevel){
-                keyJB = KHJBd.cluelevellist[i].key
-            }
-        }
-
-        let XSLYd = JSON.parse(Tool.localItem('clueresourcelist'));
-        let keyLY = '';
-        for(let i=0;i<XSLYd.clueresourcelist.length;i++){
-            if(XSLYd.clueresourcelist[i].value == RobClueVal.clueresourceid){
-                keyLY = XSLYd.clueresourcelist[i].key
-            }
-        }
-
-        let CLYTd = JSON.parse(Tool.localItem('carusagelist'));
-        let keyYT = '';
-        for(let i=0;i<CLYTd.carusagelist.length;i++){
-            if(CLYTd.carusagelist[i].value == RobClueVal.cheliangyongtuid){
-                keyYT = CLYTd.carusagelist[i].key
-            }
-        }
-
-        let ZBvd = JSON.parse(Tool.localItem('failurecaselist'));
-        let keyZB = '';
-        for(let i=0;i<ZBvd.failurecaselist.length;i++){
-            if(ZBvd.failurecaselist[i].value == RobClueVal.fail){
-                keyZB = ZBvd.failurecaselist[i].key
-            }
-        }
         this.setState({
+            id:RobClueVal.cluesextendid,
             CPLBv:{
                 subcategoryid:RobClueVal.subcategoryid,
-                subcategoryname:subcategoryname
+                subcategoryname:RobClueVal.subcategoryname
             },
             QCPPv:{
                 brandid:RobClueVal.brandid,
-                brandname:brandname
+                brandname:RobClueVal.brandname
             },
             QCXLv:{
                 seriesid:RobClueVal.seriesid,
-                seriesname:seriesname
+                seriesname:RobClueVal.seriesname
             },
             QCCXv:{
-                productid:RobClueVal.productid,
-                productname:productname
+                productid:RobClueVal.truckid,
+                productname:RobClueVal.truckname
+            },
+            DcPLBv:{
+                subcategoryid:RobClueVal.dealtsubcategoryid,
+                subcategoryname:RobClueVal.dealtsubcategoryname
+            },
+            DqCPPv:{
+                brandid:RobClueVal.dealtbrandid,
+                brandname:RobClueVal.dealtbrandname
+            },
+            DqCXLv:{
+                seriesid:RobClueVal.dealtseriesid,
+                seriesname:RobClueVal.dealtseriesname
+            },
+            DqCCXv:{
+                productid:RobClueVal.dealttruckid,
+                productname:RobClueVal.dealttruckname
             },
             SFCSv:{
                 provincesn:RobClueVal.provincesn,
-                provincename:provincename,
+                provincename:RobClueVal.provincename,
                 citysn:RobClueVal.citysn,
-                cityname:cityname
+                cityname:RobClueVal.cityname
             },
             KHJBv:{
                 values:RobClueVal.clueslevel,
-                key:keyJB,
+                key:RobClueVal.clueslevelname,
                 addday:'',
                 adddayname:''
             },
             XSLYv:{
                 values:RobClueVal.clueresourceid,
-                key:keyLY
+                key:RobClueVal.clueresourcename
             },
             CLYTv:{
                 values:RobClueVal.cheliangyongtuid,
-                key:keyYT
+                key:RobClueVal.cheliangyongtuname
             },
             ZBv:{
                 values:RobClueVal.fail,
-                key:keyZB
+                key:RobClueVal.failname
             },
             name:RobClueVal.realname,
             phone:RobClueVal.tel,
             numb:RobClueVal.expectedbycarnum,
             msg:RobClueVal.remark,
-            deal:RobClueVal.dealtprice,
-            pay:RobClueVal.dealtdate,
+            pay:RobClueVal.transactionprice,
+            dealdate:RobClueVal.dealtdate,
             faildate:RobClueVal.faildate,
         });
         if(RobClueVal.dealtdate == ''){
             document.getElementById('DealDate').valueAsDate = new Date();
             this.setState({
-                pay:document.getElementById('DealDate').value,
+                dealdate:document.getElementById('DealDate').value,
             });
         }
         if(RobClueVal.faildate == ''){
@@ -244,7 +200,6 @@ class MsgDemo extends React.Component {
                 faildate:document.getElementById('FailDate').value
             });
         }
-        console.log(this.state);
     }
     Checkbox(e){
         if(e.target.checked){
@@ -273,6 +228,28 @@ class MsgDemo extends React.Component {
              this.setState({QCCXrandoms: Math.random()});
         }else{
             Alert.to('请选择系列');
+        }
+    }
+    DCPLB(){this.setState({DcPLBrandoms: Math.random()});}
+    DQCPP(){
+        if(this.state.DcPLBv !== '' && typeof(this.state.DcPLBv.subcategoryid) !== 'undefined'){
+             this.setState({DqCPPrandoms: Math.random()});
+        }else{
+            Alert.to('请选择成交类别');
+        }
+    }
+    DQCXL(){
+        if(this.state.DqCPPv !== '' && typeof(this.state.DqCPPv.brandid) !== 'undefined'){
+             this.setState({DqCXLrandoms: Math.random()});
+        }else{
+            Alert.to('请选择成交品牌');
+        }
+    }
+    DQCCX(){
+        if(this.state.DqCXLv !== '' && typeof(this.state.DqCXLv.seriesid) !== 'undefined'){
+             this.setState({DqCCXrandoms: Math.random()});
+        }else{
+            Alert.to('请选择成交系列');
         }
     }
     SFCS(){this.setState({SFCSrandoms: Math.random()});}
@@ -325,16 +302,6 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
-    showToast() {
-        this.setState({showToast: true});
-
-        this.state.toastTimer = setTimeout(()=> {
-            this.setState({showToast: false});
-            this.context.router.push({
-                pathname: '/nav'
-            });
-        }, 1000);
-    }
     onSaves(){
         if(this.checkForm()){
             let json = {};
@@ -348,14 +315,18 @@ class MsgDemo extends React.Component {
             json.realname = this.state.name;
             json.tel = this.state.phone;
             json.clueresourceid = this.state.XSLYv.values;
-
+            json.cluesextendid = this.state.id;
             if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
                 json.clueslevel = '';
             }else{
                 json.clueslevel = this.state.KHJBv.values;
                 if(this.state.KHJBv.values == 5){
-                    json.dealtprice = this.state.deal;
-                    json.dealtdate = this.state.pay;
+                    json.dealtsubcategoryid = this.state.DcPLBv.subcategoryid;
+                    json.dealtbrandid = this.state.DqCPPv.brandid;
+                    json.dealtseriesid = this.state.DqCXLv.seriesid;
+                    json.dealttruckid = this.state.DqCCXv.productid;
+                    json.dealtprice = this.state.pay;
+                    json.dealtdate = this.state.dealdate;
                 }
                 if(this.state.KHJBv.values == 6){
                     if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
@@ -390,10 +361,13 @@ class MsgDemo extends React.Component {
             json.isrelationcustomer = this.state.Checkbox;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
-            Tool.get('Clues/AddClues.aspx',json,
+            //console.log(this.state,json);
+            Tool.get('Clues/EditClues.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        this.showToast();
+                        this.context.router.push({
+                            pathname: '/nav'
+                        });
                     }else{
                         Alert.to(res.msg);
                     }
@@ -405,12 +379,15 @@ class MsgDemo extends React.Component {
         }
     }
     render() {
-        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        // const {realname,tel,dealername} = oldData;
         let CPLBval;
         let QCPPval;
         let QCXLval;
         let QCCXval;
+
+        let DCPLBval;
+        let DQCPPval;
+        let DQCXLval;
+        let DQCCXval;
         let SFCSval;
         let KHJBval;
         let XSLYval;
@@ -438,6 +415,28 @@ class MsgDemo extends React.Component {
         }else{
             QCCXval = '';
         }
+
+        if(this.state.DcPLBv !== '' && typeof(this.state.DcPLBv.subcategoryname) !== 'undefined'){
+             DCPLBval = this.state.DcPLBv.subcategoryname;
+        }else{
+            DCPLBval = '';
+        }
+        if(this.state.DqCPPv !== '' && typeof(this.state.DqCPPv.brandname) !== 'undefined'){
+             DQCPPval = this.state.DqCPPv.brandname;
+        }else{
+            DQCPPval = '';
+        }
+        if(this.state.DqCXLv !== '' && typeof(this.state.DqCXLv.seriesname) !== 'undefined'){
+            DQCXLval = this.state.DqCXLv.seriesname;
+        }else{
+            DQCXLval = '';
+        }
+        if(this.state.DqCCXv !== '' && typeof(this.state.DqCCXv.productname) !== 'undefined'){
+            DQCCXval = this.state.DqCCXv.productname;
+        }else{
+            DQCCXval = '';
+        }
+
         if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincename) !== 'undefined'){
              SFCSval = this.state.SFCSv.provincename +' '+this.state.SFCSv.cityname;
         }else{
@@ -465,6 +464,7 @@ class MsgDemo extends React.Component {
         }else{
             ZBval = '';
         }
+        const {name,phone,pay,dealdate,faildate,msg,numb,XSLYv}=this.state;
         return (
             <Page className="account">
                 <Cells access>
@@ -501,14 +501,21 @@ class MsgDemo extends React.Component {
                     <FormCell>
                         <CellHeader><Label>客户姓名</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写客户姓名" onInput={this.nameInput}/>
+                            <Input type="text" placeholder="请填写客户姓名" onInput={this.nameInput} value={name}/>
                         </CellBody>
                         <CellFooter/>
                     </FormCell>
-                    <FormCell>
+                    <FormCell style={{'display':XSLYv.key == '卡车之家'?'none':''}}>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请填写客户电话" onInput={this.phoneInput}/>
+                            <Input type="number" placeholder="请填写客户电话" onInput={this.phoneInput} value={phone}/>
+                        </CellBody>
+                        <CellFooter />
+                    </FormCell>
+                    <FormCell style={{'display':XSLYv.key == '卡车之家'?'':'none'}}>
+                        <CellHeader><Label>客户电话</Label></CellHeader>
+                        <CellBody>
+                            <Input type="number" placeholder="请填写客户电话"  value={phone} disabled={true}/>
                         </CellBody>
                         <CellFooter />
                     </FormCell>
@@ -528,9 +535,16 @@ class MsgDemo extends React.Component {
                         </CellBody>
                         <CellFooter />
                     </Cell>
-                    <Cell>
+                    <Cell style={{'display':XSLYv.key == '卡车之家'?'none':''}}>
                         <CellHeader><Label>线索来源</Label></CellHeader>
                         <CellBody onClick={this.XSLY}>
+                            <Input type="text" placeholder="请选择线索来源" value={XSLYval} disabled={true}/>
+                        </CellBody>
+                        <CellFooter />
+                    </Cell>
+                    <Cell style={{'display':XSLYv.key == '卡车之家'?'':'none'}}>
+                        <CellHeader><Label>线索来源</Label></CellHeader>
+                        <CellBody>
                             <Input type="text" placeholder="请选择线索来源" value={XSLYval} disabled={true}/>
                         </CellBody>
                         <CellFooter />
@@ -548,22 +562,52 @@ class MsgDemo extends React.Component {
                     <FormCell>
                         <CellHeader><Label>购车数量</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请填写购车数量"onInput={this.numbInput}/>
+                            <Input type="number" placeholder="请填写购车数量"onInput={this.numbInput} value={numb}/>
                         </CellBody>
                         <CellFooter />
                     </FormCell>
                     <div className="showDeal" style={{'display':showDeal ? 'block':'none'}}>
+                        <Cells access>
+                            <Cell>
+                                <CellHeader><Label>成交类别</Label></CellHeader>
+                                <CellBody onClick={this.DCPLB}>
+                                    <Input type="text" placeholder="请选择类别" value={DCPLBval} disabled={true}/>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
+                            <Cell>
+                                <CellHeader><Label>成交品牌</Label></CellHeader>
+                                <CellBody onClick={this.DQCPP}>
+                                    <Input type="text" placeholder="请选择品牌" value={DQCPPval} disabled={true}/>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
+                            <Cell>
+                                <CellHeader><Label>成交系列</Label></CellHeader>
+                                <CellBody onClick={this.DQCXL}>
+                                    <Input type="text" placeholder="请选择系列" value={DQCXLval} disabled={true}/>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
+                            <Cell>
+                                <CellHeader><Label>成交车型</Label></CellHeader>
+                                <CellBody onClick={this.DQCCX}>
+                                    <Input type="text" placeholder="请选择车型" value={DQCCXval} disabled={true}/>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
+                        </Cells>
                         <FormCell>
                             <CellHeader><Label>成交价格</Label></CellHeader>
                             <CellBody>
-                                <Input type="number" placeholder="请填写成交价格" onInput={this.dealInput}/>
+                                <Input type="number" placeholder="请填写成交价格" onInput={this.payInput} value={pay}/>
                             </CellBody>
                             <CellFooter>万元</CellFooter>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>成交时间</Label></CellHeader>
                             <CellBody>
-                                <Input type="date" id="DealDate" onChange={this.payInput}/>
+                                <Input type="date" id="DealDate" onChange={this.dealInput} value={dealdate}/>
                             </CellBody>
                             <CellFooter />
                         </FormCell>
@@ -579,14 +623,14 @@ class MsgDemo extends React.Component {
                         <Cell>
                             <CellHeader><Label>战败时间</Label></CellHeader>
                             <CellBody>
-                                <Input type="date" id="FailDate" onChange={this.failInput}/>
+                                <Input type="date" id="FailDate" onChange={this.failInput} value={faildate}/>
                             </CellBody>
                         </Cell>
                     </Cells>
                     <FormCell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字"onInput={this.msgInput}/>
+                            <Input type="text" placeholder="请填写限800字"onInput={this.msgInput} value={msg}/>
                         </CellBody>
                         <CellFooter></CellFooter>
                     </FormCell>
@@ -604,22 +648,32 @@ class MsgDemo extends React.Component {
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:val})}/>
-                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:val,QCPPv:'',QCXLv:'',QCCXv:''})}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})}/>
+                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})}/>
                 <PP Datas={this.state.QCPPrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
-                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:val,QCXLv:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
                     brandid={this.state.QCPPv.brandid}
-                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:val,QCCXv:''})}/>
+                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
                     seriesid={this.state.QCXLv.seriesid}
-                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:val})}/>
-                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:val})}/>
-                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:val})}/>
-                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:val})}/>
-                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:val})}/>
-                <Toast show={this.state.showToast}>线索添加成功</Toast>
+                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
+                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>
+                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:''})}/>
+                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:''})}/>
+                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})}/>
+
+                <DLB Drandoms={this.state.DcPLBrandoms} onChange={val => this.setState({DcPLBv: val,DcPLBrandoms:'',DqCPPv:'',DqCXLv:'',DqCCXv:''})}/>
+                <DPP Drandoms={this.state.DqCPPrandoms}
+                    subcategoryid={this.state.DcPLBv.subcategoryid}
+                    onChange={val => this.setState({DqCPPv: val,DqCPPrandoms:'',DqCXLv:'',DqCCXv:''})}/>
+                <DXL Drandoms={this.state.DqCXLrandoms}
+                    brandid={this.state.DqCPPv.brandid}
+                    onChange={val => this.setState({DqCXLv: val,DqCXLrandoms:'',DqCCXv:''})}/>
+                <DCX Drandoms={this.state.DqCCXrandoms}
+                    seriesid={this.state.DqCXLv.seriesid}
+                    onChange={val => this.setState({DqCCXv: val,DqCCXrandoms:''})}/>
             </Page>
         );
     }

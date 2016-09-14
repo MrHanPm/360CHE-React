@@ -28,6 +28,7 @@ class MsgDemo extends React.Component {
             Messrob:[],
             reccount:0,
             showConfirm: false,
+            showAlertCfm:false,
             showDonwn:true,
             SDSrandoms:'',
             confirm: {
@@ -41,6 +42,20 @@ class MsgDemo extends React.Component {
                         type: 'primary',
                         label: '确定',
                         onClick: this.goBeac.bind(this)
+                    }
+                ],
+            },
+            AlertCfm: {
+                title: '跟进24小时内未设置客户级别的线索将返回到公共线索池',
+                buttons: [
+                    {
+                        type: 'default',
+                        label: '取消',
+                        onClick: this.hideAlertCfm.bind(this)
+                    },{
+                        type: 'primary',
+                        label: '知道了',
+                        onClick: this.hideAlertCfm.bind(this)
                     }
                 ],
             },
@@ -117,7 +132,7 @@ class MsgDemo extends React.Component {
                     if(res.reccount > 0){
                         this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
                     }else{
-                        this.setState({Messrob:res.listdata});
+                        this.setState({Messrob:res.listdata,showAlertCfm:true});
                     }
                 }else{
                     Alert.to(res.msg);
@@ -131,6 +146,7 @@ class MsgDemo extends React.Component {
 
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
+    hideAlertCfm(){this.setState({showAlertCfm: false});}
     goChengs(e){
         let data = JSON.stringify(this.state.DATArob);
         Tool.localItem('RobClues',data);
@@ -293,20 +309,23 @@ class MsgDemo extends React.Component {
                             <dd key={index}>
                                 <div title={e.id} onClick={self.SDS}></div>
                                 <p>{e.createdate}</p>
-                                <h4>{e.followuptypename}</h4>
+                                <h4>设置级别为{e.clueslevelname}</h4>
+                                <h4 style={{'display':e.remark == ''?'none':'block'}}>备注：{e.remark}</h4>
                             </dd>
                         )})}
                     </dl>
                 </div>
                 <ul className="FollBtn" style={{'display':showBtns?'none':'block'}}>
                   <li title={cluesextendid} onClick={this.showConfirm}>放弃这条线索</li>
-                  <li onClick={this.addPursue}>添加跟进记录</li>
+                  <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
                 </ul>
                 <ul className="FollBtn Rightrob" style={{'display':showBtns?'block':'none'}}>
                   <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
                 </ul>
                 <span className="ChengClues" title={cluesextendid} onClick={this.goChengs}></span>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
+                </Confirm>
+                <Confirm title={this.state.AlertCfm.title} buttons={this.state.AlertCfm.buttons} show={this.state.showAlertCfm}>
                 </Confirm>
                 <SideRob data={this.state.Messrob} showD={this.state.SDSrandoms} onChange={val => this.setState({SDSrandoms: val})}/>
             </Page>
@@ -365,7 +384,7 @@ class SideRob extends React.Component {
                             {followuptypename}
                         </CellBody>
                     </FormCell>
-                    <FormCell style={{'display':clueslevelid !== 5 && clueslevelid !== 6?'block':'none'}}>
+                    <FormCell style={{'display':clueslevelid !== 5 && clueslevelid !== 6?'':'none'}}>
                         <CellHeader><Label>预期价格</Label></CellHeader>
                         <CellBody>
                             {price}

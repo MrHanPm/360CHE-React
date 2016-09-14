@@ -55,7 +55,7 @@ class MsgDemo extends React.Component {
             phone:'',
             numb:0,
             msg:'',
-            deal:'',
+            dealdate:'',
             pay:'',
             faildate:'',
             Checkbox:1,
@@ -79,7 +79,7 @@ class MsgDemo extends React.Component {
         this.phoneInput = (e) => {this.state.phone = e.target.value;}
         this.numbInput = (e) => {this.state.numb = e.target.value;}
         this.msgInput = (e) => {this.state.msg = e.target.value;}
-        this.dealInput = (e) => {this.state.deal = e.target.value;}
+        this.dealInput = (e) => {this.state.dealdate = e.target.value;}
         this.payInput = (e) => {this.state.pay = e.target.value;}
         this.failInput = (e) => {this.state.faildate = e.target.value;}
         this.Checkbox = this.Checkbox.bind(this);
@@ -94,20 +94,20 @@ class MsgDemo extends React.Component {
         this.ZB = this.ZB.bind(this);
         this.onSaves = this.onSaves.bind(this);
         let self = this;
-        window.addEventListener("popstate", function(e) {
-            self.showConfirm();
-        }, false);
+        // window.addEventListener("popstate", function(e) {
+        //     self.showConfirm();
+        // }, false);
     }
     componentDidMount() {
         document.title = '添加线索';
         document.getElementById('FailDate').valueAsDate = new Date();
         document.getElementById('DealDate').valueAsDate = new Date();
         this.setState({
-            pay:document.getElementById('DealDate').value,
+            dealdate:document.getElementById('DealDate').value,
             faildate:document.getElementById('FailDate').value
         });
-        let star = {title:"title",url: window.location.href};
-        window.history.pushState(star,"title",window.location.href);
+        // let star = {title:"title",url: window.location.href};
+        // window.history.pushState(star,"title",window.location.href);
     }
     Checkbox(e){
         if(e.target.checked){
@@ -207,8 +207,8 @@ class MsgDemo extends React.Component {
             }else{
                 json.clueslevel = this.state.KHJBv.values;
                 if(this.state.KHJBv.values == 5){
-                    json.dealtprice = this.state.deal;
-                    json.dealtdate = this.state.pay;
+                    json.dealtprice = this.state.pay;
+                    json.dealtdate = this.state.dealdate.replace(/-/g,'/');
                 }
                 if(this.state.KHJBv.values == 6){
                     if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
@@ -216,7 +216,7 @@ class MsgDemo extends React.Component {
                     }else{
                         json.fail = this.state.ZBv.values;
                     }
-                    json.faildate = this.state.faildate;
+                    json.faildate = this.state.faildate.replace(/-/g,'/');
                 }
             }
             if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
@@ -410,14 +410,14 @@ class MsgDemo extends React.Component {
                         <FormCell>
                             <CellHeader><Label>成交价格</Label></CellHeader>
                             <CellBody>
-                                <Input type="number" placeholder="请填写成交价格" onInput={this.dealInput}/>
+                                <Input type="number" placeholder="请填写成交价格" onInput={this.payInput}/>
                             </CellBody>
                             <CellFooter>万元</CellFooter>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>成交时间</Label></CellHeader>
                             <CellBody>
-                                <Input type="date" id="DealDate" onChange={this.payInput}/>
+                                <Input type="date" id="DealDate" onChange={this.dealInput}/>
                             </CellBody>
                             <CellFooter />
                         </FormCell>
@@ -458,21 +458,21 @@ class MsgDemo extends React.Component {
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:val})}/>
-                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:val,QCPPv:'',QCXLv:'',QCCXv:''})}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})}/>
+                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})}/>
                 <PP Datas={this.state.QCPPrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
-                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:val,QCXLv:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
                     brandid={this.state.QCPPv.brandid}
-                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:val,QCCXv:''})}/>
+                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
                     seriesid={this.state.QCXLv.seriesid}
-                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:val})}/>
-                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:val})}/>
-                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:val})}/>
-                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:val})}/>
-                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:val})}/>
+                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
+                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>
+                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:''})}/>
+                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:''})}/>
+                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})}/>
             </Page>
         );
     }

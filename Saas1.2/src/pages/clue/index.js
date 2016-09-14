@@ -30,6 +30,7 @@ class Clues extends React.Component {
         this.state = {
             tab:0,
             show: false,
+            red:false,
             menus: [{
                 label: '速抢线索',
                 onClick: ()=> {
