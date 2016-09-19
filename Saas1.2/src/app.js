@@ -22,6 +22,7 @@ import RobClue from './pages/robClue/index';
 import AddClue from './pages/addClue/index';
 import AlterClue from './pages/alterClue/index';
 import AddPursue from './pages/addPursue/index';
+import AddTel from './pages/addTel/index';
 
 class App extends React.Component {
         render() {
@@ -59,6 +60,7 @@ ReactDOM.render((
             <Route path="addClue" component={AddClue}/>
             <Route path="alterClue" component={AlterClue}/>
             <Route path="addPursue" component={AddPursue}/>
+            <Route path="addTel" component={AddTel}/>
         </Route>
     </Router>
 ), document.getElementById('container'));

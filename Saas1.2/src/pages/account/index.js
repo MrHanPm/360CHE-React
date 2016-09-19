@@ -56,9 +56,11 @@ class MsgDemo extends React.Component {
         this.setState({showConfirm: false});
     }
     Quit(){
-        let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //console.log(oldData);
-        Tool.get('User/LoginOut.aspx',{sessionid:oldData.sessionid},
+        let json={};
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //json.sessionid = oldData.sessionid;
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        Tool.get('User/LoginOut.aspx',json,
             (res) => {
                 if(res.status == 1){
                     Tool.localItem('vipLodData','');

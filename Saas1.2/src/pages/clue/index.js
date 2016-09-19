@@ -63,7 +63,9 @@ class Clues extends React.Component {
     hide() {
         this.setState({show: false});
     }
-
+    componentDidMount(){
+        document.title="线索";
+    }
     render() {
         let Pages;
         switch(this.state.tab){

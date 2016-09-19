@@ -27,7 +27,7 @@ class Clues extends Component {
         super(props);
         this.state = {
             loadingS:true,
-            showBrand:'',
+            showBrands:'',
             brandid:'',
             SFCSrandoms:'',
             SFCSv:'',
@@ -47,9 +47,9 @@ class Clues extends Component {
         this.RobLine = this.RobLine.bind(this);
     }
     Alts(){Alert.to('每个经销商每天只能抢500条线索');}
-    SFCS(){this.setState({SFCSrandoms: Math.random(),showBrand:'showBrand'});}
+    SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:'showBrands'});}
     upBrand(val){
-        this.setState({brandid: val,showBrand:'showBrand'})
+        this.setState({brandid: val,showBrands:'showBrands'})
         this.upDATA(val);
     }
     upSF(val){
@@ -158,7 +158,7 @@ class Clues extends Component {
     componentDidMount() {
         this.upDATA(undefined,'componentDidMount');
     }
-    showBrand(){this.setState({showBrand: Math.random(),SFCSrandoms:'SFCSrandoms'});}
+    showBrand(){ this.setState({showBrands:Math.random(),SFCSrandoms:'SFCSrandoms'});}
     render() {
         const {loadingS, DATA, topnotice} = this.state;
         let self = this;
@@ -198,7 +198,7 @@ class Clues extends Component {
                 }
                 {loadingS ? <LoadAd /> : <NoMor />}
                 </div>
-                <Brand Datas={this.state.showBrand}  onChange={val =>this.upBrand(val)}/>
+                <Brand Datas={this.state.showBrands}  onChange={val =>this.upBrand(val)}/>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)}/>
             </Page>
         );

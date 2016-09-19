@@ -109,10 +109,10 @@ class Sidebar extends React.Component{
         var Scale = document.getElementById('index_selected');
             Scale.innerHTML = val;
             setTimeout(function(){
-                Scale.setAttribute('style','display:block;opacity:1');
+                Scale.setAttribute('class','scale show');
             },10);
             toastTimer = setTimeout(function(){
-                Scale.removeAttribute('style');
+                Scale.setAttribute('class','scale');
             },500);
     }
     UlScroll(el){
