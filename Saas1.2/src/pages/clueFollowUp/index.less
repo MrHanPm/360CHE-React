@@ -93,8 +93,10 @@
     .acs:before{border-bottom: 7px solid #00b800;}
     .acs:after{border-top: 7px solid #ccc;}
   }
-  .FollNavCssf:before{content:''; height:3px; width:3px; background:#ccc; border-radius:6px;-webkit-border-radius:6px;-moz-border-radius:6px; display:block; position:absolute; top:13px; right:20%; box-shadow:0 6px 0 #ccc, 0 12px 0 #ccc;-webkit-box-shadow:0 6px 0 #ccc, 0 12px 0 #ccc;-moz-box-shadow:0 6px 0 #ccc, 0 12px 0 #ccc; }
-  .FollNavCssf.active:before{background:#00b800;box-shadow:0 6px 0 #00b800, 0 12px 0 #00b800;-webkit-box-shadow:0 6px 0 #00b800, 0 12px 0 #00b800;-moz-box-shadow:0 6px 0 #00b800, 0 12px 0 #00b800;}
+  .FollNavCssf:after{content:'\e61b'; font-family: 'saas_ico'; color: #ccc;
+    position: absolute;top: -2px;right: 15%;
+  }
+  .FollNavCssf.active:after{color:#00b800;}
 }
 
 

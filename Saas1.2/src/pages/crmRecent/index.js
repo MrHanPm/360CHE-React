@@ -15,23 +15,111 @@ import {
     MediaBoxInfoMeta,
     ActionSheet,
     SearchBar,
+    Dialog,
+    Toast,
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
 import './index.less';
-
+const {Confirm} = Dialog;
 class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
-           loadingS:true,
-           nowpage:1,
-           DATA:[],
+            loadingS:true,
+            showToast: false,
+            toastTimer: null,
+            DelId:'',
+            DelInO:'',
+            nowpage:1,
+            DATA:[],
+            confirm: {
+                title: '确认删除这位联系人吗？',
+                buttons: [
+                    {
+                        type: 'default',
+                        label: '取消',
+                        onClick: this.hideConfirm.bind(this)
+                    },
+                    {
+                        type: 'primary',
+                        label: '删除',
+                        onClick: this.DelActive.bind(this)
+                    }
+                ]
+            }
         }
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
+        this.CrmStar = this.CrmStar.bind(this);
+        this.CrmDels = this.CrmDels.bind(this);
+        this.CrmMesc = this.CrmMesc.bind(this);
     }
-
+    showConfirm(){this.setState({showConfirm: true});}
+    hideConfirm(){this.setState({showConfirm: false});}
+    showToast() {
+        this.setState({showToast: true});
+        this.state.toastTimer = setTimeout(()=> {
+            this.setState({showToast: false});
+        }, 1200);
+    }
+    CrmStar(e){
+        let doms = e.target;
+        let json={};
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //json.sessionid = oldData.sessionid;
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        json.customerid = e.target.title;
+        json.status = doms.getAttribute('data') == '1' ? 0 :1;
+        console.log(json);
+        Tool.get('Customer/ChangeCustomerStatus.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                    this.showToast();
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
+    CrmDels(e){
+        let doms = e.target;
+        this.state.DelInO = doms.getAttribute('data');
+        this.state.DelId = e.target.title;
+        this.showConfirm();
+    }
+    CrmMesc(e){
+        let urlTxt = '/detailTel?id=' + e.target.title;
+        this.context.router.push({pathname: urlTxt});
+    }
+    DelActive(){
+        let json={};
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //json.sessionid = oldData.sessionid;
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        json.customerid = this.state.DelId;
+        Tool.get('Customer/DelCustomer.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                    let k = parseInt(this.state.DelInO);
+                    this.setState({showConfirm: false});
+                    let newDa = this.state.DATA;
+                    newDa.splice(k,1);
+                    this.setState({
+                        DATA:newDa
+                    });
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
     upDATA(){
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
@@ -68,15 +156,15 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
+        let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
-        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
-        Tool.get('Customer/UpdateCustomerLastLinkTime.aspx',{sessionid:sessionid,customerid:e.target.title},
+        //json.sessionid = oldData.sessionid;
+        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        json.customerid = e.target.title;
+        Tool.get('Customer/UpdateCustomerLastLinkTime.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    //let urlTxt = '/robClue?id=' + res.data.cluesextendid;
-                    //this.context.router.push({pathname: urlTxt});
-                    //document.open('');
+                    
                 }else{
                     Alert.to(res.msg);
                 }
@@ -111,7 +199,7 @@ class Clues extends React.Component {
         const {loadingS, DATA} = this.state;
         let self = this;
         return (
-            <div className="clueBody cluePending cluePend"  onScroll={this.handleScroll}>
+            <div className="clueBody cluePending cluePend crmRecent"  onScroll={this.handleScroll}>
                 <SearchBar />
             {DATA.map(function(e,index){
                 return(
@@ -119,14 +207,17 @@ class Clues extends React.Component {
                     <PanelBody>
                         <MediaBox type="text">
                             <MediaBoxHeader>
-                                <Button type="primary" title={e.customerid} onClick={self.RobLine} plain>呼叫</Button>
+                                <a href={`tel:${e.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={e.customid} onClick={self.RobLine}> </a>
                             </MediaBoxHeader>
                             <MediaBoxBody>
                                 <MediaBoxDescription>
-                                    {e.customname}
+                                    <span>{e.customname}</span>
+                                    <i className={e.isfavorites?"crmStar active" :"crmStar" } title={e.customid} data={e.isfavorites} onClick={self.CrmStar}></i>
+                                    <i className="crmDels" title={e.customid} data={index} onClick={self.CrmDels}></i>
                                 </MediaBoxDescription>
                                 <MediaBoxInfo>
                                     <MediaBoxInfoMeta>{e.lastlinktime}</MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta className="crmMesc" title={e.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>
@@ -134,28 +225,10 @@ class Clues extends React.Component {
                 </Panel>
                 )})
             }
-
-            <Panel>
-                <PanelBody>
-                    <MediaBox type="text">
-                        <MediaBoxHeader>
-                            <Button type="primary" title="123123" onClick={self.RobLine} plain>呼叫</Button>
-                        </MediaBoxHeader>
-                        <MediaBoxBody>
-                            <MediaBoxDescription>
-                                王小川
-                            </MediaBoxDescription>
-                            <MediaBoxInfo>
-                                <MediaBoxInfoMeta>2016年12月23日 12:00</MediaBoxInfoMeta>
-                            </MediaBoxInfo>
-                        </MediaBoxBody>
-                    </MediaBox>
-                </PanelBody>
-            </Panel>
-
-
-
             {loadingS ? <LoadAd /> : <NoMor />}
+            <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
+            </Confirm>
+            <Toast show={this.state.showToast}>操作成功</Toast>
         </div>
         );
     }

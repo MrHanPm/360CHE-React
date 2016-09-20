@@ -49,14 +49,18 @@ class Clues extends Component {
     Alts(){Alert.to('每个经销商每天只能抢500条线索');}
     SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:'showBrands'});}
     upBrand(val){
-        this.setState({brandid: val,showBrands:'showBrands'})
+        //this.setState({brandid: val,showBrands:'showBrands'});
+        this.state.brandid = val;
+        this.state.showBrands = 'showBrands';
         this.upDATA(val);
     }
     upSF(val){
-        this.setState({
-            SFCSv: val,
-            SFCSrandoms:'SFCSrandoms'
-        });
+        // this.setState({
+        //     SFCSv: val,
+        //     SFCSrandoms:'SFCSrandoms'
+        // });
+        this.state.SFCSv = val;
+        this.state.SFCSrandoms = 'SFCSrandoms';
         this.upDATA(val);
     }
     upDATA(val,typ){
@@ -76,7 +80,9 @@ class Clues extends Component {
                 json.provincesn = '';
                 json.citysn = '';
             }
-        }else if(typeof(val) == 'string'){
+        }
+        if(typeof(val) == 'string'){
+            this.state.DATA = [];
             json.nowpage = 1;
             json.brandid = val;
             if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincesn) !== 'undefined'){
@@ -86,7 +92,9 @@ class Clues extends Component {
                 json.provincesn = '';
                 json.citysn = '';
             }
-        }else if(typeof(val) == 'object'){
+        }
+        if(typeof(val) == 'object'){
+            this.state.DATA = [];
             json.nowpage = 1;
             json.brandid = this.state.brandid;
             json.provincesn = val.provincesn;
@@ -97,10 +105,16 @@ class Clues extends Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
+                    this.state.SFCSrandoms = 'SFCSrandoms';
+                    this.state.showBrands = 'showBrands';
+                    if(res.listdata.length === 0){
+                        this.setState({loadingS:false});
+                    }else{
+                        this.setState({loadingS:true});
+                    }
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
                     }
-                    console.log(page,this.state.DATA);
                     if(res.pagecount == page){
                         this.setState({loadingS:false});
                     }else{
@@ -110,6 +124,7 @@ class Clues extends Component {
                             nowpage:page
                         });
                     }
+                    console.log(this.state);
                 }else{
                     Alert.to(res.msg);
                 }

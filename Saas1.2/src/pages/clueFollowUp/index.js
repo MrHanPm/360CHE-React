@@ -53,6 +53,7 @@ export default class Clues extends React.Component {
         json.s_sortfield = this.state.s_sortfield;
         json.s_sorttype = this.state.s_sorttype;
         if(this.state.FollV !== '' && typeof(this.state.FollV.s_brandids) !== 'undefined'){
+            json.nowpage = 1;
             json.s_levelsetstatus = this.state.FollV.s_levelsetstatus;//级别状态
             json.s_followstatus = this.state.FollV.s_followstatus;//跟进状态
             json.s_follownummin = this.state.FollV.s_follownummin;//跟进次数

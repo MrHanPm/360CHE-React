@@ -110,10 +110,13 @@ class MsgDemo extends React.Component {
     componentDidMount() {
         document.title = '线索详情';
         let persId = this.getQueryString('id');
+        let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
+        //json.sessionid = oldData.sessionid;
         let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
-        Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid:persId},
+        json.sessionid = sessionid;
+        json.cluesextendid = persId;
+        Tool.get('Clues/GetCluesDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
                     this.setState({DATArob:res.data});

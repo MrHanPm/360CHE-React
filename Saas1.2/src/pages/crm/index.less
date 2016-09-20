@@ -64,9 +64,23 @@
     .weui_media_box{
         width: 90%;
     }
+    .crmRecent{
+        .weui_media_box{
+            width: 100%;
+        }
+    }
     .weui_panel:after, .weui_panel:before{display: none;}
     .weui_panel_bd{border-bottom: 1px solid #f9f9f9;}
     .weui_panel_hd{background: #f9f9f9;padding: 5px 15px;}
+    .crmCall{
+        border:0;
+        height: 34px;
+        &:before{
+            content:'\e617';
+            font-family: 'saas_ico';
+            font-size: 30px;
+        }
+    }
     .butX{
         width: 45px;
         height: 45px;
@@ -88,5 +102,33 @@
         line-height: 45px;
         text-align: center;
         font-size: 26px;
+    }
+    .crmStar{
+        margin-left: 20px;
+        &:before{
+            content:'\e615';
+            font-family: 'saas_ico';
+            color: #ccc;
+        }
+    }
+    .crmStar.active:before{
+        content:'\e61a';
+        color: #04be02;
+    }
+    .crmDels{
+        margin-left: 20px;
+        &:before{
+            content:'\e614';
+            font-family: 'saas_ico';
+            color: #ccc;
+        }
+    }
+    .crmMesc{
+        margin-left: 20px;
+        &:before{
+            content:'\e613';
+            font-family: 'saas_ico';
+            color: #ccc;
+        }
     }
 }

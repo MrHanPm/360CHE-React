@@ -34,8 +34,8 @@
 
 /*侧边索引*/
 .brands-model{position: relative;}
-.scale{position: fixed;left:50%;top:50%;margin:-40px 0 0 -40px;width: 80px; height: 80px; line-height: 80px; text-align: center; font-size: 50px; color:#fff; border-radius: 8px; z-index: 11; background: rgba(0,0,0,.6);display:block;opacity: 0; -webkit-transition:opacity .2s ease-out;transition:opacity .2s ease-out;}
-.scale.show{opacity: 1;}
+.scale{position: fixed;left:50%;top:50%;margin:-40px 0 0 -40px;width: 80px; height: 80px; line-height: 80px; text-align: center; font-size: 50px; color:#fff; border-radius: 8px; z-index: -1; background: rgba(0,0,0,.6);display:block;opacity: 0; -webkit-transition:opacity .2s ease-out;transition:opacity .2s ease-out;}
+.scale.show{z-index: 111;opacity: 1;}
 
 #index_nav{position:fixed;top: 10%;right:0; z-index: 11;}
 #index_nav li{padding:0 10px;font-size: 14px;line-height: 22px;color:#666; text-align: center; font-weight: 500}

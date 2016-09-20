@@ -23,7 +23,9 @@ import AddClue from './pages/addClue/index';
 import AlterClue from './pages/alterClue/index';
 import AddPursue from './pages/addPursue/index';
 import AddTel from './pages/addTel/index';
-
+import AlterTel from './pages/alterTel/index';
+import DetailTel from './pages/detailTel/index';
+import CrmClue from './pages/crmClue/index';
 class App extends React.Component {
         render() {
                 return (
@@ -61,6 +63,9 @@ ReactDOM.render((
             <Route path="alterClue" component={AlterClue}/>
             <Route path="addPursue" component={AddPursue}/>
             <Route path="addTel" component={AddTel}/>
+            <Route path="alterTel" component={AlterTel}/>
+            <Route path="detailTel" component={DetailTel}/>
+            <Route path="crmClue" component={CrmClue}/>
         </Route>
     </Router>
 ), document.getElementById('container'));
