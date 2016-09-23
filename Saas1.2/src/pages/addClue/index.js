@@ -59,6 +59,7 @@ class MsgDemo extends React.Component {
             pay:'',
             faildate:'',
             Checkbox:1,
+            crmShow:false,
             showConfirm: false,
             confirm: {
                 title: '信息没保存，是否放弃？',
@@ -75,8 +76,8 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-        this.nameInput = (e) => {this.state.name = e.target.value;}
-        this.phoneInput = (e) => {this.state.phone = e.target.value;}
+        this.nameInput = (e) => {this.setState({name:e.target.value});}
+        this.phoneInput = (e) => {this.setState({phone:e.target.value});}
         this.numbInput = (e) => {this.state.numb = e.target.value;}
         this.msgInput = (e) => {this.state.msg = e.target.value;}
         this.dealInput = (e) => {this.state.dealdate = e.target.value;}
@@ -106,6 +107,27 @@ class MsgDemo extends React.Component {
             dealdate:document.getElementById('DealDate').value,
             faildate:document.getElementById('FailDate').value
         });
+
+        let crmId = Tool.getQueryString('id');
+        if(crmId !== null){
+            let crmData = JSON.parse(Tool.localItem('RobClues'));
+            console.log(crmData);
+            if(crmId == crmData.customid){
+                this.setState({
+                    name:crmData.customname,
+                    phone:crmData.customphone,
+                    crmShow:true,
+                    SFCSv:{
+                        'provincesn':crmData.provincesn,
+                        'provincename':crmData.provincename,
+                        'cityname':crmData.citynamne,
+                        'citysn':crmData.citysn
+                    }
+                });
+            }else{
+                Alert.to('数据异常，请核对后重试～');
+            }
+        }
         // let star = {title:"title",url: window.location.href};
         // window.history.pushState(star,"title",window.location.href);
     }
@@ -244,20 +266,36 @@ class MsgDemo extends React.Component {
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
             console.log(JSON.stringify(this.state));
-            Tool.get('Clues/AddClues.aspx',json,
-                (res) => {
-                    if(res.status == 1){
-                        this.context.router.push({
-                            pathname: '/nav'
-                        });
-                    }else{
-                        Alert.to(res.msg);
+            if(this.state.crmShow){
+                Tool.get('Clues/AddClues.aspx',json,
+                    (res) => {
+                        if(res.status == 1){
+                            let urlTxt = '/detailTel?id=' + res.data.customerId;
+                            this.context.router.push({pathname: urlTxt});
+                        }else{
+                            Alert.to(res.msg);
+                        }
+                    },
+                    (err) => {
+                        Alert.to('网络异常，稍后重试。。');
                     }
-                },
-                (err) => {
-                    Alert.to('网络异常，稍后重试。。');
-                }
-            )
+                )
+            }else{
+                Tool.get('Clues/AddClues.aspx',json,
+                    (res) => {
+                        if(res.status == 1){
+                            this.context.router.push({
+                                pathname: '/nav'
+                            });
+                        }else{
+                            Alert.to(res.msg);
+                        }
+                    },
+                    (err) => {
+                        Alert.to('网络异常，稍后重试。。');
+                    }
+                )
+            }
         }
     }
     render() {
@@ -319,6 +357,7 @@ class MsgDemo extends React.Component {
         }else{
             ZBval = '';
         }
+        const {name,phone,crmShow}=this.state;
         return (
             <Page className="account">
                 <Cells access>
@@ -355,14 +394,15 @@ class MsgDemo extends React.Component {
                     <FormCell>
                         <CellHeader><Label>客户姓名</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写客户姓名" onInput={this.nameInput}/>
+                            <Input type="text" placeholder="请填写客户姓名" value={name} onInput={this.nameInput}/>
                         </CellBody>
                         <CellFooter/>
                     </FormCell>
                     <FormCell>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请填写客户电话" onInput={this.phoneInput}/>
+                            <Input type="number" placeholder="请填写客户电话" value={phone} style={{'display':crmShow?'none':''}} onInput={this.phoneInput}/>
+                            <Input type="number" value={phone} style={{'display':crmShow?'':'none'}} disabled={true}/>
                         </CellBody>
                         <CellFooter />
                     </FormCell>
@@ -445,7 +485,7 @@ class MsgDemo extends React.Component {
                         <CellFooter></CellFooter>
                     </FormCell>
                 </Form>
-                <Form checkbox>
+                <Form style={{'display':crmShow?'none':''}} checkbox>
                     <FormCell checkbox>
                         <CellHeader>
                             <Checkbox onChange={this.Checkbox} defaultChecked/>

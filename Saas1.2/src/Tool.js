@@ -185,7 +185,17 @@ Tool.removeLocalItem = function (key) {
 Tool.checkPhone = function (phone){
     if((/^1[3|4|5|7|8]\d{9}$/.test(phone))){ return true; }else{return false;}
 }
-
+Tool.getQueryString = function(name) {
+    let conts = window.location.hash.split("?");
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    let r = conts[1].match(reg);
+    if (r != null) {
+        return unescape(r[2]);
+    }
+    else {
+        return null;
+    }
+}
 
 //弹窗提示的封装
 var Alert = {};

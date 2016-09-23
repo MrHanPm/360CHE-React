@@ -19,6 +19,7 @@ import {
     Toast,
     Button,
 } from 'react-weui';
+//import ImgseCrm from './crm.png';
 import {Tool,Alert} from '../../tool.js';
 import './index.less';
 const {Confirm} = Dialog;
@@ -50,6 +51,7 @@ class Clues extends React.Component {
             }
         }
         this.handleScroll = this.handleScroll.bind(this);
+        this.goSearchPage = this.goSearchPage.bind(this);
         this.RobLine = this.RobLine.bind(this);
         this.CrmStar = this.CrmStar.bind(this);
         this.CrmDels = this.CrmDels.bind(this);
@@ -62,6 +64,9 @@ class Clues extends React.Component {
         this.state.toastTimer = setTimeout(()=> {
             this.setState({showToast: false});
         }, 1200);
+    }
+    goSearchPage(){
+        this.context.router.push({pathname: '/search'});
     }
     CrmStar(e){
         let doms = e.target;
@@ -199,8 +204,8 @@ class Clues extends React.Component {
         const {loadingS, DATA} = this.state;
         let self = this;
         return (
-            <div className="clueBody cluePending cluePend crmRecent"  onScroll={this.handleScroll}>
-                <SearchBar />
+            <div className="clueBody cluePending cluePend crmRecent goSe"  onScroll={this.handleScroll}>
+                <div className="goSear" onClick={this.goSearchPage}>搜索</div>
             {DATA.map(function(e,index){
                 return(
                 <Panel key={index}>

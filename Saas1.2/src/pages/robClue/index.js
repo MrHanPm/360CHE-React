@@ -190,7 +190,9 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             {tel}
                         </CellBody>
-                        <CellFooter>A</CellFooter>
+                        <CellFooter className="cleAft">
+                            <a href={`tel:${tel}`}> </a>
+                        </CellFooter>
                     </FormCell>
                 </Form>
                 <Form style={{'display':showDonwn?'block':'none'}}>

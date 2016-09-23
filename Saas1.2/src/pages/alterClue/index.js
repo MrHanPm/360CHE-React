@@ -13,11 +13,10 @@ import {Button,
     Cells,
     Cell,
     CellFooter,
-    Dialog,
     Checkbox,
     CellBody
 } from 'react-weui';
-const { Confirm } = Dialog;
+
 import Page from '../../component/page';
 import SF from '../sidebar/SF';//省份
 import LB from '../sidebar/LB';//类别
@@ -78,20 +77,6 @@ class MsgDemo extends React.Component {
             id:'',
             Checkbox:1,
             showConfirm: false,
-            confirm: {
-                title: '跟进24小时内未设置客户级别的线索将返回到公共线索池',
-                buttons: [
-                    {
-                        type: 'default',
-                        label: '取消',
-                        onClick: this.hideConfirm.bind(this)
-                    },{
-                        type: 'primary',
-                        label: '知道了',
-                        onClick: this.goWell.bind(this)
-                    }
-                ],
-            },
         };
         this.nameInput = (e) => {this.setState({name:e.target.value});}
         this.phoneInput = (e) => {this.setState({phone:e.target.value});}
@@ -635,7 +620,7 @@ class MsgDemo extends React.Component {
                         <CellFooter></CellFooter>
                     </FormCell>
                 </Form>
-                <Form checkbox>
+                <Form style={{'display':'none'}} checkbox>
                     <FormCell checkbox>
                         <CellHeader>
                             <Checkbox onChange={this.Checkbox} defaultChecked/>
@@ -646,8 +631,6 @@ class MsgDemo extends React.Component {
                 <ButtonArea>
                     <Button onClick={this.onSaves}  style={{'marginBottom':'100px'}}>保存</Button>
                 </ButtonArea>
-                <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
-                </Confirm>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})}/>
                 <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})}/>
                 <PP Datas={this.state.QCPPrandoms}

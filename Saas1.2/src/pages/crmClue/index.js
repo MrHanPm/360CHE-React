@@ -100,13 +100,14 @@ export default class Clues extends React.Component {
       }
     }
     componentDidMount() {
+        document.title="联系人线索列表";
         this.upDATA();
     }
     render() {
         const {loadingS, DATA} = this.state;
         let self = this;
         return (
-            <div className="clueBody clueDef"  onScroll={this.handleScroll}>
+            <div className="clueBody clueDef crmCols"  onScroll={this.handleScroll}>
                 {DATA.map(function(e,index){
                     return(
                     <Panel key={index}>

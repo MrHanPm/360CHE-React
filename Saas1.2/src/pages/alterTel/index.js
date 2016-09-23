@@ -34,6 +34,7 @@ class MsgDemo extends React.Component {
             company:'',
             isbuy:'',
             msg:'',
+            customerid:'',
             showConfirm: false,
             confirm: {
                 title: '信息没保存，是否放弃？',
@@ -50,17 +51,36 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-        this.msgInput = (e) => {this.state.msg = e.target.value;}
-        this.nameInput = (e) => {this.state.name = e.target.value;}
-        this.telInput = (e) => {this.state.tel = e.target.value;}
-        this.addressInput = (e) => {this.state.address = e.target.value;}
-        this.companyInput = (e) => {this.state.company = e.target.value;}
+        this.msgInput = (e) => {this.setState({msg:e.target.value});}
+        this.nameInput = (e) => {this.setState({name:e.target.value});}
+        this.telInput = (e) => {this.setState({tel:e.target.value});}
+        this.addressInput = (e) => {this.setState({address:e.target.value});}
+        this.companyInput = (e) => {this.setState({company:e.target.value});}
         this.onSaves = this.onSaves.bind(this);
-        this.isBuys = (e) => {this.state.isbuy = e.target.value;}
+        this.isBuys = (e) => {this.setState({isbuy:e.target.value});}
         this.SFCS = this.SFCS.bind(this);
     }
     componentDidMount() {
-        document.title = '新建客户信息';
+        document.title = '修改客户信息';
+        let crmData = JSON.parse(Tool.localItem('RobClues'));
+        if(crmData.customphone !== ''){
+            this.setState({
+                SFCSv:{
+                    'provincename':crmData.provincename,
+                    'provincesn':crmData.provincesn,
+                    'cityname':crmData.citynamne,
+                    'citysn':crmData.citysn,
+                },
+                name:crmData.customname,
+                tel:crmData.customphone,
+                address:crmData.adress,
+                company:crmData.company,
+                isbuy:crmData.isbuy,
+                msg:crmData.remark,
+                customerid:crmData.customid
+            });
+        }
+        console.log(crmData);
     }
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
@@ -90,25 +110,14 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
     onSaves(){
-        //let persId = this.getQueryString('id');
         if(this.checkForm()){
             let json = {};
             // let oldData = JSON.parse(Tool.localItem('vipLodData'));
             // json.sessionid = oldData.sessionid;
             json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
             json.type = '1';
+            json.customerid = this.state.customerid;
             json.customname = this.state.name;
             json.customphone = this.state.tel;
             json.isbuy = this.state.isbuy;
@@ -127,12 +136,16 @@ class MsgDemo extends React.Component {
             }
             
             console.log(JSON.stringify(this.state),json);
-            Tool.get('Customer/AddCustomer.aspx',json,
+            Tool.get('Customer/EditCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        this.context.router.push({
-                            pathname: '/nav'
-                        });
+                        let crmData = JSON.parse(Tool.localItem('RobClues'));
+                        if(crmData.customphone !== ''){
+                            let urlTxt = '/detailTel?id=' + crmData.customid;
+                            this.context.router.push({pathname: urlTxt});
+                        }else{
+                           Alert.to('修改数据异常，请返回重试～');
+                        }
                     }else{
                         Alert.to(res.msg);
                     }
@@ -150,6 +163,7 @@ class MsgDemo extends React.Component {
         }else{
             SFCSval = '';
         }
+        const {name,tel,address,company,isbuy,msg} = this.state;
         return (
             <Page className="account addPursd">
                 
@@ -157,14 +171,13 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>客户姓名</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请输入" onChange={this.nameInput}/>
+                            <Input type="text" value={name} placeholder="请输入" onInput={this.nameInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
                     <Cell>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请输入" onChange={this.telInput}/>
+                            <Input type="number" value={tel} placeholder="请输入" onInput={this.telInput}/>
                         </CellBody>
                         <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
@@ -180,16 +193,14 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>详细地址</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请输入" onChange={this.addressInput}/>
+                            <Input type="text" value={address} placeholder="请输入" onInput={this.addressInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
                     <Cell>
                         <CellHeader><Label>工作单位</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请输入" onChange={this.companyInput}/>
+                            <Input type="text" value={company} placeholder="请输入" onInput={this.companyInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
                     <FormCell select selectPos="after">
                         <CellHeader><Label>是否购车</Label></CellHeader>
@@ -207,7 +218,7 @@ class MsgDemo extends React.Component {
                                     value: 1,
                                     label: '已购车'
                                 }
-                            ]} onChange={this.isBuys} />
+                            ]} value={isbuy} onChange={this.isBuys} />
                         </CellBody>
                     </FormCell>
                 </Cells>
@@ -216,7 +227,7 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字" onInput={this.msgInput}/>
+                            <Input type="text" value={msg} placeholder="请填写限800字" onInput={this.msgInput}/>
                         </CellBody>
                     </Cell>
                 </Cells>

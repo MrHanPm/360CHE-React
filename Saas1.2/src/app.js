@@ -7,7 +7,7 @@ import { Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-rou
 import WeUI from 'react-weui';
 import 'weui';
 
-import Home from './pages/home/index';
+//import Home from './pages/home/index';
 import Name from './pages/name/index';
 import Login from './pages/login/index';
 import Phone from './pages/testPhone/index';
@@ -26,6 +26,8 @@ import AddTel from './pages/addTel/index';
 import AlterTel from './pages/alterTel/index';
 import DetailTel from './pages/detailTel/index';
 import CrmClue from './pages/crmClue/index';
+import Share from './pages/share/index';
+import Search from './pages/searchbar/index';
 class App extends React.Component {
         render() {
                 return (
@@ -47,7 +49,7 @@ class App extends React.Component {
 ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={Home}/>
+            <IndexRoute component={LoadMsg}/>
             <Route path="loading" component={LoadMsg}/>
             <Route path="phone" component={Phone}/>
             <Route path="login" component={Login}/>
@@ -66,6 +68,8 @@ ReactDOM.render((
             <Route path="alterTel" component={AlterTel}/>
             <Route path="detailTel" component={DetailTel}/>
             <Route path="crmClue" component={CrmClue}/>
+            <Route path="share" component={Share}/>
+            <Route path="search" component={Search}/>
         </Route>
     </Router>
 ), document.getElementById('container'));

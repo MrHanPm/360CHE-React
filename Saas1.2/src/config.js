@@ -20,6 +20,7 @@ export const target = 'http://192.168.0.247:804/';
 //
 //fingerprint          初始指纹包
 //
+//  SearchData   储存所有联系人信息
 
  RobClues  抢到的线索
 

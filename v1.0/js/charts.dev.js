@@ -17,7 +17,7 @@ var chartOptions = {
 	    	"series": [
 		        {
 		            "type":'pie',
-					"hoverAnimation":false,
+					"hoverAnimation":true,
 		            "center":['50%','40%'],
 		            "radius": ['80%', '75%'],
 		            "label": {
@@ -75,7 +75,7 @@ var chartOptions = {
 					nx = x - 10;
 					ny = y + 80;
 					vy = y + 115;
-
+					rx = x + 320;
 					break;
 				case 1:
 					nx = x + 10;

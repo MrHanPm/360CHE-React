@@ -97,7 +97,7 @@ class MsgDemo extends React.Component {
         return (
             <Page className="account addPursd">
                 
-                <Cells access>
+                <Cells>
                     <Cell>
                         <CellHeader><Label>客户姓名</Label></CellHeader>
                         <CellBody>
@@ -109,7 +109,9 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             {customphone}
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
+                        <CellFooter className="cleAft">
+                            <a href={`tel:${customphone}`}> </a>
+                        </CellFooter>
                     </Cell>
                 </Cells>
                 <Cells access>

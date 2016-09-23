@@ -130,9 +130,8 @@ class MsgDemo extends React.Component {
             Tool.get('Customer/AddCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        this.context.router.push({
-                            pathname: '/nav'
-                        });
+                        let urlTxt = '/detailTel?id=' + res.data.customid;
+                        this.context.router.push({pathname: urlTxt});
                     }else{
                         Alert.to(res.msg);
                     }
@@ -159,7 +158,6 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             <Input type="text" placeholder="请输入" onChange={this.nameInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
                     <Cell>
                         <CellHeader><Label>客户电话</Label></CellHeader>
@@ -182,14 +180,12 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             <Input type="text" placeholder="请输入" onChange={this.addressInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
                     <Cell>
                         <CellHeader><Label>工作单位</Label></CellHeader>
                         <CellBody>
                             <Input type="text" placeholder="请输入" onChange={this.companyInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
                     </Cell>
                     <FormCell select selectPos="after">
                         <CellHeader><Label>是否购车</Label></CellHeader>

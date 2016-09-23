@@ -151,9 +151,17 @@ class Clues extends React.Component {
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
-
+                    let NewSeDa = [];
                     for(let i=0;i < res.listdata.length; i++){
                       let item = res.listdata[i].firstnameletter;
+                      let jsons = {
+                        'customname':res.listdata[i].customname,
+                        'customphone':res.listdata[i].customphone,
+                        'customid':res.listdata[i].customid,
+                        'followname':res.listdata[i].followname,
+                        'lastlinktime':res.listdata[i].lastlinktime,
+                      }
+                      NewSeDa.push(jsons);
                       if(item == ''){item = '☆';}
                       let her = this.state.DATA.indexOf(item);
                       if ( her === -1) {this.state.DATA.push(item);}
@@ -172,7 +180,6 @@ class Clues extends React.Component {
                       if ( her !== -1) {this.state.Lis[her].push(json);}
                     }
                     this.setState({reccount:res.reccount});
-                    
                     if(res.pagecount == page){
                         this.setState({loadingS:false});
                     }else{
@@ -180,6 +187,20 @@ class Clues extends React.Component {
                         this.setState({
                             nowpage:page                     
                         });
+                    }
+                    let SearchData = JSON.parse(Tool.localItem('SearchData'));
+                    if(SearchData !== null){
+                        for(let i=0;i < SearchData.length; i++){
+                            for(let is=0;is < NewSeDa.length; is++){
+                                if(SearchData[i].customphone==NewSeDa[is].customphone){
+                                    NewSeDa.splice(is,1);
+                                }
+                            }
+                        }
+                        let newDS = SearchData.concat(NewSeDa);
+                        Tool.localItem('SearchData',JSON.stringify(newDS));
+                    }else{
+                        Tool.localItem('SearchData',JSON.stringify(NewSeDa));
                     }
                 }else{
                     Alert.to(res.msg);

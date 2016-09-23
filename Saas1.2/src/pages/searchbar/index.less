@@ -1,0 +1,38 @@
+.SearBoxs{
+    .hd{display: none;}
+    .phns{padding-right: 30px;}
+    .SearWell{
+        width: 80%;
+        height: 300px;
+        margin: 60px auto 0;
+        dt{
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+            clear: both;
+        }
+        dd{
+            width: 50%;
+            height: 140px;
+            float: left;
+            text-align: center;
+            &:before{
+                content:'\e613';
+                font-family: 'saas_ico';
+                width: 70px;
+                display: block;
+                height: 70px;
+                background: #fff;
+                border-radius: 100%;
+                line-height: 70px;
+                text-align: center;
+                margin:30px auto 10px;
+                color: #666;
+                font-size: 40px;
+            }
+        }
+        .pon:before{
+            content:'\e612';
+        }
+    }
+}

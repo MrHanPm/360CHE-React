@@ -26,7 +26,7 @@ import { ButtonArea,
 import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
 
-import vcodeSrc from './images/vcode.jpg';
+import vcodeSrc from '../../vcode.jpg';
 
 class CellDemo extends React.Component {
     constructor(props){

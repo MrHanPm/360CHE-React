@@ -16,12 +16,7 @@ import {
     ActionSheet,
     Button,
 } from 'react-weui';
-
 import './index.less';
-
-import Imgse from './crm.png';
-import './index.less';
-
 import ShowAlert from '../../component/Alert.js'
 import OkTel from '../okTel/index.js';
 import NoTel from '../noTel/index.js';
@@ -43,11 +38,9 @@ class Clues extends React.Component {
                     });
                 }
             }, {
-                label: '扫名片',
+                label: '更多功能，待开发…',
                 onClick: ()=> {
-                    this.context.router.push({
-                        pathname: '/addTel'
-                    });
+
                 }
             }],
             actions: [
@@ -108,21 +101,5 @@ Clues.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
-
-class CrmImgs extends React.Component {
-    state = {
-
-    };
-    render() {
-        return (
-            <div className="crmBox">
-                <img src={Imgse}/>
-            </div>
-        );
-    }
-};
-
-
-//CrmImgs
 export default Clues
 

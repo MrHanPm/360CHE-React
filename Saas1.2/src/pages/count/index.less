@@ -1,0 +1,71 @@
+.countBox{
+    .bd{
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow: auto;
+    }
+    .user-title{
+        padding-top:20px;
+        text-align: center;
+        font-size: 30px; color: #3cc51f;font-weight: 300;
+    }
+    .button_sp_area{
+        text-align:justify;
+        text-align-last:justify;
+        padding-top: 20px;
+        button{
+            width: 28%;
+            display: inline-block;
+            background: #fff;
+            text-align: center;
+            text-align-last:center;
+        }
+        .actv{
+            color: #3cc51f;
+        }
+        .weui_btn:after{
+
+        }
+    }
+    .initUrlKey{
+        position: fixed;
+        z-index: 288;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        text-align: center;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+        &:before{
+            content: ' ';
+            background: url(../../vcode.jpg) center center no-repeat;
+            background-size: 80px 80px;
+            display: block;
+            width: 128px;
+            height: 128px;
+            margin:50% auto 0;
+            padding-bottom: 20px;
+        }
+    }
+    .charts-list li {
+        margin-top: 20px;
+        float: left;
+        min-width: 50px;
+        width: 50%;
+        min-height: 140px;
+        text-align: center;
+        div{margin:0 auto;}
+    }
+    .chart{
+        min-height: 300px;
+        min-width: 100px;
+        width: 100%;
+        height: auto;
+        padding-top: 10px;
+    }
+    .weui_cells_title{text-align: center;margin:10px 0;}
+}
+

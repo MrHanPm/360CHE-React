@@ -19,12 +19,11 @@ import {
     CellBody,
     CellFooter
 } from 'react-weui';
-import Imgse from './find.png';
 import './index.less';
 export default class MsgDemo extends React.Component {
     render() {
         return (
-        <div className="findBodys">
+        <div className="findBodys findBoxs">
             <Panel>
                 <PanelBody>
                     <MediaBox type="small_appmsg">
@@ -37,6 +36,21 @@ export default class MsgDemo extends React.Component {
                                 <CellFooter>
                                     
                                 </CellFooter>
+                            </Cell>
+                        </Cells>
+                    </MediaBox>
+                </PanelBody>
+            </Panel>
+            <Panel>
+                <PanelBody>
+                    <MediaBox type="small_appmsg">
+                        <Cells access>
+                            <Cell href="#share">
+                                <CellHeader><i className='findIcos fenx'></i></CellHeader>
+                                <CellBody>
+                                    <p>分享店铺</p>
+                                </CellBody>
+                                <CellFooter />
                             </Cell>
                         </Cells>
                     </MediaBox>
@@ -76,7 +90,3 @@ export default class MsgDemo extends React.Component {
         );
     }
 };
-
-// <div className="crmBox">
-//     <img src={Imgse}/>
-// </div>
