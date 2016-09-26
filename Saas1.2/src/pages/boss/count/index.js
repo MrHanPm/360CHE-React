@@ -13,13 +13,14 @@ import {
     Label,
     CellHeader,
     CellBody,
+    Icon,
     CellFooter,
     Button,
 } from 'react-weui';
 import Echarts from 'echarts';
-import Page from '../../component/page';
-import {Tool,Alert} from '../../tool.js';
-import {Views} from '../../component/charts.min.js';
+import Page from '../../../component/page';
+import {Tool,Alert} from '../../../tool.js';
+import {Views} from '../../../component/charts.min.js';
 import './index.less';
 
 
@@ -31,9 +32,14 @@ export default class Clues extends React.Component {
             startdate:'',
             enddate:'',
             userid:'',
-            name:'',
+            name:'全部',
+            ids:'',
+            NameRandoms:'',
             loadShow:true,
             actvs:0,
+            accountTotalList:[
+                {accountid: 0, username: ""},
+            ],
             briefingData:[
                 {title:'',value:0},
                 {title:'',value:0},
@@ -51,6 +57,23 @@ export default class Clues extends React.Component {
         this.Sdate = this.Sdate.bind(this);
         this.goSea = this.goSea.bind(this);
         this.goEea = this.goEea.bind(this);
+        this.getNames = this.getNames.bind(this);
+        this.ChanName = this.ChanName.bind(this);
+    }
+    getNames(){this.setState({NameRandoms: Math.random()});}
+    ChanName(obj){
+        this.setState({
+            name:obj.name,
+            NameRandoms:''
+        });
+        this.state.ids = obj.ids;
+        let Stdat = this.GetDateYes();
+        let Endat = this.GetDateEes();
+        this.setState({
+            startdate: Stdat,
+            enddate: Endat
+        });
+        this.upDATA(Stdat,Endat);
     }
     goSea(e){
         let Stdat = e.target.value;
@@ -129,7 +152,8 @@ export default class Clues extends React.Component {
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(this.state.ids !== ''){json.userid = this.state.ids;}
+        json.sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
         json.startdate = Stdat.replace(/-/g,'/');
         json.enddate = Endat.replace(/-/g,'/');
         Tool.get('Statistics/StatisticsList.aspx',json,
@@ -137,7 +161,7 @@ export default class Clues extends React.Component {
                 if(res.status == 1){
                     this.setState({
                         loadShow:false,
-                        name:res.data.accountTotalList.username,
+                        accountTotalList:res.data.accountTotalList,
                         briefingData:res.data.briefingData,
                         successData:res.data.successData,
                         addData:res.data.addData,
@@ -147,7 +171,7 @@ export default class Clues extends React.Component {
                         tryRankData:res.data.tryRankData,
                         addRankData:res.data.addRankData,
                     });
-                    // 销售简报图形 
+                    // 销售简报图形
                     [].forEach.call(document.querySelector('#pie_charts').children,function(chart,index){
                         var data = res.data.briefingData[index];
                         Echarts.init(chart).setOption(Views.pie(data.title,data.value,index));
@@ -186,14 +210,16 @@ export default class Clues extends React.Component {
             enddate: Endat
         });
         this.upDATA(Stdat,Endat);
-        
     }
     render() {
         const {loadShow,name,actvs,startdate,enddate} = this.state;
         return (
             <Page className="account addPursd countBox">
                 <div style={{'display':loadShow?'none':'block'}}>
-                    <h3 className="user-title">{name}</h3>
+                    <h3 className="user-title">
+                        {name}
+                        <i onClick={this.getNames}>切换 &gt;</i>
+                    </h3>
                     <Cells>
                         <Cell>
                             <CellHeader><Label>开始时间</Label></CellHeader>
@@ -300,7 +326,88 @@ export default class Clues extends React.Component {
 
                 </div>
                 <div className="initUrlKey" style={{'display':loadShow?'block':'none'}}>数据加载中…</div>
+                <NameList data={this.state.accountTotalList} showD={this.state.NameRandoms} ChangeName={val => this.ChanName(val)} />
             </Page>
         );
     }
 };
+
+class NameList extends React.Component{
+  constructor(props) {
+      super(props);
+          
+          this.state ={
+            visible:false,
+            active:false,
+            values:'',
+            key:'',
+            L:[]
+          }
+      this.closeSold = this.closeSold.bind(this);
+      this.upDatas = this.upDatas.bind(this);
+  }
+
+  upDatas(e){
+    let citylistData = [];
+      let Ad = {
+        'ids':e.target.title,
+        'name':e.target.innerHTML
+      };
+      this.setState({
+        values:e.target.title,
+        key:e.target.innerHTML,
+        visible:false
+      }, ()=> this.props.ChangeName(Ad));
+  }
+  componentDidMount(){
+    let self = this;
+    [].forEach.call(document.querySelectorAll('.PubSidebar'), function (el){  
+      el.addEventListener('touchend', function(e) {
+        var x = e.changedTouches[0].pageX;
+        if( x < 68 ){
+            self.closeSold();
+        }
+      }, false);
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      L:nextProps.data
+    });
+    if(typeof(nextProps.showD) == 'number'){
+      this.setState({
+        visible: true
+      });
+    }
+  }
+  closeSold(){this.setState({visible:false});}
+  render(){
+    let self = this;
+    let Fes = this.state.key;
+      return(
+          <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"}>
+              <header>
+                  <span>选择查看范围</span>
+                  <span className="closeBtn" onClick={this.closeSold}></span>
+              </header>
+              <ul className="Fnav" style={{'padding-bottom':'100px'}}>
+                {this.state.L.map(function(e,indexs){
+                  return(
+                    <li key={indexs} 
+                    className={e.username == Fes ? "active" :''}
+                    >
+                      <span 
+                      title={e.accountid}
+                      onClick={self.upDatas}
+                      >
+                        {e.username}
+                      </span>
+                      <Icon value="success" />
+                    </li>
+                  )
+                })}
+              </ul>
+          </aside>
+      )
+  }
+}

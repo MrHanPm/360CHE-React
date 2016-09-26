@@ -17,7 +17,7 @@ import {
     CellFooter,
     Button,
 } from 'react-weui';
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert} from '../../../tool.js';
 import './index.less';
 
 export default class Clues extends React.Component {
@@ -31,24 +31,13 @@ export default class Clues extends React.Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
     upDATA(){
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        json.sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
         json.nowpage = this.state.nowpage;
-        json.customerid = this.getQueryString('id');
+        json.cluesstatus = 4;
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -78,14 +67,7 @@ export default class Clues extends React.Component {
         )
     }
     RobLine(e){
-        let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        let urlTxt;
-        if(oldData.usercategory == "2"){
-            urlTxt = '/boss/robClue?id=' + e.target.title;
-        }
-        if(oldData.usercategory == "1"){
-            urlTxt = '/robClue?id=' + e.target.title;
-        }
+        let urlTxt = '/boss/robClue?id=' + e.target.title;
         this.context.router.push({pathname: urlTxt});
     }
     handleScroll(e){
@@ -107,14 +89,13 @@ export default class Clues extends React.Component {
       }
     }
     componentDidMount() {
-        document.title="联系人线索列表";
         this.upDATA();
     }
     render() {
         const {loadingS, DATA} = this.state;
         let self = this;
         return (
-            <div className="clueBody clueDef crmCols"  onScroll={this.handleScroll}>
+            <div className="clueBody clueDef BossTitle"  onScroll={this.handleScroll}>
                 {DATA.map(function(e,index){
                     return(
                     <Panel key={index}>
@@ -125,7 +106,10 @@ export default class Clues extends React.Component {
                                     <CellFooter/>
                                 </MediaBoxHeader>
                                 <MediaBoxBody>
-                                    <MediaBoxTitle>{e.realname}</MediaBoxTitle>
+                                    <MediaBoxTitle>
+                                        {e.realname}
+                                        <i>{e.nextvisitlisttitle}</i>
+                                    </MediaBoxTitle>
                                     <MediaBoxDescription>
                                         {e.truckname}
                                     </MediaBoxDescription>

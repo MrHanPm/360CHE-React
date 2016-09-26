@@ -62,9 +62,12 @@ class CellDemo extends React.Component {
                 (res) => {
                     if(res.status === 1){
                         Tool.localItem('vipLodData',JSON.stringify(res.data));
-                        this.context.router.push({
-                            pathname: '/name'
-                        });
+                        if(res.data.usercategory == '1'){
+                            this.context.router.push({pathname: '/nav'});
+                        }
+                        if(res.data.usercategory == '2'){
+                            this.context.router.push({pathname: '/name'});
+                        }
                     }else{
                         Alert.to(res.msg);
                     }

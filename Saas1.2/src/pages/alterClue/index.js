@@ -193,24 +193,24 @@ class MsgDemo extends React.Component {
             this.setState({Checkbox:0});
         }
     }
-    CPLB(){this.setState({CPLBrandoms: Math.random()});}
+    CPLB(){this.setState({CPLBrandoms: Math.random(),QCPPrandoms:'QCPPrandoms',QCXLrandoms:'QCXLrandoms',QCCXrandoms:'QCCXrandoms'});}
     QCPP(){
         if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryid) !== 'undefined'){
-             this.setState({QCPPrandoms: Math.random()});
+             this.setState({QCPPrandoms: Math.random(),CPLBrandoms:'CPLBrandoms',QCXLrandoms:'QCXLrandoms',QCCXrandoms:'QCCXrandoms'});
         }else{
             Alert.to('请选择类别');
         }
     }
     QCXL(){
         if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandid) !== 'undefined'){
-             this.setState({QCXLrandoms: Math.random()});
+             this.setState({QCXLrandoms: Math.random(),CPLBrandoms:'CPLBrandoms',QCPPrandoms:'QCPPrandoms',QCCXrandoms:'QCCXrandoms'});
         }else{
             Alert.to('请选择品牌');
         }
     }
     QCCX(){
         if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesid) !== 'undefined'){
-             this.setState({QCCXrandoms: Math.random()});
+             this.setState({QCCXrandoms: Math.random(),CPLBrandoms:'CPLBrandoms',QCPPrandoms:'QCPPrandoms',QCXLrandoms:'QCXLrandoms'});
         }else{
             Alert.to('请选择系列');
         }

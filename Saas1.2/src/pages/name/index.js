@@ -78,9 +78,12 @@ class CellDemo extends React.Component {
             Tool.get('User/AddUser.aspx',json,
                 (res) => {
                     if(res.status === 1){
-                        this.context.router.push({
-                            pathname: '/nav'
-                        });
+                        if(res.data.usercategory == '1'){
+                            this.context.router.push({pathname: '/nav'});
+                        }
+                        if(res.data.usercategory == '2'){
+                            this.context.router.push({pathname: '/boss/nav'});
+                        }
                     }else if(res.status === 801){
                         Alert.to(res.msg);
                     }

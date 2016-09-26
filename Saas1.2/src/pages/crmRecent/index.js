@@ -215,11 +215,11 @@ class Clues extends React.Component {
                                 <a href={`tel:${e.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={e.customid} onClick={self.RobLine}> </a>
                             </MediaBoxHeader>
                             <MediaBoxBody>
-                                <MediaBoxDescription>
+                                <MediaBoxTitle>
                                     <span>{e.customname}</span>
                                     <i className={e.isfavorites?"crmStar active" :"crmStar" } title={e.customid} data={e.isfavorites} onClick={self.CrmStar}></i>
                                     <i className="crmDels" title={e.customid} data={index} onClick={self.CrmDels}></i>
-                                </MediaBoxDescription>
+                                </MediaBoxTitle>
                                 <MediaBoxInfo>
                                     <MediaBoxInfoMeta>{e.lastlinktime}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta className="crmMesc" title={e.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>

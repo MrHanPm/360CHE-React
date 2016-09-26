@@ -331,11 +331,11 @@ class Clues extends React.Component {
                                 <a href={`tel:${ele.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={ele.customid} onClick={self.RobLine}> </a>
                             </MediaBoxHeader>
                             <MediaBoxBody>
-                                <MediaBoxDescription>
+                                <MediaBoxTitle>
                                     <span>{ele.customname}</span>
                                     <i className={ele.isfavorites?"crmStar active" :"crmStar" } title={ele.customid} data={ele.isfavorites} onClick={self.CrmStar}></i>
                                     <i className="crmDels" title={ele.customid} data={indexs} alt={index} onClick={self.CrmDels}></i>
-                                </MediaBoxDescription>
+                                </MediaBoxTitle>
                                 <MediaBoxInfo>
                                     <MediaBoxInfoMeta>{ele.lastlinktime}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta className="crmMesc" title={ele.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>

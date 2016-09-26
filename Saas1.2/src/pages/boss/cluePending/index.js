@@ -14,13 +14,12 @@ import {
     MediaBoxInfo,
     MediaBoxInfoMeta,
     ActionSheet,
-    CellFooter,
     Button,
 } from 'react-weui';
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert} from '../../../tool.js';
 import './index.less';
 
-export default class Clues extends React.Component {
+class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -31,25 +30,14 @@ export default class Clues extends React.Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
+
     upDATA(){
         let json={};
         //let oldData = JSON.parse(Tool.localItem('vipLodData'));
         //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        json.sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
         json.nowpage = this.state.nowpage;
-        json.customerid = this.getQueryString('id');
-        Tool.get('Clues/GetCluesList.aspx',json,
+        Tool.get('Clues/GetRobCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
@@ -78,15 +66,22 @@ export default class Clues extends React.Component {
         )
     }
     RobLine(e){
-        let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        let urlTxt;
-        if(oldData.usercategory == "2"){
-            urlTxt = '/boss/robClue?id=' + e.target.title;
-        }
-        if(oldData.usercategory == "1"){
-            urlTxt = '/robClue?id=' + e.target.title;
-        }
-        this.context.router.push({pathname: urlTxt});
+        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        //sessionid = oldData.sessionid;
+        let sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+        Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
+            (res) => {
+                if(res.status == 1){
+                    let urlTxt = '/boss/robClue?id=' + res.data.cluesextendid;
+                    this.context.router.push({pathname: urlTxt});
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
     }
     handleScroll(e){
       let BodyMin = e.target;
@@ -107,40 +102,38 @@ export default class Clues extends React.Component {
       }
     }
     componentDidMount() {
-        document.title="联系人线索列表";
         this.upDATA();
     }
     render() {
         const {loadingS, DATA} = this.state;
         let self = this;
         return (
-            <div className="clueBody clueDef crmCols"  onScroll={this.handleScroll}>
-                {DATA.map(function(e,index){
-                    return(
-                    <Panel key={index}>
-                        <PanelBody>
-                            <MediaBox className="Follov" title={e.cluesextendid} onClick={self.RobLine}></MediaBox>
-                            <MediaBox type="text">
-                                <MediaBoxHeader>
-                                    <CellFooter/>
-                                </MediaBoxHeader>
-                                <MediaBoxBody>
-                                    <MediaBoxTitle>{e.realname}</MediaBoxTitle>
-                                    <MediaBoxDescription>
-                                        {e.truckname}
-                                    </MediaBoxDescription>
-                                    <MediaBoxInfo>
-                                        <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
-                                    </MediaBoxInfo>
-                                </MediaBoxBody>
-                            </MediaBox>
-                        </PanelBody>
-                    </Panel>
-                    )})
-                }
-                {loadingS ? <LoadAd /> : <NoMor />}
-            </div>
+            <div className="clueBody cluePending cluePend"  onScroll={this.handleScroll}>
+            {DATA.map(function(e,index){
+                return(
+                <Panel key={index}>
+                    <PanelBody>
+                        <MediaBox type="text">
+                            <MediaBoxHeader>
+                                <Button type="primary" title={e.maincluesid} onClick={self.RobLine} plain>立即抢</Button>
+                            </MediaBoxHeader>
+                            <MediaBoxBody>
+                                <MediaBoxDescription>
+                                    {e.truckname}
+                                </MediaBoxDescription>
+                                <MediaBoxInfo>
+                                    <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{e.cityname}</MediaBoxInfoMeta>
+                                </MediaBoxInfo>
+                            </MediaBoxBody>
+                        </MediaBox>
+                    </PanelBody>
+                </Panel>
+                )})
+            }
+            {loadingS ? <LoadAd /> : <NoMor />}
+        </div>
         );
     }
 };

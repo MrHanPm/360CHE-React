@@ -28,6 +28,10 @@ import DetailTel from './pages/detailTel/index';
 import CrmClue from './pages/crmClue/index';
 import Share from './pages/share/index';
 import Search from './pages/searchbar/index';
+
+import BosNav from './pages/boss/nav/index';
+import BosRobClue from './pages/boss/robClue/index';
+import BosDetailTel from './pages/boss/detailTel/index';
 class App extends React.Component {
         render() {
                 return (
@@ -70,6 +74,10 @@ ReactDOM.render((
             <Route path="crmClue" component={CrmClue}/>
             <Route path="share" component={Share}/>
             <Route path="search" component={Search}/>
+            
+            <Route path="boss/nav" component={BosNav}/>
+            <Route path="boss/robClue" component={BosRobClue}/>
+            <Route path="boss/detailTel" component={BosDetailTel}/>
         </Route>
     </Router>
 ), document.getElementById('container'));
