@@ -32,17 +32,7 @@ class MsgDemo extends React.Component {
         this.goFun= this.goFun.bind(this);
         this.goAdd = this.goAdd.bind(this);
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
+
     goFun(e){
         let doms = e.target;
         let nub = parseInt(e.target.title);
@@ -72,17 +62,21 @@ class MsgDemo extends React.Component {
     }
     componentDidMount(){
         document.title = '联系人信息';
-        let persId = this.getQueryString('id');
+        let persId = Tool.getQueryString('id');
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
-        json.sessionid = sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.customerid = persId;
         Tool.get('Customer/GetCustomerDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
                     this.setState({DATA:res.data});
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

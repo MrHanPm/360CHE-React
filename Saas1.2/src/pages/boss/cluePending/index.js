@@ -33,9 +33,11 @@ class Clues extends React.Component {
 
     upDATA(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.nowpage = this.state.nowpage;
         Tool.get('Clues/GetRobCluesList.aspx',json,
             (res) => {
@@ -56,6 +58,9 @@ class Clues extends React.Component {
                             nowpage:page
                         });
                     }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -66,14 +71,20 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
-        let sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+        let sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
         Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
             (res) => {
                 if(res.status == 1){
                     let urlTxt = '/boss/robClue?id=' + res.data.cluesextendid;
                     this.context.router.push({pathname: urlTxt});
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

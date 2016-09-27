@@ -57,18 +57,21 @@ class MsgDemo extends React.Component {
     }
     Quit(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         Tool.get('User/LoginOut.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    Tool.localItem('vipLodData','');
-                    Tool.localItem('Uphone','');
-                    Tool.localItem('BrandKey','');
-                    this.context.router.push({
-                        pathname: '/loading'
-                    });
+                    Tool.localItem('vipLodData',null);
+                    Tool.localItem('Uphone',null);
+                    Tool.localItem('BrandKey',null);
+                    WeixinJSBridge.call('closeWindow');
+                    // this.context.router.push({
+                    //     pathname: '/loading'
+                    // });
                 }else{
                     Alert.to(res.msg);
                 }

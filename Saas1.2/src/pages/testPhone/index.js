@@ -155,12 +155,13 @@ class CellDemo extends React.Component {
             Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,vercode:this.state.mcode},
                 (res) => {
                     if(res.status === 1){
-                        Tool.localItem('vipLodData',JSON.stringify(res.data));
+                        let Vd = JSON.stringify(res.data);
+                        Tool.localItem('vipLodData',Vd);
                         if(res.data.usercategory == '1'){
                             this.context.router.push({pathname: '/nav'});
                         }
                         if(res.data.usercategory == '2'){
-                            this.context.router.push({pathname: '/boss/nav'});
+                            this.context.router.push({pathname: '/name'});
                         } 
                     }else if(res.status === 912){
                         this.context.router.push({

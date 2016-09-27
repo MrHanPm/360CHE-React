@@ -38,12 +38,11 @@ export default class SearchBarDemo extends React.Component {
         if(text.length > 0){
             if(regHZ.test(text)){
                 newDB = this.state.DATA.filter(function(item){
-
                     return item.customname.indexOf(text) !== -1;
                 });
-            }else if(regNB.test(text)){
+            }
+            if(regNB.test(text)){
                 newDB = this.state.DATA.filter(function(item){
-                    console.log(text);
                     return item.customphone.indexOf(text) !== -1;
                 });
             }
@@ -58,6 +57,9 @@ export default class SearchBarDemo extends React.Component {
     componentDidMount() {
         document.title="搜索联系人";
         let SearchData = JSON.parse(Tool.localItem('SearchData'));
+        if(SearchData == null){
+            SearchData = [];
+        }
         console.log(SearchData);
         this.setState({DATA:SearchData});
     }

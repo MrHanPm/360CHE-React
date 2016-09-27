@@ -41,15 +41,18 @@ class Clues extends React.Component {
     
     upDATA(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.nowpage = this.state.nowpage;
         json.type = 2;
         json.size = 50;
         Tool.get('Customer/GetCustomerList.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    let NewSeDa = [];
                     let page = this.state.nowpage;
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
@@ -57,6 +60,14 @@ class Clues extends React.Component {
 
                     for(let i=0;i < res.listdata.length; i++){
                       let item = res.listdata[i].firstnameletter;
+                      let jsons = {
+                        'customname':res.listdata[i].customname,
+                        'customphone':res.listdata[i].customphone,
+                        'customid':res.listdata[i].customid,
+                        'followname':res.listdata[i].followname,
+                        'lastlinktime':res.listdata[i].lastlinktime,
+                      }
+                      NewSeDa.push(jsons);
                       if(item == ''){item = '☆';}
                       let her = this.state.DATA.indexOf(item);
                       if ( her === -1) {this.state.DATA.push(item);}
@@ -84,6 +95,23 @@ class Clues extends React.Component {
                             nowpage:page                     
                         });
                     }
+                    let SearchData = JSON.parse(Tool.localItem('SearchData'));
+                    if(SearchData !== null){
+                        for(let i=0;i < SearchData.length; i++){
+                            for(let is=0;is < NewSeDa.length; is++){
+                                if(SearchData[i].customphone==NewSeDa[is].customphone){
+                                    NewSeDa.splice(is,1);
+                                }
+                            }
+                        }
+                        let newDS = SearchData.concat(NewSeDa);
+                        Tool.localItem('SearchData',JSON.stringify(newDS));
+                    }else{
+                        Tool.localItem('SearchData',JSON.stringify(NewSeDa));
+                    }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

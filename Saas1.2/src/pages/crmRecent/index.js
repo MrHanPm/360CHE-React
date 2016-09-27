@@ -71,9 +71,11 @@ class Clues extends React.Component {
     CrmStar(e){
         let doms = e.target;
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.customerid = e.target.title;
         json.status = doms.getAttribute('data') == '1' ? 0 :1;
         console.log(json);
@@ -81,6 +83,9 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.showToast();
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -102,9 +107,11 @@ class Clues extends React.Component {
     }
     DelActive(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.customerid = this.state.DelId;
         Tool.get('Customer/DelCustomer.aspx',json,
             (res) => {
@@ -116,6 +123,9 @@ class Clues extends React.Component {
                     this.setState({
                         DATA:newDa
                     });
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -127,9 +137,11 @@ class Clues extends React.Component {
     }
     upDATA(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.nowpage = this.state.nowpage;
         json.type = -1;
         Tool.get('Customer/GetCustomerList.aspx',json,
@@ -151,6 +163,9 @@ class Clues extends React.Component {
                             nowpage:page
                         });
                     }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -162,9 +177,11 @@ class Clues extends React.Component {
     }
     RobLine(e){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.customerid = e.target.title;
         Tool.get('Customer/UpdateCustomerLastLinkTime.aspx',json,
             (res) => {

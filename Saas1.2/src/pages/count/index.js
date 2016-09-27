@@ -127,9 +127,11 @@ export default class Clues extends React.Component {
     }
     upDATA(Stdat,Endat){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.startdate = Stdat.replace(/-/g,'/');
         json.enddate = Endat.replace(/-/g,'/');
         Tool.get('Statistics/StatisticsList.aspx',json,
@@ -167,6 +169,9 @@ export default class Clues extends React.Component {
                     Echarts.init(document.querySelector('#success_rank_chart')).setOption(Views.bar(res.data.successRankData));
                     Echarts.init(document.querySelector('#try_rank_chart')).setOption(Views.bar(res.data.tryRankData));
                     Echarts.init(document.querySelector('#add_rank_chart')).setOption(Views.bar(res.data.addRankData));
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

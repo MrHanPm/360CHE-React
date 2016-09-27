@@ -22,6 +22,7 @@ import Count from '../count/index.js';
 export default class TabBarDemo extends React.Component {
     state={
         tab:0,
+        initData:true,
         countdown: 0,
     };
     initData(asid){
@@ -33,6 +34,9 @@ export default class TabBarDemo extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.forAjax(res.listdata);
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg)
                 }
@@ -43,9 +47,59 @@ export default class TabBarDemo extends React.Component {
         );
     }
 
+    forAjax(listdata){
+        let ajaxUrls = [];
+        let ajaxDataName = [];
+        let nameKey ='';
+        for(let i=0;i<listdata.length;i++){
+            if(listdata[i].ischange == 1){
+                ajaxUrls.push(listdata[i].url);
+                ajaxDataName.push(listdata[i].name);
+            }
+            nameKey += listdata[i].fingerprint + '_';
+        }
+        this.state.countdown = ajaxUrls.length;
+        if(ajaxDataName.length > 0){
+            this.loadAllData(ajaxDataName,ajaxUrls);
+        }else{
+            this.setState({initData:false});
+        }
+        Tool.localItem('fingerprint',nameKey);
+    }
+    loadAllData(names,urls){
+        let t;
+        if (this.state.countdown == 0) {
+            this.setState({countdown:urls.length,initData:false,});
+            clearTimeout(t);
+        } else {
+            let s = this.state.countdown;
+            let k = s-1;
+            Tool.get(urls[k],'',
+                (res) => {
+                    if(res.status === 1){
+                        Tool.localItem(names[k],JSON.stringify(res));
+                        //console.log(Tool.localItem(names[k]),names[k]);
+                    }else{
+                        Alert.to(res.msg);
+                    }
+                },
+                (err) => {
+                    Alert.to(err.msg);
+                }
+            )
+            s--;
+            this.setState({countdown:s});
+            t = setTimeout(() => this.loadAllData(names,urls),10);
+        }
+    }
     componentDidMount(){
-
-
+        let sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
+        this.initData(sessionid);
     }
     render() {
         let Pages;
@@ -96,6 +150,7 @@ export default class TabBarDemo extends React.Component {
                         label="发现"
                     />
                 </TabBar>
+                <div className="initUrlKey" style={{'display':this.state.initData?'block':'none'}}>初始数据加载中…</div>
             </Tab>
         );
     }

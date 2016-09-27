@@ -47,15 +47,19 @@ class MsgDemo extends React.Component {
     }
     goSubm(){
         if(this.checkForm()){
-            let oldData = JSON.parse(Tool.localItem('vipLodData'));
-            Tool.get('User/Feedback.aspx',{sessionid:oldData.sessionid,content:this.state.txt},
+            let sessionid;
+            if(typeof(Tool.SessionId) == 'string'){
+                sessionid= Tool.SessionId;
+            }else{
+                sessionid = Tool.SessionId.get();
+            }
+            Tool.get('User/Feedback.aspx',{sessionid:sessionid,content:this.state.txt},
                 (res) => {
                     if(res.status == 1){
                         this.showToast();
                     }else if(res.status == 901){
-                        this.context.router.push({
-                            pathname: '/loading'
-                        });
+                        Alert.to(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }

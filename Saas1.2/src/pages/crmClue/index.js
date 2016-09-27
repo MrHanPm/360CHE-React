@@ -31,24 +31,16 @@ export default class Clues extends React.Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
+
     upDATA(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.nowpage = this.state.nowpage;
-        json.customerid = this.getQueryString('id');
+        json.customerid = Tool.getQueryString('id');
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -68,6 +60,9 @@ export default class Clues extends React.Component {
                             nowpage:page
                         });
                     }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

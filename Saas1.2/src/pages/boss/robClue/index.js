@@ -41,31 +41,26 @@ class MsgDemo extends React.Component {
         let st = parseInt(e.target.title);
         this.setState({SDSrandoms:st});
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
 
     componentDidMount() {
         document.title = '线索详情';
-        let persId = this.getQueryString('id');
+        let persId = Tool.getQueryString('id');
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        let sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+        let sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
         json.sessionid = sessionid;
         json.cluesextendid = persId;
         Tool.get('Clues/GetCluesDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
                     this.setState({DATArob:res.data});
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -83,6 +78,9 @@ class MsgDemo extends React.Component {
                     }else{
                         this.setState({Messrob:res.listdata});
                     }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

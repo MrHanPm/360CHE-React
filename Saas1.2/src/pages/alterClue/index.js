@@ -193,55 +193,263 @@ class MsgDemo extends React.Component {
             this.setState({Checkbox:0});
         }
     }
-    CPLB(){this.setState({CPLBrandoms: Math.random(),QCPPrandoms:'QCPPrandoms',QCXLrandoms:'QCXLrandoms',QCCXrandoms:'QCCXrandoms'});}
+    CPLB(){this.setState({
+        CPLBrandoms: Math.random(),
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DcPLBrandoms:'',
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        SFCSrandoms:'',
+        KHJBrandoms:'',
+        XSLYrandoms:'',
+        CLYTrandoms:'',
+        ZBrandoms:'',
+    });}
     QCPP(){
         if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryid) !== 'undefined'){
-             this.setState({QCPPrandoms: Math.random(),CPLBrandoms:'CPLBrandoms',QCXLrandoms:'QCXLrandoms',QCCXrandoms:'QCCXrandoms'});
+             this.setState({
+                QCPPrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                DcPLBrandoms:'',
+                DqCPPrandoms:'',
+                DqCXLrandoms:'',
+                DqCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
         }else{
             Alert.to('请选择类别');
         }
     }
     QCXL(){
         if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandid) !== 'undefined'){
-             this.setState({QCXLrandoms: Math.random(),CPLBrandoms:'CPLBrandoms',QCPPrandoms:'QCPPrandoms',QCCXrandoms:'QCCXrandoms'});
+             this.setState({
+                QCXLrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCCXrandoms:'',
+
+                DcPLBrandoms:'',
+                DqCPPrandoms:'',
+                DqCXLrandoms:'',
+                DqCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
         }else{
             Alert.to('请选择品牌');
         }
     }
     QCCX(){
         if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesid) !== 'undefined'){
-             this.setState({QCCXrandoms: Math.random(),CPLBrandoms:'CPLBrandoms',QCPPrandoms:'QCPPrandoms',QCXLrandoms:'QCXLrandoms'});
+             this.setState({
+                QCCXrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCXLrandoms:'',
+
+                DcPLBrandoms:'',
+                DqCPPrandoms:'',
+                DqCXLrandoms:'',
+                DqCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
         }else{
             Alert.to('请选择系列');
         }
     }
-    DCPLB(){this.setState({DcPLBrandoms: Math.random()});}
+    DCPLB(){this.setState({
+        DcPLBrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        SFCSrandoms:'',
+        KHJBrandoms:'',
+        XSLYrandoms:'',
+        CLYTrandoms:'',
+        ZBrandoms:'',
+    });}
     DQCPP(){
         if(this.state.DcPLBv !== '' && typeof(this.state.DcPLBv.subcategoryid) !== 'undefined'){
-             this.setState({DqCPPrandoms: Math.random()});
+             this.setState({
+                DqCPPrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                DcPLBrandoms:'',
+                DqCXLrandoms:'',
+                DqCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
         }else{
             Alert.to('请选择成交类别');
         }
     }
     DQCXL(){
         if(this.state.DqCPPv !== '' && typeof(this.state.DqCPPv.brandid) !== 'undefined'){
-             this.setState({DqCXLrandoms: Math.random()});
+             this.setState({
+                DqCXLrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                DcPLBrandoms:'',
+                DqCPPrandoms:'',
+                DqCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
         }else{
             Alert.to('请选择成交品牌');
         }
     }
     DQCCX(){
         if(this.state.DqCXLv !== '' && typeof(this.state.DqCXLv.seriesid) !== 'undefined'){
-             this.setState({DqCCXrandoms: Math.random()});
+             this.setState({
+                DqCCXrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                DcPLBrandoms:'',
+                DqCPPrandoms:'',
+                DqCXLrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
         }else{
             Alert.to('请选择成交系列');
         }
     }
-    SFCS(){this.setState({SFCSrandoms: Math.random()});}
-    KHJB(){this.setState({KHJBrandoms: Math.random()});}
-    XSLY(){this.setState({XSLYrandoms: Math.random()});}
-    CLYT(){this.setState({CLYTrandoms: Math.random()});}
-    ZB(){this.setState({ZBrandoms: Math.random()});}
+    SFCS(){this.setState({
+        SFCSrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DcPLBrandoms:'',
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        KHJBrandoms:'',
+        XSLYrandoms:'',
+        CLYTrandoms:'',
+        ZBrandoms:'',
+    });}
+    KHJB(){this.setState({
+        KHJBrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DcPLBrandoms:'',
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        SFCSrandoms:'',
+        XSLYrandoms:'',
+        CLYTrandoms:'',
+        ZBrandoms:'',
+    });}
+    XSLY(){this.setState({
+        XSLYrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DcPLBrandoms:'',
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        SFCSrandoms:'',
+        KHJBrandoms:'',
+        CLYTrandoms:'',
+        ZBrandoms:'',
+    });}
+    CLYT(){this.setState({
+        CLYTrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DcPLBrandoms:'',
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        SFCSrandoms:'',
+        KHJBrandoms:'',
+        XSLYrandoms:'',
+        ZBrandoms:'',
+    });}
+    ZB(){this.setState({
+        ZBrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        DcPLBrandoms:'',
+        DqCPPrandoms:'',
+        DqCXLrandoms:'',
+        DqCCXrandoms:'',
+
+        SFCSrandoms:'',
+        KHJBrandoms:'',
+        XSLYrandoms:'',
+        CLYTrandoms:'',
+    });}
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
     goWell(){ this.context.router.push({pathname: '/nav'});}
@@ -290,9 +498,11 @@ class MsgDemo extends React.Component {
     onSaves(){
         if(this.checkForm()){
             let json = {};
-            //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-            //json.sessionid = oldData.sessionid;
-            json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+            if(typeof(Tool.SessionId) == 'string'){
+                json.sessionid = Tool.SessionId;
+            }else{
+                json.sessionid = Tool.SessionId.get();
+            }
             json.subcategoryid = this.state.CPLBv.subcategoryid;
             json.brandid = this.state.QCPPv.brandid;
             json.seriesid = this.state.QCXLv.seriesid;
@@ -353,6 +563,9 @@ class MsgDemo extends React.Component {
                         this.context.router.push({
                             pathname: '/nav'
                         });
+                    }else if(res.status == 901){
+                        Alert.to(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }

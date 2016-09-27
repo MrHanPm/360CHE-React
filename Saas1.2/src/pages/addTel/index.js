@@ -90,24 +90,15 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
     onSaves(){
-        //let persId = this.getQueryString('id');
+        //let persId = Tool.getQueryString('id');
         if(this.checkForm()){
             let json = {};
-            // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-            // json.sessionid = oldData.sessionid;
-            json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+            if(typeof(Tool.SessionId) == 'string'){
+                json.sessionid = Tool.SessionId;
+            }else{
+                json.sessionid = Tool.SessionId.get();
+            }
             json.type = '1';
             json.customname = this.state.name;
             json.customphone = this.state.tel;
@@ -132,6 +123,9 @@ class MsgDemo extends React.Component {
                     if(res.status == 1){
                         let urlTxt = '/detailTel?id=' + res.data.customid;
                         this.context.router.push({pathname: urlTxt});
+                    }else if(res.status == 901){
+                        Alert.to(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }
@@ -164,7 +158,7 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             <Input type="number" placeholder="请输入" onChange={this.telInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
+                        <CellFooter className="cleAft"></CellFooter>
                     </Cell>
                 </Cells>
                 <Cells access>

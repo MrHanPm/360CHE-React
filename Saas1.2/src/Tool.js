@@ -1,8 +1,10 @@
 import * as config from './config.js';
 
 const {target} = config;
+const {SessionId} = config;
 const Tool = {};
 Tool.HTTPs = target;
+Tool.SessionId = SessionId;
 /**
  * 发送ajax请求和服务器交互
  * @param {object} mySetting 配置ajax的配置

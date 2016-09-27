@@ -46,6 +46,7 @@ class CellDemo extends React.Component {
         Tool.get('WeiXin/GetWXDealerUserAddBrand.aspx',{},
             (res) => {
                 if(res.status === 901){
+                    Alert.to(res.msg);
                     this.context.router.push({
                         pathname: '/loading'
                     });

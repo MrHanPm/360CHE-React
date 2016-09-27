@@ -93,31 +93,94 @@ class MsgDemo extends React.Component {
             failTime:document.getElementById('FailTime').value
         });
     }
-    CPLB(){this.setState({CPLBrandoms: Math.random()});}
+    CPLB(){this.setState({
+        CPLBrandoms: Math.random(),
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        KHJBrandoms:'',
+        ZBrandoms:'',
+        GJrandoms:'',
+    });}
     QCPP(){
         if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryid) !== 'undefined'){
-             this.setState({QCPPrandoms: Math.random()});
+             this.setState({
+                QCPPrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                KHJBrandoms:'',
+                ZBrandoms:'',
+                GJrandoms:'',
+            });
         }else{
             Alert.to('请选择类别');
         }
     }
     QCXL(){
         if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandid) !== 'undefined'){
-             this.setState({QCXLrandoms: Math.random()});
+             this.setState({
+                QCXLrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCCXrandoms:'',
+
+                KHJBrandoms:'',
+                ZBrandoms:'',
+                GJrandoms:'',
+            });
         }else{
             Alert.to('请选择品牌');
         }
     }
     QCCX(){
         if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesid) !== 'undefined'){
-             this.setState({QCCXrandoms: Math.random()});
+             this.setState({
+                QCCXrandoms: Math.random(),
+                CPLBrandoms:'',
+                QCPPrandoms:'',
+                QCXLrandoms:'',
+
+                KHJBrandoms:'',
+                ZBrandoms:'',
+                GJrandoms:'',
+            });
         }else{
             Alert.to('请选择系列');
         }
     }
-    KHJB(){this.setState({KHJBrandoms: Math.random()});}
-    GJ(){this.setState({GJrandoms: Math.random()});}
-    ZB(){this.setState({ZBrandoms: Math.random()});}
+    KHJB(){this.setState({
+        KHJBrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        ZBrandoms:'',
+        GJrandoms:'',
+    });}
+    GJ(){this.setState({
+        GJrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        KHJBrandoms:'',
+        ZBrandoms:'',
+    });}
+    ZB(){this.setState({
+        ZBrandoms: Math.random(),
+        CPLBrandoms:'',
+        QCPPrandoms:'',
+        QCXLrandoms:'',
+        QCCXrandoms:'',
+
+        KHJBrandoms:'',
+        GJrandoms:'',
+    });}
 
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
@@ -178,24 +241,15 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
     onSaves(){
-        let persId = this.getQueryString('id');
+        let persId = Tool.getQueryString('id');
         if(this.checkForm()){
             let json = {};
-            // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-            // json.sessionid = oldData.sessionid;
-            json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+            if(typeof(Tool.SessionId) == 'string'){
+                json.sessionid = Tool.SessionId;
+            }else{
+                json.sessionid = Tool.SessionId.get();
+            }
             json.cluesextendid = persId;
             let Uptimes = this.state.followupdate.replace(/T/g,' ');
             let Followupdate = Uptimes + ':00';
@@ -235,6 +289,9 @@ class MsgDemo extends React.Component {
                         this.context.router.push({
                             pathname: '/nav'
                         });
+                    }else if(res.status == 901){
+                        Alert.to(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }

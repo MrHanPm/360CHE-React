@@ -69,9 +69,12 @@ class MsgDemo extends React.Component {
     }
     goSave(){
         if(this.checkForm()){
-            let oldData = JSON.parse(Tool.localItem('vipLodData'));
             let json = {};
-            json.sessionid = oldData.sessionid;
+            if(typeof(Tool.SessionId) == 'string'){
+                json.sessionid = Tool.SessionId;
+            }else{
+                json.sessionid = Tool.SessionId.get();
+            }
             json.oldpwd = this.state.oldpwd;
             json.newpwd = this.state.pwd;
             json.confirmpwd = this.state.newpwd;
@@ -83,6 +86,7 @@ class MsgDemo extends React.Component {
                         });
                     }else if(res.status == 901){
                         Alert.to(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }

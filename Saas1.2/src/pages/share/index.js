@@ -38,9 +38,11 @@ export default class MsgDemo extends React.Component {
     }
     upDATA(){
         let json = {};
-        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        // json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         Tool.get('User/Share.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -48,6 +50,9 @@ export default class MsgDemo extends React.Component {
                         DATA:res.listdata,
                         loadingS:false
                     });
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -60,6 +65,17 @@ export default class MsgDemo extends React.Component {
     componentDidMount() {
         document.title = '选择店铺';
         this.upDATA();
+        let self = this;
+        [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
+          el.addEventListener('touchend', function(e) {
+            let y = e.changedTouches[0].pageY;
+            let Hit  = window.screen.height/2;
+            if( y < Hit ){
+                self.hidFx();
+                e.preventDefault();
+            }
+          }, false);
+        });
     }
     render() {
         const {loadingS,DATA,shows} =this.state;
@@ -114,7 +130,6 @@ export default class MsgDemo extends React.Component {
                         <div className="url"></div>
                         <p>复制链接</p>
                     </dd>
-                    <dt className="clos" onClick={this.hidFx}></dt>
                 </dl>
             </div>
         </Page>

@@ -113,9 +113,11 @@ class MsgDemo extends React.Component {
     onSaves(){
         if(this.checkForm()){
             let json = {};
-            // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-            // json.sessionid = oldData.sessionid;
-            json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+            if(typeof(Tool.SessionId) == 'string'){
+                json.sessionid = Tool.SessionId;
+            }else{
+                json.sessionid = Tool.SessionId.get();
+            }
             json.type = '1';
             json.customerid = this.state.customerid;
             json.customname = this.state.name;
@@ -179,7 +181,7 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             <Input type="number" value={tel} placeholder="请输入" onInput={this.telInput}/>
                         </CellBody>
-                        <CellFooter className="cleAft">A</CellFooter>
+                        <CellFooter className="cleAft"></CellFooter>
                     </Cell>
                 </Cells>
                 <Cells access>

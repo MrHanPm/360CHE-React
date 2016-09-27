@@ -27,8 +27,9 @@ export default class TabBarDemo extends React.Component {
         countdown: 0,
         initData:true,
         showConfirm: false,
+        HelloMes:'',
         confirm: {
-            title: '标题标题',
+            title: '',
             buttons: [
                 {
                     type: 'default',
@@ -58,6 +59,9 @@ export default class TabBarDemo extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.forAjax(res.listdata);
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg)
                 }
@@ -116,30 +120,23 @@ export default class TabBarDemo extends React.Component {
         }
     }
     componentDidMount(){
-        this.initData('42018_422bdaf3ca2073292e335c8f507812bd5df94093');
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //this.initData(oldData.sessionid);
-
-        // if(oldData.alermsg !== '' && oldData.alermsg.length !== 0){
-        //     this.setState({
-        //         confirm:{
-        //             title: oldData.alermsg,
-        //             buttons: [
-        //                 {
-        //                     type: 'default',
-        //                     label: '取消',
-        //                     onClick: this.hideConfirm.bind(this)
-        //                 },
-        //                 {
-        //                     type: 'primary',
-        //                     label: '我知道了',
-        //                     onClick: this.hideConfirm.bind(this)
-        //                 }
-        //             ]
-        //         }
-        //     });
+        let sessionid;
+        // if(typeof(Tool.SessionId) == 'string'){
+        //     sessionid= Tool.SessionId;
+        // }else{
+        //     sessionid = Tool.SessionId.get();
         // }
+        
+        let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        sessionid = oldData.sessionid;
 
+        this.initData(sessionid);
+
+        if(oldData.alermsg !== '' && oldData.alermsg.length > 0){
+            this.setState({
+                HelloMes: oldData.alermsg,
+            });
+        }
     }
     render() {
         let Pages;
@@ -190,8 +187,7 @@ export default class TabBarDemo extends React.Component {
                         label="发现"
                     />
                 </TabBar>
-                <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
-                </Confirm>
+                <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>{this.state.HelloMes}</Confirm>
                 <div className="initUrlKey" style={{'display':this.state.initData?'block':'none'}}>初始数据加载中…</div>
             </Tab>
         );

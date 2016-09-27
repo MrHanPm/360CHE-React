@@ -47,11 +47,11 @@ class Clues extends Component {
         this.RobLine = this.RobLine.bind(this);
     }
     Alts(){Alert.to('每个经销商每天只能抢500条线索');}
-    SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:'showBrands'});}
+    SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:''});}
     upBrand(val){
         //this.setState({brandid: val,showBrands:'showBrands'});
         this.state.brandid = val;
-        this.state.showBrands = 'showBrands';
+        this.state.showBrands = '';
         this.upDATA(val);
     }
     upSF(val){
@@ -60,16 +60,18 @@ class Clues extends Component {
         //     SFCSrandoms:'SFCSrandoms'
         // });
         this.state.SFCSv = val;
-        this.state.SFCSrandoms = 'SFCSrandoms';
+        this.state.SFCSrandoms = '';
         this.upDATA(val);
     }
     upDATA(val,typ){
         console.log(typ,'typ');
         console.log(val,'val');
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         if(typeof(val) == 'undefined'){
             json.brandid = this.state.brandid;
             json.nowpage = this.state.nowpage;
@@ -125,6 +127,9 @@ class Clues extends Component {
                         });
                     }
                     console.log(this.state);
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -135,9 +140,12 @@ class Clues extends Component {
         )
     }
     RobLine(e){
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
-        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        let sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
         Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
             (res) => {
                 if(res.status == 1){
@@ -173,7 +181,7 @@ class Clues extends Component {
     componentDidMount() {
         this.upDATA(undefined,'componentDidMount');
     }
-    showBrand(){ this.setState({showBrands:Math.random(),SFCSrandoms:'SFCSrandoms'});}
+    showBrand(){ this.setState({showBrands:Math.random(),SFCSrandoms:''});}
     render() {
         const {loadingS, DATA, topnotice} = this.state;
         let self = this;

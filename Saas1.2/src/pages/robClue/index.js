@@ -76,16 +76,22 @@ class MsgDemo extends React.Component {
         this.setState({SDSrandoms:st});
     }
     goBeac(){
-        let persId = this.getQueryString('id');
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //sessionid = oldData.sessionid;
-        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        let persId = Tool.getQueryString('id');
+        let sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
         Tool.get('Clues/ChangeCluesStatus.aspx',{sessionid:sessionid,cluesextendid:persId},
             (res) => {
                 if(res.status == 1){
                     this.context.router.push({
                         pathname: '/nav'
                     });
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -95,31 +101,26 @@ class MsgDemo extends React.Component {
             }
         )
     }
-    getQueryString(name) {
-        let conts = window.location.hash.split("?");
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = conts[1].match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }
-        else {
-            return null;
-        }
-    }
 
     componentDidMount() {
         document.title = '线索详情';
-        let persId = this.getQueryString('id');
+        let persId = Tool.getQueryString('id');
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        let sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+        let sessionid;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
         json.sessionid = sessionid;
         json.cluesextendid = persId;
         Tool.get('Clues/GetCluesDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
                     this.setState({DATArob:res.data});
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -137,6 +138,9 @@ class MsgDemo extends React.Component {
                     }else{
                         this.setState({Messrob:res.listdata,showAlertCfm:true});
                     }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

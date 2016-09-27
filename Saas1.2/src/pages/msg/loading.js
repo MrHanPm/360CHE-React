@@ -14,9 +14,9 @@ class MsgDemo extends React.Component {
 
     componentDidMount() {
         document.title="Loading";
-        Tool.localItem('vipLodData','');
-        Tool.localItem('Uphone','');
-        Tool.localItem('BrandKey','');
+        Tool.localItem('vipLodData',null);
+        Tool.localItem('Uphone',null);
+        Tool.localItem('BrandKey',null);
         Tool.get('WeiXin/BindTel.aspx',{},
             (res) => {
                 if(res.status === 910){
@@ -24,10 +24,14 @@ class MsgDemo extends React.Component {
                         pathname: '/phone'
                     });
                 }else if(res.status === 1){
-                    Tool.localItem('vipLodData',JSON.stringify(res.data));
-                    this.context.router.push({
-                        pathname: '/nav'
-                    });
+                    let Vd = JSON.stringify(res.data);
+                    Tool.localItem('vipLodData',Vd);
+                    if(res.data.usercategory == '1'){
+                        this.context.router.push({pathname: '/nav'});
+                    }
+                    if(res.data.usercategory == '2'){
+                        this.context.router.push({pathname: '/boss/nav'});
+                    }
                 }else{
                     Alert.to(res.msg);
                 }

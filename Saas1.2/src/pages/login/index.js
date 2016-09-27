@@ -61,12 +61,13 @@ class CellDemo extends React.Component {
             Tool.get('User/Login.aspx',{username:this.state.name,pwd:this.state.pwd,apptype:'weixin'},
                 (res) => {
                     if(res.status === 1){
-                        Tool.localItem('vipLodData',JSON.stringify(res.data));
+                        let Vd = JSON.stringify(res.data);
+                        Tool.localItem('vipLodData',Vd);
                         if(res.data.usercategory == '1'){
                             this.context.router.push({pathname: '/nav'});
                         }
                         if(res.data.usercategory == '2'){
-                            this.context.router.push({pathname: '/name'});
+                            this.context.router.push({pathname: '/boss/nav'});
                         }
                     }else{
                         Alert.to(res.msg);

@@ -33,9 +33,11 @@ export default class Clues extends React.Component {
     }
     upDATA(){
         let json={};
-        //let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        //json.sessionid = oldData.sessionid;
-        json.sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
         json.nowpage = this.state.nowpage;
         json.cluesstatus = 4;
         Tool.get('Clues/GetCluesList.aspx',json,
@@ -57,6 +59,9 @@ export default class Clues extends React.Component {
                             nowpage:page
                         });
                     }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

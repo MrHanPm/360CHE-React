@@ -31,6 +31,7 @@ class CellDemo extends React.Component {
         super(props);
         this.state = {
             name:'',
+
             brands:[],
             showBrands:false,
             
@@ -43,11 +44,11 @@ class CellDemo extends React.Component {
 
     componentDidMount() {
         document.title="销售信息"
-        let BrandKey = Tool.localItem('BrandKey');
-        if(BrandKey !== null){
+        let BrandKey = JSON.parse(Tool.localItem('BrandKey'));
+        if(BrandKey !== null && BrandKey.length >= 0){
             this.setState({
                 showBrands:true,
-                brands: JSON.parse(BrandKey)
+                brands: BrandKey
             });
         }
     }
@@ -71,10 +72,11 @@ class CellDemo extends React.Component {
                 brandArry += this.state.brands[i].keys+','
             }
             //console.log(brandArry);
+            let telS = Tool.localItem('Uphone');
             json.subdealerid = brandArry;
             json.realname = this.state.name;
-            json.tel = Tool.localItem('Uphone');
-            json.loginname =  Tool.localItem('Uphone');
+            json.tel = telS;
+            json.loginname = telS;
             Tool.get('User/AddUser.aspx',json,
                 (res) => {
                     if(res.status === 1){
@@ -107,7 +109,14 @@ class CellDemo extends React.Component {
         });
         return (
             <Page className="name" title="销售信息">
-
+                <Cells access>
+                    <Cell href="#brand">
+                        <CellBody>
+                            选择您的销售品牌
+                        </CellBody>
+                        <CellFooter></CellFooter>
+                    </Cell>
+                </Cells>
                 <Form>
                     <FormCell>
                         <CellHeader>
@@ -118,15 +127,6 @@ class CellDemo extends React.Component {
                         </CellBody>
                     </FormCell>
                 </Form>
-                <Cells access>
-                    <Cell href="#brand">
-                        <CellBody>
-                            选择您的销售品牌
-                        </CellBody>
-                        <CellFooter></CellFooter>
-                    </Cell>
-                </Cells>
-
                 <Form checkbox style={{'display':this.state.showBrands ? 'block': 'none' }}>
                     <p style={{'padding':'10px 15px'}}>已选择品牌</p>
                     {list}
