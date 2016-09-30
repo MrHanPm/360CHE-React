@@ -65,7 +65,7 @@ class CellDemo extends React.Component {
     }
     GoSub(){
         let list = document.querySelectorAll('[name="brandCheck"]');
-        console.log(list);
+        //console.log(list);
         let json = [];
         for(let i=0;i < list.length; i++){
             if(list[i].checked == true){

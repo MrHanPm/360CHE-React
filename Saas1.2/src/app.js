@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-router';
+import { Router, Route, IndexRoute, hashHistory} from 'react-router';
 import WeUI from 'react-weui';
 import 'weui';
 
@@ -40,16 +40,15 @@ class App extends React.Component {
                         transitionName="page"
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={500}
-                        style={{height: '100%'}}
+                        style={{'height': '100%','overflow':'hidden'}}
                     >
                             {React.cloneElement(this.props.children, {
-                                    key: this.props.location.pathname
+                                key: this.props.location.pathname
                             })}
                     </ReactCSSTransitionGroup>
                 );
         }
 }
-
 ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
@@ -59,7 +58,6 @@ ReactDOM.render((
             <Route path="login" component={Login}/>
             <Route path="name" component={Name}/>
             <Route path="brand" component={Brand}/>
-            <Route path="nav" component={Nav}/>
             <Route path="feedback" component={Feedback}/>
             <Route path="account" component={Account}/>
             <Route path="mdfPwd" component={MdfPwd}/>
@@ -75,9 +73,19 @@ ReactDOM.render((
             <Route path="share" component={Share}/>
             <Route path="search" component={Search}/>
             
-            <Route path="boss/nav" component={BosNav}/>
             <Route path="boss/robClue" component={BosRobClue}/>
             <Route path="boss/detailTel" component={BosDetailTel}/>
         </Route>
+        <Route path="/nav" component={Nav}/>
+        <Route path="/nav/x(/:name)" component={Nav}/>
+        <Route path="/nav/c(/:name)" component={Nav}/>
+        <Route path="/nav/t" component={Nav}/>
+        <Route path="/nav/f" component={Nav}/>
+
+        <Route path="/boss/nav" component={BosNav}/>
+        <Route path="/boss/nav/x(/:name)" component={BosNav}/>
+        <Route path="/boss/nav/c(/:name)" component={BosNav}/>
+        <Route path="/boss/nav/t" component={BosNav}/>
+        <Route path="/boss/nav/f" component={BosNav}/>
     </Router>
 ), document.getElementById('container'));

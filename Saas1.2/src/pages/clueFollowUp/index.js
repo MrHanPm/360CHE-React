@@ -22,7 +22,7 @@ import './index.less';
 import Foll from '../sidebar/Foll';//筛选
 
 
-export default class Clues extends React.Component {
+class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -69,7 +69,7 @@ export default class Clues extends React.Component {
             json.s_clueresource = this.state.FollV.s_clueresource;//线索
             json.s_cheliangyongtuid = this.state.FollV.s_cheliangyongtuid;//用途
         }
-        console.log(json);
+        //console.log(json);
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -105,7 +105,7 @@ export default class Clues extends React.Component {
         )
     }
     FollSidebar(val){
-        console.log(val);
+        //console.log(val);
         if(val.s_levelsetstatus.length == 0 && val.s_followstatus.length == 0 && val.s_brandids.length ==0 && val.s_clueslevel.length ==0 && val.s_cheliangyongtuid.length ==0 && val.s_clueresource.length ==0 && val.s_expectedbycarnummax == -1 &&
             val.s_expectedbycarnummin == -1 && val.s_follownummax == -1 && val.s_follownummin == -1 && val.s_lastlinktimemin == '' && val.s_lastlinktimemax == ''){
             this.setState({pf:0});
@@ -158,10 +158,10 @@ export default class Clues extends React.Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height;
+      Hit  = window.screen.height-100;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
-      if(goNumb == 0){
+      if(goNumb <= 0){
         if(this.state.loadingS){
             let t
             t && clearTimeout(t);
@@ -172,13 +172,14 @@ export default class Clues extends React.Component {
       }
     }
     componentDidMount() {
+        this.props.hideS();
         this.upDATA();
     }
     render() {
         const {loadingS, DATA,p,buycarnum,follownum,pf} = this.state;
         let self = this;
         return (
-        <div>
+        <div className="clueBody cluePend">
             <ul className="FollNavs">
                 <li className={p==1?'active':''} title="zh" onClick={this.FilterS}>综合</li>
                 <li className={p==2?'FollNavCss active':'FollNavCss'}>
@@ -191,7 +192,7 @@ export default class Clues extends React.Component {
                 </li>
                 <li className={pf?'FollNavCssf active':'FollNavCssf'} onClick={this.FOLL}>筛选</li>
             </ul>
-            <div className="clueBody clueFollo"  onScroll={this.handleScroll}>
+            <div className="clueFollo"  onScroll={this.handleScroll}>
                 {DATA.map(function(e,index){
                     return(
                     <Panel key={index}>

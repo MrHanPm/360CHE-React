@@ -17,7 +17,7 @@ import {Button,
 } from 'react-weui';
 import Page from '../../../component/page';
 import {Tool,Alert} from '../../../tool.js';
-import './index.less';
+
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
@@ -72,7 +72,7 @@ class MsgDemo extends React.Component {
         Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
             (res) => {
                 if(res.status == 1){
-                    console.log(JSON.stringify(res.listdata[0]));
+                    //console.log(JSON.stringify(res.listdata[0]));
                     if(res.reccount > 0){
                         this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
                     }else{

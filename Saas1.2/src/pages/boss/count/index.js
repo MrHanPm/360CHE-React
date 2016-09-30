@@ -18,7 +18,6 @@ import {
     Button,
 } from 'react-weui';
 import Echarts from 'echarts';
-import Page from '../../../component/page';
 import {Tool,Alert} from '../../../tool.js';
 import {Views} from '../../../component/charts.min.js';
 import './index.less';
@@ -219,8 +218,8 @@ export default class Clues extends React.Component {
     render() {
         const {loadShow,name,actvs,startdate,enddate} = this.state;
         return (
-            <Page className="account addPursd countBox">
-                <div style={{'display':loadShow?'none':'block'}}>
+            <div className="countBox">
+                <div style={{'display':loadShow?'none':'block'}} className="BoxC">
                     <h3 className="user-title">
                         {name}
                         <i onClick={this.getNames}>切换 &gt;</i>
@@ -328,11 +327,11 @@ export default class Clues extends React.Component {
                             </div>
                         </div>
                     </div>
-
+                    <div className="weui_cells_title"> </div>
                 </div>
                 <div className="initUrlKey" style={{'display':loadShow?'block':'none'}}>数据加载中…</div>
                 <NameList data={this.state.accountTotalList} showD={this.state.NameRandoms} ChangeName={val => this.ChanName(val)} />
-            </Page>
+            </div>
         );
     }
 };
@@ -395,7 +394,7 @@ class NameList extends React.Component{
                   <span>选择查看范围</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
               </header>
-              <ul className="Fnav" style={{'padding-bottom':'100px'}}>
+              <ul className="Fnav">
                 {this.state.L.map(function(e,indexs){
                   return(
                     <li key={indexs} 

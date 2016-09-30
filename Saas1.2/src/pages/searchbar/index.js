@@ -46,7 +46,7 @@ export default class SearchBarDemo extends React.Component {
                     return item.customphone.indexOf(text) !== -1;
                 });
             }
-            console.log(newDB);
+            //console.log(newDB);
             if(newDB.length > 5) newDB = newDB.slice(0,5);
         }
         this.setState({
@@ -60,7 +60,7 @@ export default class SearchBarDemo extends React.Component {
         if(SearchData == null){
             SearchData = [];
         }
-        console.log(SearchData);
+        //console.log(SearchData);
         this.setState({DATA:SearchData});
     }
     render() {

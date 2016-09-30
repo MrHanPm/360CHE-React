@@ -49,10 +49,6 @@ class MsgDemo extends React.Component {
                 title: '跟进24小时内未设置客户级别的线索将返回到公共线索池',
                 buttons: [
                     {
-                        type: 'default',
-                        label: '取消',
-                        onClick: this.hideAlertCfm.bind(this)
-                    },{
                         type: 'primary',
                         label: '知道了',
                         onClick: this.hideAlertCfm.bind(this)
@@ -132,7 +128,7 @@ class MsgDemo extends React.Component {
         Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
             (res) => {
                 if(res.status == 1){
-                    console.log(JSON.stringify(res.listdata[0]));
+                    //console.log(JSON.stringify(res.listdata[0]));
                     if(res.reccount > 0){
                         this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
                     }else{
@@ -362,7 +358,7 @@ class SideRob extends React.Component {
             }
         }
         let datas = nextProps.data[ints];
-        console.log(ints,datas,'bbbbb');
+        //console.log(ints,datas,'bbbbb');
         if(typeof(nextProps.showD) == 'number'){
           this.setState({
             showSid: true,

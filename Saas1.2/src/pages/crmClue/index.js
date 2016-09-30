@@ -51,7 +51,7 @@ export default class Clues extends React.Component {
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
                     }
-                    console.log(page,this.state.DATA);
+                    //console.log(page,this.state.DATA);
                     if(res.pagecount == page){
                         this.setState({loadingS:false});
                     }else{
@@ -90,7 +90,7 @@ export default class Clues extends React.Component {
       Hit  = window.screen.height;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
-      if(goNumb == 0){
+      if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
             let t

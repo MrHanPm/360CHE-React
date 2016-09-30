@@ -1,35 +1,3 @@
-.clueNav{
-    width: 100%;
-    height: 45px;
-    background: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 200;
-    li{
-        width: 25%;
-        height: 100%;
-        box-sizing: border-box;
-        text-align: center;
-        line-height: 45px;
-        float: left;
-    }
-    .active{
-        border-bottom: 2px solid #00B800;
-        color: #00B800;
-    }
-    li:first-child:after{
-        content: ' ';
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        background: #FF0000;
-        border-radius: 100%;
-        position: relative;
-        top: -10px;
-        left: 10px;
-    }
-}
 .clueBody{
     padding-top: 45px;
     height: 100%;
@@ -56,7 +24,7 @@
     position: absolute;
     bottom: 14%;
     right: 20px;
-    z-index: 16;
+    z-index: 900;
     font-family: 'saas_ico';
 }
 .butX:before{
@@ -68,15 +36,27 @@
     line-height: 45px;
     text-align: center;
     font-size: 26px;
+    -webkit-transition: transform .5s ease-out;
+        transition: transform .5s ease-out;
 }
-
+.clueBtnXbg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 889;
+    display: none;
+    background: rgba(0,0,0,.5);
+}
 .clueBtnX{
     position: absolute;
     width: 120px;
     height: auto;
     bottom: 20%;
     right: 25px;
-    z-index: 16;
+    z-index: 900;
+    display: none;
     span{
         display: block;
         width: 100%;
@@ -92,22 +72,22 @@
         float: left;
         color: #666;
         background: #fff;
-        box-shadow: 0 0 6px #ccc;
+        box-shadow: 0 0 6px #333;
         border-radius: 5px;
         text-align: center;
         line-height: 30px;
         margin-top: 3px;
     }
     span:after{
-        content: '\e601';
+        content: '\e600';
         display:inline-block;
         width: 36px;
         height: 36px;
         color: #666;
-        font-size: 26px;
+        font-size: 28px;
         float: right;
         background: #fff;
-        box-shadow: 0 0 6px #ccc;
+        box-shadow: 0 0 6px #333;
         border-radius: 100px;
         text-align: center;
         line-height: 36px;
@@ -116,11 +96,19 @@
         content: '添加线索';
     }
     .butX_add:after{
-        content: '\e602';
-        font-size: 24px;
+        content: '\e60b';
     }
 }
-
+.NM{
+    .XActiv:before{
+        -webkit-transform: rotate(225deg);
+        transform: rotate(225deg);
+    }
+    .XHide{display: none;}
+    .XbgActiv{
+        display: block;
+    }
+}
 
 
 .clueBody .weui_cell_ft:after {

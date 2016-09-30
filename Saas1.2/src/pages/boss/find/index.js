@@ -19,7 +19,7 @@ import {
     CellBody,
     CellFooter
 } from 'react-weui';
-import './index.less';
+
 export default class MsgDemo extends React.Component {
     render() {
         return (

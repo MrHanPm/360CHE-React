@@ -6,16 +6,15 @@
         height: auto;
     }
 }
-
-
 .clueNav{
     width: 100%;
     height: 45px;
     background: #fff;
-    position: fixed;
+    display: flex;
+    position: absolute;
     top: 0;
     left: 0;
-    z-index: 200;
+    z-index: 888;
     li{
         width: 25%;
         height: 100%;
@@ -28,7 +27,7 @@
         border-bottom: 2px solid #00B800;
         color: #00B800;
     }
-    li:first-child:after{
+    .red:after{
         content: ' ';
         display: inline-block;
         width: 6px;
@@ -70,8 +69,8 @@
         }
     }
     .weui_panel:after, .weui_panel:before{display: none;}
-    .weui_panel_bd{border-bottom: 1px solid #f9f9f9;}
-    .weui_panel_hd{background: #f9f9f9;padding: 5px 15px;}
+    .weui_panel_bd{border-bottom: 1px solid #f7f7fa;}
+    .weui_panel_hd{background: #f7f7fa;padding: 5px 15px;}
     .crmCall{
         border:0;
         height: 34px;

@@ -20,7 +20,7 @@ import {
 import {Tool,Alert} from '../../../tool.js';
 import './index.less';
 
-export default class Clues extends React.Component {
+class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -50,7 +50,7 @@ export default class Clues extends React.Component {
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
                     }
-                    console.log(page,this.state.DATA);
+                    //console.log(page,this.state.DATA);
                     if(res.pagecount == page){
                         this.setState({loadingS:false});
                     }else{
@@ -79,10 +79,10 @@ export default class Clues extends React.Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height;
+      Hit  = window.screen.height-55;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
-      if(goNumb == 0){
+      if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
             let t

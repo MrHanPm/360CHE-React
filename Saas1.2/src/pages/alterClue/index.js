@@ -106,7 +106,7 @@ class MsgDemo extends React.Component {
     componentDidMount() {
         document.title = '修改线索';
         let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
-        console.log(RobClueVal);
+        //console.log(RobClueVal);
         this.setState({
             id:RobClueVal.cluesextendid,
             CPLBv:{

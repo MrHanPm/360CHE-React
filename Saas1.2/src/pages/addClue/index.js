@@ -111,7 +111,7 @@ class MsgDemo extends React.Component {
         let crmId = Tool.getQueryString('id');
         if(crmId !== null){
             let crmData = JSON.parse(Tool.localItem('RobClues'));
-            console.log(crmData);
+            //console.log(crmData);
             if(crmId == crmData.customid){
                 this.setState({
                     name:crmData.customname,
@@ -366,7 +366,7 @@ class MsgDemo extends React.Component {
             json.isrelationcustomer = this.state.Checkbox;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
-            console.log(JSON.stringify(this.state));
+            //console.log(JSON.stringify(this.state));
             if(this.state.crmShow){
                 Tool.get('Clues/AddClues.aspx',json,
                     (res) => {

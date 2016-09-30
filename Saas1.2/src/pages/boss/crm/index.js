@@ -15,7 +15,6 @@ import {
     MediaBoxInfoMeta,
     Button,
 } from 'react-weui';
-import './index.less';
 import ShowAlert from '../../../component/Alert.js'
 import OkTel from '../okTel/index.js';
 import NoTel from '../noTel/index.js';
@@ -27,6 +26,23 @@ class Clues extends React.Component {
         super(props);
         this.state = {
             tab:0,
+        }
+    }
+    componentWillMount(){
+        let Hashs = window.location.hash.substring(13,14);
+        switch(Hashs){
+            case 'z' :
+                this.setState({tab:0});
+                break;
+            case 's' :
+                this.setState({tab:1});
+                break;
+            case 'w' :
+                this.setState({tab:2});
+                break;
+            case 'o' :
+                this.setState({tab:3});
+                break;
         }
     }
     componentDidMount(){
@@ -49,12 +65,12 @@ class Clues extends React.Component {
                 break;
         }
         return (
-            <div style={{height:'100%'}} className="CrmBox">
+            <div style={{'height':'100%','overflow':'hidden'}} className="CrmBox">
                 <ul className="clueNav">
-                    <li className={this.state.tab == 0 ? 'active':''} onClick={e=>this.setState({tab:0})}>最近联系</li>
-                    <li className={this.state.tab == 1 ? 'active':''} onClick={e=>this.setState({tab:1})}>收藏</li>
-                    <li className={this.state.tab == 2 ? 'active':''} onClick={e=>this.setState({tab:2})}>未购车</li>
-                    <li className={this.state.tab == 3 ? 'active':''} onClick={e=>this.setState({tab:3})}>已购车</li>
+                    <li className={this.state.tab == 0 ? 'active':''} onClick={e=>{this.setState({tab:0});this.context.router.push({pathname: '/boss/nav/c/z'})}}>最近联系</li>
+                    <li className={this.state.tab == 1 ? 'active':''} onClick={e=>{this.setState({tab:1});this.context.router.push({pathname: '/boss/nav/c/s'})}}>收藏</li>
+                    <li className={this.state.tab == 2 ? 'active':''} onClick={e=>{this.setState({tab:2});this.context.router.push({pathname: '/boss/nav/c/w'})}}>未购车</li>
+                    <li className={this.state.tab == 3 ? 'active':''} onClick={e=>{this.setState({tab:3});this.context.router.push({pathname: '/boss/nav/c/o'})}}>已购车</li>
                 </ul>
                 {Pages}
                 <ShowAlert />

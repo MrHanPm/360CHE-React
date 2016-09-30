@@ -69,8 +69,10 @@ export default class MsgDemo extends React.Component {
         [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
           el.addEventListener('touchend', function(e) {
             let y = e.changedTouches[0].pageY;
-            let Hit  = window.screen.height/2;
-            if( y < Hit ){
+            let Hl = document.getElementById('FenXDL').scrollHeight;
+            let Hit  = window.screen.height;
+            //console.log(Hit,Hl,y);
+            if( y < Hit-Hl){
                 self.hidFx();
                 e.preventDefault();
             }
@@ -104,7 +106,7 @@ export default class MsgDemo extends React.Component {
             </Panel>
             {loadingS ? <LoadAd /> : <NoMor />}
             <div className="FXBox" style={{'display':shows?'':'none'}}>
-                <dl>
+                <dl id="FenXDL">
                     <dt className="pit">分享这个店铺</dt>
                     <dd>
                         <div></div>

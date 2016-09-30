@@ -18,7 +18,6 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../../tool.js';
-import './index.less';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -147,10 +146,10 @@ class Clues extends React.Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height;
+      Hit  = window.screen.height-55;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
-      if(goNumb == 0){
+      if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
             let t

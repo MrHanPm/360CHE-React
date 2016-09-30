@@ -13,7 +13,6 @@ import {
     MediaBoxDescription,
     MediaBoxInfo,
     MediaBoxInfoMeta,
-    ActionSheet,
     Button,
 } from 'react-weui';
 
@@ -31,69 +30,91 @@ class Clues extends React.Component {
             tab:0,
             show: false,
             red:false,
-            menus: [{
-                label: '速抢线索',
-                onClick: ()=> {
-                    this.context.router.push({
-                        pathname: '/rob'
-                    });
-                }
-            }, {
-                label: '添加线索',
-                onClick: ()=> {
-                    this.context.router.push({
-                        pathname: '/addClue'
-                    });
-                }
-            }],
-            actions: [
-                {
-                    label: '取消',
-                    onClick: this.hide.bind(this)
-                }
-            ]
+            showBtns:false,
         }
         this.show = this.show.bind(this);
-        this.hide = this.hide.bind(this);
-    }
-    show() {
-        this.setState({show: true});
     }
 
-    hide() {
-        this.setState({show: false});
+    show(){this.setState({show: !this.state.show});}
+
+    componentWillMount(){
+        let Hashs = window.location.hash.substring(8,9);
+        switch(Hashs){
+            case 'd' :
+                this.setState({tab:0});
+                break;
+            case 'g' :
+                this.setState({tab:1});
+                break;
+            case 'y' :
+                this.setState({tab:2});
+                break;
+            case 'b' :
+                this.setState({tab:3});
+                break;
+        }
     }
     componentDidMount(){
         document.title="线索";
+        //let Hashs = window.location.hash;
+        //console.log(Hashs);
     }
     render() {
         let Pages;
-        switch(this.state.tab){
+        const {show,tab,showBtns,red} = this.state;
+        switch(tab){
             case 0 :
-                Pages = <Pending />;
+                Pages = <Pending hideS={()=>this.setState({showBtns:false})} REDS={val=>this.setState({red:val})}/>;
                 break;
             case 1 :
-                Pages = <FollowUp />;
+                Pages = <FollowUp hideS={()=>this.setState({showBtns:true})}/>;
                 break;
             case 2 :
-                Pages = <Already />;
+                Pages = <Already hideS={()=>this.setState({showBtns:true})}/>;
                 break;
             case 3 :
-                Pages = <Defeat />;
+                Pages = <Defeat hideS={()=>this.setState({showBtns:true})}/>;
                 break;
         }
+        let Btns;
+        if(showBtns){
+            Btns = 'butX XHide';
+        }else{
+            if(show){
+                Btns = 'butX XActiv';
+            }else{
+                Btns = 'butX';
+            }
+        }
+        let Tabs;
+        if(tab == 0){
+            if(red){
+                Tabs = 'active red';
+            }else{
+                Tabs = 'active';
+            }
+        }else{
+            if(red){
+                Tabs = 'red';
+            }else{
+                Tabs = '';
+            }
+        }
         return (
-            <div style={{height:'100%'}}>
+            <div style={{'height':'100%','overflow':'hidden'}} className="NM">
                 <ul className="clueNav">
-                    <li className={this.state.tab == 0 ? 'active':''} onClick={e=>this.setState({tab:0})}>待处理</li>
-                    <li className={this.state.tab == 1 ? 'active':''} onClick={e=>this.setState({tab:1})}>跟进中</li>
-                    <li className={this.state.tab == 2 ? 'active':''} onClick={e=>this.setState({tab:2})}>已成交</li>
-                    <li className={this.state.tab == 3 ? 'active':''} onClick={e=>this.setState({tab:3})}>已战败</li>
+                    <li className={Tabs} onClick={e=>{this.setState({tab:0});this.context.router.push({pathname: '/nav/x/d'})}}>待处理</li>
+                    <li className={tab == 1 ? 'active':''} onClick={e=>{this.setState({tab:1});this.context.router.push({pathname: '/nav/x/g'})}}>跟进中</li>
+                    <li className={tab == 2 ? 'active':''} onClick={e=>{this.setState({tab:2});this.context.router.push({pathname: '/nav/x/y'})}}>已成交</li>
+                    <li className={tab == 3 ? 'active':''} onClick={e=>{this.setState({tab:3});this.context.router.push({pathname: '/nav/x/b'})}}>已战败</li>
                 </ul>
                 {Pages}
-                <span className="butX" onClick={this.show}></span>
-                <ActionSheet menus={this.state.menus} actions={this.state.actions} show={this.state.show} onRequestClose={this.hide} />
-                <ShowAlert />
+                <span className={Btns} onClick={this.show}></span>
+                <div className={show?'clueBtnX XbgActiv':'clueBtnX'}>
+                    <span onClick={()=> this.context.router.push({pathname: '/rob'})}> </span>
+                    <span className="butX_add" onClick={()=> this.context.router.push({pathname: '/addClue'})}> </span>
+                </div>
+                <div className={show?'clueBtnXbg XbgActiv':'clueBtnXbg'}></div>
             </div>
         );
     }

@@ -80,7 +80,7 @@ class MsgDemo extends React.Component {
                 customerid:crmData.customid
             });
         }
-        console.log(crmData);
+        //console.log(crmData);
     }
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
@@ -137,7 +137,7 @@ class MsgDemo extends React.Component {
                 json.citysn = this.state.SFCSv.citysn;
             }
             
-            console.log(JSON.stringify(this.state),json);
+            //console.log(JSON.stringify(this.state),json);
             Tool.get('Customer/EditCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){

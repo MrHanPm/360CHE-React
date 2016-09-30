@@ -17,7 +17,6 @@ import {
     Button,
 } from 'react-weui';
 import Echarts from 'echarts';
-import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
 import {Views} from '../../component/charts.min.js';
 import './index.less';
@@ -196,8 +195,8 @@ export default class Clues extends React.Component {
     render() {
         const {loadShow,name,actvs,startdate,enddate} = this.state;
         return (
-            <Page className="account addPursd countBox">
-                <div style={{'display':loadShow?'none':'block'}}>
+            <div className="countBox">
+                <div style={{'display':loadShow?'none':'block'}} className="BoxC">
                     <h3 className="user-title">{name}</h3>
                     <Cells>
                         <Cell>
@@ -302,10 +301,10 @@ export default class Clues extends React.Component {
                             </div>
                         </div>
                     </div>
-
+                    <div className="weui_cells_title"> </div>
                 </div>
                 <div className="initUrlKey" style={{'display':loadShow?'block':'none'}}>数据加载中…</div>
-            </Page>
+            </div>
         );
     }
 };

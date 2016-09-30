@@ -35,6 +35,7 @@ class CellDemo extends React.Component {
             showToast: false,
             toastTimer: null,
             countdown:10,
+            LcountDown: 0,
             phone:'',
             vcode:'',
             mcode:'',
@@ -55,6 +56,68 @@ class CellDemo extends React.Component {
         this.getVcode = this.getVcode.bind(this);
         this.getMcode = this.getMcode.bind(this);
         this.goNext = this.goNext.bind(this);
+    }
+    initData(asid){
+        let i = 0;
+        let time;
+        let h ;
+        let urlKey = Tool.localItem('fingerprint');
+        Tool.get('Comm/GetAllCategoryDownUrl.aspx',{sessionid:asid,fingerprint:urlKey},
+            (res) => {
+                if(res.status == 1){
+                    this.forAjax(res.listdata);
+                }else{
+                    Alert.to(res.msg)
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        );
+    }
+
+    forAjax(listdata){
+        let ajaxUrls = [];
+        let ajaxDataName = [];
+        let nameKey ='';
+        for(let i=0;i<listdata.length;i++){
+            if(listdata[i].ischange == 1){
+                ajaxUrls.push(listdata[i].url);
+                ajaxDataName.push(listdata[i].name);
+            }
+            nameKey += listdata[i].fingerprint + '_';
+        }
+        this.state.LcountDown = ajaxUrls.length;
+        if(ajaxDataName.length > 0){
+            this.loadAllData(ajaxDataName,ajaxUrls);
+        }else{
+            //this.showConfirm();
+        }
+        Tool.localItem('fingerprint',nameKey);
+    }
+    loadAllData(names,urls){
+        let t;
+        if (this.state.LcountDown == 0) {
+            this.setState({LcountDown:urls.length});
+            clearTimeout(t);
+        } else {
+            let s = this.state.LcountDown;
+            let k = s-1;
+            Tool.get(urls[k],'',
+                (res) => {
+                    if(res.status === 1){
+                        Tool.localItem(names[k],JSON.stringify(res));
+                        //console.log(Tool.localItem(names[k]),names[k]);
+                    }
+                },
+                (err) => {
+                    Alert.to(err.msg);
+                }
+            )
+            s--;
+            this.setState({LcountDown:s});
+            t = setTimeout(() => this.loadAllData(names,urls),10);
+        }
     }
     componentDidMount() {
         document.title="手机认证"
@@ -140,7 +203,7 @@ class CellDemo extends React.Component {
             this.setState({countdown:10})
             clearTimeout(t)
         } else {
-            obj.setAttribute("disabled", true); 
+            obj.setAttribute("disabled", true);
             obj.setAttribute('class','weui_btn weui_btn_default weui_btn_disabled weui_btn_mini');
             obj.innerHTML="重新发送(" + this.state.countdown + "s)"; 
             let s = this.state.countdown;
@@ -156,7 +219,9 @@ class CellDemo extends React.Component {
                 (res) => {
                     if(res.status === 1){
                         let Vd = JSON.stringify(res.data);
+                        let Sessionid = res.data.sessionid;
                         Tool.localItem('vipLodData',Vd);
+                        this.initData(Sessionid);
                         if(res.data.usercategory == '1'){
                             this.context.router.push({pathname: '/nav'});
                         }

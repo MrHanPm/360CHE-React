@@ -64,8 +64,8 @@ class Clues extends Component {
         this.upDATA(val);
     }
     upDATA(val,typ){
-        console.log(typ,'typ');
-        console.log(val,'val');
+        //console.log(typ,'typ');
+        //console.log(val,'val');
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
@@ -126,7 +126,7 @@ class Clues extends Component {
                             nowpage:page
                         });
                     }
-                    console.log(this.state);
+                    //console.log(this.state);
                 }else if(res.status == 901){
                     Alert.to(res.msg);
                     this.context.router.push({pathname: '/loading'});
@@ -164,10 +164,11 @@ class Clues extends Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height;
+      Hit  = window.screen.height-45;
       LastLi = BodyMin.scrollTop;
+      //console.log(DataMin,Hit,LastLi);
       goNumb = DataMin - Hit - LastLi;
-      if(goNumb == 0){
+      if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
             let t
@@ -186,7 +187,7 @@ class Clues extends Component {
         const {loadingS, DATA, topnotice} = this.state;
         let self = this;
         return (
-            <Page className="robBody" >
+            <Page className="robBody">
                 <ul className="robNav">
                     <li onClick={this.showBrand}>品牌</li>
                     <li onClick={this.SFCS}>地区</li>
@@ -205,9 +206,9 @@ class Clues extends Component {
                                         <Button type="primary" title={e.maincluesid} onClick={self.RobLine} plain>立即抢</Button>
                                     </MediaBoxHeader>
                                     <MediaBoxBody>
-                                        <MediaBoxDescription>
+                                        <MediaBoxTitle>
                                             {e.truckname}
-                                        </MediaBoxDescription>
+                                        </MediaBoxTitle>
                                         <MediaBoxInfo>
                                             <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>

@@ -77,11 +77,14 @@ class Clues extends React.Component {
         }
         json.customerid = e.target.title;
         json.status = doms.getAttribute('data') == '1' ? 0 :1;
-        console.log(json);
+        //console.log(json);
         Tool.get('Customer/ChangeCustomerStatus.aspx',json,
             (res) => {
                 if(res.status == 1){
                     this.showToast();
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -110,7 +113,7 @@ class Clues extends React.Component {
             json.sessionid = Tool.SessionId.get();
         }
         json.customerid = this.state.DelId;
-        console.log(json);
+        //console.log(json);
         Tool.get('Customer/DelCustomer.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -270,10 +273,10 @@ class Clues extends React.Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height;
+      Hit  = window.screen.height-55;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
-      if(goNumb == 0){
+      if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
             let t

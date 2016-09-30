@@ -1,12 +1,19 @@
 /*侧边栏样式*/
 #Folls{
     padding-left:0;
-    .Fnav{
-        box-sizing:border-box;
-        padding-bottom: 100px;
-        position: relative;
+    position: absolute;
+    overflow: hidden;
+    header{
+        position: absolute;
         top: 0;
         left: 0;
+        z-index: 6669;
+    }
+    .Fnav{
+        box-sizing:border-box;
+        height: 100%;
+        width: 100%;
+        padding: 44px 0 45px;
     }
 }
 
@@ -43,7 +50,7 @@
             height: 40px;
             line-height: 40px;
             padding: 0 10px;
-            border:1px solid #f9f9f9;
+            border:1px solid #f7f7fa;
             margin:0 5px 10px;
             border-radius: 10px;
             
@@ -58,25 +65,6 @@
         }
    }
    .PPstyle:last-child{border: 0;}
-   .FollBtn{
-      position: absolute;
-      height: 45px;
-      width: 100%;
-      bottom: 0;
-      left: 0;
-      z-index: 777;
-      li{
-        width: 50%;
-        height: 45px;
-        line-height: 45px;
-        text-align: center;
-        color: #fff;
-        font-size: 16px;
-        background:#00b800; 
-        float: left;
-        &:first-child{background:#f9f9f9;color: #666;}
-      }
-   }
 
 }
 

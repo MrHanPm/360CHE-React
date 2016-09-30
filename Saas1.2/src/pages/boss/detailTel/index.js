@@ -20,7 +20,7 @@ import {Button,
 
 import Page from '../../../component/page';
 import {Tool,Alert} from '../../../tool.js';
-import './index.less';
+
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);

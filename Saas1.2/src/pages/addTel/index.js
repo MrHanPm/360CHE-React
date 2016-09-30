@@ -117,7 +117,7 @@ class MsgDemo extends React.Component {
                 json.citysn = this.state.SFCSv.citysn;
             }
             
-            console.log(JSON.stringify(this.state),json);
+            //console.log(JSON.stringify(this.state),json);
             Tool.get('Customer/AddCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
