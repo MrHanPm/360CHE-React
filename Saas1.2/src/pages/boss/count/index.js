@@ -21,15 +21,16 @@ import Echarts from 'echarts';
 import {Tool,Alert} from '../../../tool.js';
 import {Views} from '../../../component/charts.min.js';
 import './index.less';
+import MsgBox from './msg.js';
 
-
-export default class Clues extends React.Component {
+class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
             DATA:[],
             startdate:'',
             enddate:'',
+            Drandoms:'',
             userid:'',
             name:'全部',
             ids:'',
@@ -58,8 +59,9 @@ export default class Clues extends React.Component {
         this.goEea = this.goEea.bind(this);
         this.getNames = this.getNames.bind(this);
         this.ChanName = this.ChanName.bind(this);
+        this.goMessage = this.goMessage.bind(this);
     }
-    getNames(){this.setState({NameRandoms: Math.random()});}
+    getNames(){this.setState({NameRandoms: Math.random(),Drandoms:'',});}
     ChanName(obj){
         this.setState({
             name:obj.name,
@@ -146,6 +148,12 @@ export default class Clues extends React.Component {
             enddate: Endat
         });
         this.upDATA(Stdat,Endat);
+    }
+    goMessage(){
+        this.setState({
+            Drandoms: Math.random(),
+            NameRandoms:'',
+        });
     }
     upDATA(Stdat,Endat){
         let json={};
@@ -245,7 +253,10 @@ export default class Clues extends React.Component {
                     </div>
 
 
-                    <div className="weui_cells_title">销售简报</div>
+                    <div className="weui_cells_title">
+                        <span>销售简报</span>
+                        <i onClick={this.goMessage}>详细 ></i>
+                    </div>
                     <div className="weui_cells">
                         <div className="weui_cell">
                             <div className="weui_cell_bd weui_cell_primary">
@@ -253,7 +264,7 @@ export default class Clues extends React.Component {
                                     <li></li>   
                                     <li></li>   
                                     <li></li>   
-                                    <li></li>  
+                                    <li></li>
                                 </ul>
                             </div>
                         </div>
@@ -329,7 +340,16 @@ export default class Clues extends React.Component {
                     </div>
                     <div className="weui_cells_title"> </div>
                 </div>
-                <div className="initUrlKey" style={{'display':loadShow?'block':'none'}}>数据加载中…</div>
+                <div className="jump-cover" id="jump_cover" style={{'display':loadShow?'block':'none'}}>
+                    <div className="loading visible">
+                        <span className="loading-ring"> </span>
+                    </div>
+                </div>
+                <MsgBox startdate={this.state.startdate}
+                        enddate={this.state.enddate}
+                        Drandoms={this.state.Drandoms}
+                        ids={this.state.ids}
+                        onChange={()=> this.setState({Drandoms:''})} />
                 <NameList data={this.state.accountTotalList} showD={this.state.NameRandoms} ChangeName={val => this.ChanName(val)} />
             </div>
         );
@@ -358,9 +378,9 @@ class NameList extends React.Component{
         'name':e.target.innerHTML
       };
       this.setState({
+        visible:false,
         values:e.target.title,
         key:e.target.innerHTML,
-        visible:false
       }, ()=> this.props.ChangeName(Ad));
   }
   componentDidMount(){
@@ -395,6 +415,7 @@ class NameList extends React.Component{
                   <span className="closeBtn" onClick={this.closeSold}></span>
               </header>
               <ul className="Fnav">
+                <li><span title="" onClick={self.upDatas}>全部</span></li>
                 {this.state.L.map(function(e,indexs){
                   return(
                     <li key={indexs} 
@@ -415,3 +436,5 @@ class NameList extends React.Component{
       )
   }
 }
+
+export default Clues

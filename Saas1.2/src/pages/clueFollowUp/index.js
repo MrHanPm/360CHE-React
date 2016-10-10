@@ -20,13 +20,14 @@ import {
 import {Tool,Alert} from '../../tool.js';
 import './index.less';
 import Foll from '../sidebar/Foll';//筛选
-
+import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
 
 class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
            loadingS:true,
+           isDatas:false,
            nowpage:1,
            follownum:1,
            buycarnum:1,
@@ -74,7 +75,11 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
-                    
+                    if(res.listdata.length === 0){
+                        this.setState({isDatas:true});
+                    }else{
+                        this.setState({isDatas:false});
+                    }
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
@@ -176,8 +181,14 @@ class Clues extends React.Component {
         this.upDATA();
     }
     render() {
-        const {loadingS, DATA,p,buycarnum,follownum,pf} = this.state;
+        const {loadingS, DATA,p,buycarnum,follownum,pf,isDatas} = this.state;
         let self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
         <div className="clueBody cluePend">
             <ul className="FollNavs">
@@ -218,34 +229,13 @@ class Clues extends React.Component {
                     </Panel>
                     )})
                 }
-                {loadingS ? <LoadAd /> : <NoMor />}
+                {footerS}
             </div>
             <Foll onChange={val => this.FollSidebar(val)}/>
         </div>
         );
     }
 };
-
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
-
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}
-
 
 Clues.contextTypes = {
     router: React.PropTypes.object.isRequired

@@ -21,6 +21,7 @@ import {
 } from 'react-weui';
 //import ImgseCrm from './crm.png';
 import {Tool,Alert} from '../../tool.js';
+import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
 import './index.less';
 const {Confirm} = Dialog;
 class Clues extends React.Component {
@@ -33,6 +34,7 @@ class Clues extends React.Component {
             DelId:'',
             DelInO:'',
             nowpage:1,
+            isDatas:false,
             DATA:[],
             confirm: {
                 title: '确认删除这位联系人吗？',
@@ -83,6 +85,13 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.showToast();
+                    if(doms.getAttribute('data') == '1'){
+                        doms.setAttribute('data','0');
+                        doms.setAttribute('class','crmStar');
+                    }else{
+                        doms.setAttribute('data','1');
+                        doms.setAttribute('class','crmStar active');
+                    }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
                     this.context.router.push({pathname: '/loading'});
@@ -113,7 +122,7 @@ class Clues extends React.Component {
             json.sessionid = Tool.SessionId.get();
         }
         json.customerid = this.state.DelId;
-        Tool.get('Customer/DelCustomer.aspx',json,
+        Tool.get('Customer/RemoveCustomerLastLinkTime.aspx',json,
             (res) => {
                 if(res.status == 1){
                     let k = parseInt(this.state.DelInO);
@@ -148,6 +157,11 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
+                    if(res.listdata.length === 0){
+                        this.setState({isDatas:true});
+                    }else{
+                        this.setState({isDatas:false});
+                    }
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
@@ -218,8 +232,14 @@ class Clues extends React.Component {
         this.upDATA();
     }
     render() {
-        const {loadingS, DATA} = this.state;
+        const {loadingS, DATA,isDatas} = this.state;
         let self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
             <div className="clueBody cluePending cluePend crmRecent goSe"  onScroll={this.handleScroll}>
                 <div className="goSear" onClick={this.goSearchPage}>搜索</div>
@@ -231,6 +251,7 @@ class Clues extends React.Component {
                             <MediaBoxHeader>
                                 <a href={`tel:${e.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={e.customid} onClick={self.RobLine}> </a>
                             </MediaBoxHeader>
+                            <div className="Cfocus" title={e.customid} onClick={self.CrmMesc}></div>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
                                     <span>{e.customname}</span>
@@ -247,7 +268,7 @@ class Clues extends React.Component {
                 </Panel>
                 )})
             }
-            {loadingS ? <LoadAd /> : <NoMor />}
+            {footerS}
             <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
             </Confirm>
             <Toast show={this.state.showToast}>操作成功</Toast>
@@ -255,27 +276,6 @@ class Clues extends React.Component {
         );
     }
 };
-
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
-
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}
-
 
 Clues.contextTypes = {
     router: React.PropTypes.object.isRequired

@@ -15,6 +15,7 @@ import {
 } from 'react-weui';
 import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
+import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
 import './index.less';
 export default class MsgDemo extends React.Component {
     constructor(){
@@ -24,6 +25,7 @@ export default class MsgDemo extends React.Component {
             DATA:[],
             url:'',
             title:'',
+            isDatas:false,
             ico:'',
             shows:false,
         }
@@ -46,6 +48,11 @@ export default class MsgDemo extends React.Component {
         Tool.get('User/Share.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    if(res.listdata.length === 0){
+                        this.setState({isDatas:true});
+                    }else{
+                        this.setState({isDatas:false});
+                    }
                     this.setState({
                         DATA:res.listdata,
                         loadingS:false
@@ -80,8 +87,14 @@ export default class MsgDemo extends React.Component {
         });
     }
     render() {
-        const {loadingS,DATA,shows} =this.state;
-        const self = this
+        const {loadingS,DATA,shows,isDatas} =this.state;
+        const self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
         <Page className="account addPursd ShareBox">
             <Panel>
@@ -104,7 +117,7 @@ export default class MsgDemo extends React.Component {
                     </MediaBox>
                 </PanelBody>
             </Panel>
-            {loadingS ? <LoadAd /> : <NoMor />}
+            {footerS}
             <div className="FXBox" style={{'display':shows?'':'none'}}>
                 <dl id="FenXDL">
                     <dt className="pit">分享这个店铺</dt>
@@ -138,22 +151,4 @@ export default class MsgDemo extends React.Component {
         );
     }
 };
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
 
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}

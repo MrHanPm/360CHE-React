@@ -14,6 +14,8 @@ import Phone from './pages/testPhone/index';
 import Brand from './pages/brand/index';
 import Nav from './pages/nav/index';
 import LoadMsg from './pages/msg/loading';
+import LoadData from './pages/msg/data';
+
 import Feedback from './pages/msg/feedback';
 import Account from './pages/account/index';
 import MdfPwd from './pages/mdfPwd/index';
@@ -54,6 +56,7 @@ ReactDOM.render((
         <Route path="/" component={App}>
             <IndexRoute component={LoadMsg}/>
             <Route path="loading" component={LoadMsg}/>
+            <Route path="loaddata" component={LoadData}/>
             <Route path="phone" component={Phone}/>
             <Route path="login" component={Login}/>
             <Route path="name" component={Name}/>
@@ -62,19 +65,20 @@ ReactDOM.render((
             <Route path="account" component={Account}/>
             <Route path="mdfPwd" component={MdfPwd}/>
             <Route path="rob" component={Rob}/>
-            <Route path="robClue" component={RobClue}/>
-            <Route path="addClue" component={AddClue}/>
             <Route path="alterClue" component={AlterClue}/>
-            <Route path="addPursue" component={AddPursue}/>
             <Route path="addTel" component={AddTel}/>
             <Route path="alterTel" component={AlterTel}/>
-            <Route path="detailTel" component={DetailTel}/>
-            <Route path="crmClue" component={CrmClue}/>
             <Route path="share" component={Share}/>
             <Route path="search" component={Search}/>
-            
-            <Route path="boss/robClue" component={BosRobClue}/>
-            <Route path="boss/detailTel" component={BosDetailTel}/>
+
+            <Route path="addClue" component={AddClue}/>
+            <Route path="robClue" component={RobClue}/>
+            <Route path="crmClue" component={CrmClue}/>
+            <Route path="detailTel" component={DetailTel}/>
+            <Route path="addPursue" component={AddPursue}/>
+
+            <Route path="boss/robClue(/:name)" component={BosRobClue}/>
+            <Route path="boss/detailTel(/:name)" component={BosDetailTel}/>
         </Route>
         <Route path="/nav" component={Nav}/>
         <Route path="/nav/x(/:name)" component={Nav}/>

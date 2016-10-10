@@ -45,12 +45,13 @@ class CellDemo extends React.Component {
         document.title="销售品牌"
         Tool.get('WeiXin/GetWXDealerUserAddBrand.aspx',{},
             (res) => {
-                if(res.status === 901){
-                    Alert.to(res.msg);
-                    this.context.router.push({
-                        pathname: '/loading'
-                    });
-                }else if(res.status === 1){
+                // if(res.status === 901){
+                //     Alert.to(res.msg);
+                //     this.context.router.push({
+                //         pathname: '/loading'
+                //     });
+                // }
+                if(res.status === 1){
                     this.setState({
                         brands:res.listdata
                     });

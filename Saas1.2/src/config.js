@@ -11,7 +11,7 @@ const sessidS = {
 
 //boos
 const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
-const devBug = false;
+const devBug = true;
 
 export const SessionId = devBug ? sessionid : sessidS;
 

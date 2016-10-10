@@ -148,6 +148,10 @@ class Sidebar extends React.Component{
                   <span className="close" id="sidebar_close"  onClick={this.closeSold}></span>
              </header>
              <div className="sidebar-container">
+                <div className="sidebar-module">
+                   <ul><li><a href="javascript:;" title="" onClick={self.upDatas}>所有品牌</a></li>
+                   </ul>
+                </div>
                 {R.map(function(e,indexs){
                     return(
                       <div className="sidebar-module" key={indexs}>

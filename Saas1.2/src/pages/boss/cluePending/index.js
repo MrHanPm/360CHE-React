@@ -17,7 +17,7 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../../tool.js';
-
+import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -25,6 +25,7 @@ class Clues extends React.Component {
            loadingS:true,
            nowpage:1,
            DATA:[],
+           isDatas:false,
         }
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
@@ -42,6 +43,11 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
+                    if(res.listdata.length === 0){
+                        this.setState({isDatas:true});
+                    }else{
+                        this.setState({isDatas:false});
+                    }
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
@@ -71,28 +77,10 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
-        let sessionid;
-        if(typeof(Tool.SessionId) == 'string'){
-            sessionid= Tool.SessionId;
-        }else{
-            sessionid = Tool.SessionId.get();
-        }
-        Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
-            (res) => {
-                if(res.status == 1){
-                    let urlTxt = '/boss/robClue?id=' + res.data.cluesextendid;
-                    this.context.router.push({pathname: urlTxt});
-                }else if(res.status == 901){
-                    Alert.to(res.msg);
-                    this.context.router.push({pathname: '/loading'});
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('网络异常，稍后重试。。');
-            }
-        )
+        let urlTxt = '/boss/robClue?id=' + e.target.title;
+        this.context.router.push({
+            pathname: urlTxt
+        });
     }
     handleScroll(e){
       let BodyMin = e.target;
@@ -116,8 +104,14 @@ class Clues extends React.Component {
         this.upDATA();
     }
     render() {
-        const {loadingS, DATA} = this.state;
+        const {loadingS, DATA,isDatas} = this.state;
         let self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
             <div className="clueBody cluePending cluePend" id="clueBody" onScroll={this.handleScroll}>
             {DATA.map(function(e,index){
@@ -126,7 +120,7 @@ class Clues extends React.Component {
                     <PanelBody>
                         <MediaBox type="text">
                             <MediaBoxHeader>
-                                <Button type="primary" title={e.maincluesid} onClick={self.RobLine} plain>立即抢</Button>
+                                <Button type="primary" title={e.cluesextendid} onClick={self.RobLine} plain>查看</Button>
                             </MediaBoxHeader>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
@@ -143,31 +137,11 @@ class Clues extends React.Component {
                 </Panel>
                 )})
             }
-            {loadingS ? <LoadAd /> : <NoMor />}
+            {footerS}
         </div>
         );
     }
 };
-
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
-
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}
 
 
 Clues.contextTypes = {

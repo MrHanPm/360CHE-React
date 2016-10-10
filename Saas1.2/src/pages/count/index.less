@@ -32,26 +32,7 @@
 
         }
     }
-    .initUrlKey{
-        position: absolute;
-        z-index: 288;
-        width: 100%;
-        top: 0;
-        left: 0;
-        text-align: center;
-        background: rgba(0,0,0,.5);
-        color: #fff;
-        &:before{
-            content: ' ';
-            background: url(../../vcode.jpg) center center no-repeat;
-            background-size: 80px 80px;
-            display: block;
-            width: 128px;
-            height: 128px;
-            margin:50% auto 0;
-            padding-bottom: 20px;
-        }
-    }
+    
     .charts-list li {
         margin-top: 20px;
         float: left;
@@ -68,6 +49,52 @@
         height: auto;
         padding-top: 10px;
     }
-    .weui_cells_title{text-align: center;margin:10px 0;}
+    .weui_cells_title{
+        text-align: center;
+        margin:10px 0;
+        position: relative;
+        i{
+            position: absolute;
+            right: 0;
+        }
+    }
+    .contMesBox{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        box-sizing:border-box;
+        padding:15px;
+        background: #f7f7fa;
+        overflow: hidden;
+        overflow-y:scroll; 
+        .closD{
+            text-align: center;
+            font-size: 18px;
+            color: #3cc51f;
+            line-height: 60px;
+        }
+        .tables{
+            width:100%;
+            height: auto;
+            background: #fff;
+            border-radius: 6px;
+            ul{width: 100%; height: 40px;border-top: 1px solid #ccc;}
+            .titles{
+                background: #E5E5E5;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+                border-top: 0;
+            }
+            li{height: 40px;line-height: 40px;text-align: center;float: left;border-left: 1px solid #ccc;}
+            .dates{width: 30%;border:0;}
+            .adds{width: 20%;}
+            .oks{width: 20%;}
+            .nos{width: 20%;}
+            .dels{width: 10%;}
+        }
+    }
 }
 

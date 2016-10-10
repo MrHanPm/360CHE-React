@@ -20,6 +20,7 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
+import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
 import './index.less';
 const {Confirm} = Dialog;
 class Clues extends React.Component {
@@ -29,10 +30,10 @@ class Clues extends React.Component {
             loadingS:true,
             showToast: false,
             toastTimer: null,
+            isDatas:false,
             nowpage:1,
             DATA:[],
             Lis:[],
-            reccount:'',
             DelId:'',
             DelInO:'',
             DelInd:'',
@@ -82,6 +83,13 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.showToast();
+                    if(doms.getAttribute('data') == '1'){
+                        doms.setAttribute('data','0');
+                        doms.setAttribute('class','crmStar');
+                    }else{
+                        doms.setAttribute('data','1');
+                        doms.setAttribute('class','crmStar active');
+                    }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
                     this.context.router.push({pathname: '/loading'});
@@ -161,6 +169,11 @@ class Clues extends React.Component {
                 if(res.status == 1){
                     let NewSeDa = [];
                     let page = this.state.nowpage;
+                    if(res.listdata.length === 0){
+                        this.setState({isDatas:true});
+                    }else{
+                        this.setState({isDatas:false});
+                    }
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
@@ -191,7 +204,6 @@ class Clues extends React.Component {
                                   };
                       if ( her !== -1) {this.state.Lis[her].push(json);}
                     }
-                    this.setState({reccount:res.reccount});
                     if(res.pagecount == page){
                         this.setState({loadingS:false});
                     }else{
@@ -267,7 +279,7 @@ class Clues extends React.Component {
         var goUl = document.getElementById(el);
         var Uls = document.querySelector('.clueBody');
         var ulHeight = goUl.parentNode.offsetTop;
-        Uls.scrollTop = ulHeight - 71;
+        Uls.scrollTop = ulHeight - 45;
     }
     handleScroll(e){
       let BodyMin = e.target;
@@ -331,11 +343,16 @@ class Clues extends React.Component {
         });
     }
     render() {
-        const {loadingS,DATA,Lis,reccount} = this.state;
+        const {loadingS,DATA,Lis,isDatas} = this.state;
         let self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
             <div className="clueBody cluePending crmPend"  onScroll={this.handleScroll}>
-            <p className="crmConts">共{reccount}位联系人</p>
             {DATA.map(function(e,indexs){
                 return(
                 <Panel key={indexs}>
@@ -347,6 +364,7 @@ class Clues extends React.Component {
                             <MediaBoxHeader>
                                 <a href={`tel:${ele.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={ele.customid} onClick={self.RobLine}> </a>
                             </MediaBoxHeader>
+                            <div className="Cfocus" title={ele.customid} onClick={self.CrmMesc}></div>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
                                     <span>{ele.customname}</span>
@@ -365,7 +383,7 @@ class Clues extends React.Component {
                 </Panel>
                 )})
             }
-            {loadingS ? <LoadAd /> : <NoMor />}
+            {footerS}
             <aside className="scale" id="index_selected">A</aside>
             <ul id="index_nav">
               {DATA.map(function(e,index){
@@ -381,27 +399,6 @@ class Clues extends React.Component {
         );
     }
 };
-
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
-
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}
-
 
 Clues.contextTypes = {
     router: React.PropTypes.object.isRequired

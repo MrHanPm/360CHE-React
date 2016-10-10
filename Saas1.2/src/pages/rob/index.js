@@ -17,10 +17,11 @@ import {
     Button,
 } from 'react-weui';
 import Brand from '../sidebar/brand';//品牌
-import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
-import SF from '../sidebar/SF';//省份
+import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
+import SF from '../sidebar/SFA';//省份
 import './index.less';
+import ShowAlert from '../../component/Alert.js'
 
 class Clues extends Component {
     constructor(props){
@@ -34,6 +35,7 @@ class Clues extends Component {
             size:'',
             nowpage:1,
             DATA:[],
+            isDatas:false,
             topnotice:'',
             maxrobnum:'',//最大能抢线索数量
             todayrobnum:''//今天已经抢的线索数量pagecount
@@ -46,7 +48,26 @@ class Clues extends Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
-    Alts(){Alert.to('每个经销商每天只能抢500条线索');}
+    Alts(){
+        let json={};
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
+        Tool.get('PublicClues/RobCLuesDescription.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                    Alert.to(res.msg);
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
     SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:''});}
     upBrand(val){
         //this.setState({brandid: val,showBrands:'showBrands'});
@@ -110,9 +131,12 @@ class Clues extends Component {
                     this.state.SFCSrandoms = 'SFCSrandoms';
                     this.state.showBrands = 'showBrands';
                     if(res.listdata.length === 0){
-                        this.setState({loadingS:false});
+                        this.setState({isDatas:true});
                     }else{
-                        this.setState({loadingS:true});
+                        this.setState({isDatas:false});
+                    }
+                    if(res.listdata.length < 10){
+                        this.setState({loadingS:false});
                     }
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
@@ -164,7 +188,7 @@ class Clues extends Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-45;
+      Hit  = window.screen.height;
       LastLi = BodyMin.scrollTop;
       //console.log(DataMin,Hit,LastLi);
       goNumb = DataMin - Hit - LastLi;
@@ -184,19 +208,25 @@ class Clues extends Component {
     }
     showBrand(){ this.setState({showBrands:Math.random(),SFCSrandoms:''});}
     render() {
-        const {loadingS, DATA, topnotice} = this.state;
+        const {loadingS, DATA, topnotice,isDatas} = this.state;
         let self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
-            <Page className="robBody">
+            <div className="robBody">
                 <ul className="robNav">
                     <li onClick={this.showBrand}>品牌</li>
                     <li onClick={this.SFCS}>地区</li>
                 </ul>
-                <div className="clueBody cluePending" id="clueBody" onScroll={this.handleScroll}>
-                    <div className="robMsg">
-                        <p>{topnotice}</p>
-                        <i onClick={this.Alts}></i>
-                    </div>
+                <div className="robMsg">
+                    <p>{topnotice}</p>
+                    <i onClick={this.Alts}></i>
+                </div>
+                <div className="clueBody cluePending" id="clueBody" style={{'paddingTop':'85px'}} onScroll={this.handleScroll}>
                     {DATA.map(function(e,index){
                         return(
                         <Panel key={index}>
@@ -220,35 +250,15 @@ class Clues extends Component {
                         </Panel>
                     )})
                 }
-                {loadingS ? <LoadAd /> : <NoMor />}
+                {footerS}
                 </div>
+                <ShowAlert />
                 <Brand Datas={this.state.showBrands}  onChange={val =>this.upBrand(val)}/>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)}/>
-            </Page>
+            </div>
         );
     }
 };
-
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
-
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}
-
 
 Clues.contextTypes = {
     router: React.PropTypes.object.isRequired

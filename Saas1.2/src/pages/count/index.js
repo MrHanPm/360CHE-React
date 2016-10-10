@@ -20,9 +20,9 @@ import Echarts from 'echarts';
 import {Tool,Alert} from '../../tool.js';
 import {Views} from '../../component/charts.min.js';
 import './index.less';
+import MsgBox from './msg.js';
 
-
-export default class Clues extends React.Component {
+class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -30,6 +30,7 @@ export default class Clues extends React.Component {
             startdate:'',
             enddate:'',
             userid:'',
+            Drandoms:'',
             name:'',
             loadShow:true,
             actvs:0,
@@ -50,6 +51,7 @@ export default class Clues extends React.Component {
         this.Sdate = this.Sdate.bind(this);
         this.goSea = this.goSea.bind(this);
         this.goEea = this.goEea.bind(this);
+        this.goMessage = this.goMessage.bind(this);
     }
     goSea(e){
         let Stdat = e.target.value;
@@ -124,6 +126,11 @@ export default class Clues extends React.Component {
         });
         this.upDATA(Stdat,Endat);
     }
+    goMessage(){
+        this.setState({
+            Drandoms: Math.random()
+        });
+    }
     upDATA(Stdat,Endat){
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
@@ -137,6 +144,7 @@ export default class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.setState({
+                        Drandoms:'',
                         loadShow:false,
                         name:res.data.accountTotalList.username,
                         briefingData:res.data.briefingData,
@@ -219,7 +227,10 @@ export default class Clues extends React.Component {
                     </div>
 
 
-                    <div className="weui_cells_title">销售简报</div>
+                    <div className="weui_cells_title">
+                        <span>销售简报</span>
+                        <i onClick={this.goMessage}>详细 ></i>
+                    </div>
                     <div className="weui_cells">
                         <div className="weui_cell">
                             <div className="weui_cell_bd weui_cell_primary">
@@ -303,8 +314,19 @@ export default class Clues extends React.Component {
                     </div>
                     <div className="weui_cells_title"> </div>
                 </div>
-                <div className="initUrlKey" style={{'display':loadShow?'block':'none'}}>数据加载中…</div>
+                
+                <div className="jump-cover" id="jump_cover" style={{'display':loadShow?'block':'none'}}>
+                    <div className="loading visible">
+                        <span className="loading-ring"> </span>
+                    </div>
+                </div>
+                <MsgBox startdate={this.state.startdate}
+                        enddate={this.state.enddate}
+                        Drandoms={this.state.Drandoms}
+                        onChange={()=> this.setState({Drandoms:''})} />
             </div>
         );
     }
 };
+
+export default Clues

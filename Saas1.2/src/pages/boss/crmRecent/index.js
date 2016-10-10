@@ -19,7 +19,7 @@ import {
 } from 'react-weui';
 //import ImgseCrm from './crm.png';
 import {Tool,Alert} from '../../../tool.js';
-
+import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -29,6 +29,7 @@ class Clues extends React.Component {
             DelInO:'',
             nowpage:1,
             DATA:[],
+            isDatas:false,
         }
         this.handleScroll = this.handleScroll.bind(this);
         this.goSearchPage = this.goSearchPage.bind(this);
@@ -55,6 +56,11 @@ class Clues extends React.Component {
             (res) => {
                 if(res.status == 1){
                     let page = this.state.nowpage;
+                    if(res.listdata.length === 0){
+                        this.setState({isDatas:true});
+                    }else{
+                        this.setState({isDatas:false});
+                    }
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
@@ -104,8 +110,14 @@ class Clues extends React.Component {
         this.upDATA();
     }
     render() {
-        const {loadingS, DATA} = this.state;
+        const {loadingS, DATA,isDatas} = this.state;
         let self = this;
+        let footerS;
+        if(isDatas){
+            footerS = <NoDataS />;
+        }else{
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
+        }
         return (
             <div className="clueBody cluePending cluePend crmRecent goSe CRMtitle"  onScroll={this.handleScroll}>
                 <div className="goSear" onClick={this.goSearchPage}>搜索</div>
@@ -117,10 +129,11 @@ class Clues extends React.Component {
                             <MediaBoxHeader>
                                 <a href={`tel:${e.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={e.customid}> </a>
                             </MediaBoxHeader>
+                            <div className="Cfocus" title={e.customid} onClick={self.CrmMesc}></div>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
                                     <span>{e.customname}</span>
-                                    <i>跟进人员：{e.followname}</i>
+                                    <i>跟进人：{e.followname}</i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
                                     <MediaBoxInfoMeta>{e.lastlinktime}</MediaBoxInfoMeta>
@@ -132,32 +145,11 @@ class Clues extends React.Component {
                 </Panel>
                 )})
             }
-            {loadingS ? <LoadAd /> : <NoMor />}
+            {footerS}
         </div>
         );
     }
 };
-
-class LoadAd extends Component{
-  render(){
-    return(
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-    )
-  }
-}
-
-class NoMor extends Component{
-  render(){
-    return(
-        <p className="noMor">没有更多了...</p>
-    )
-  }
-}
-
 
 Clues.contextTypes = {
     router: React.PropTypes.object.isRequired
