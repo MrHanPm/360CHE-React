@@ -18,7 +18,7 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
+import {LoadAd,Reccount,NoDataS} from '../../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -27,9 +27,9 @@ class Clues extends React.Component {
             nowpage:1,
             DATA:[],
             Lis:[],
+            reccount:0,
             isDatas:false,
         }
-        this.handleScroll = this.handleScroll.bind(this);
         this.Liclick = this.Liclick.bind(this);
         this.CrmMesc = this.CrmMesc.bind(this);
     }
@@ -40,76 +40,91 @@ class Clues extends React.Component {
     }
     
     upDATA(){
+        let okTel = JSON.parse(Tool.localItem('okTel'));
+        let okAZ = JSON.parse(Tool.localItem('okAZ'));
+        if(okTel !== null){
+            this.setState({
+                DATA:okTel,
+                Lis:okAZ,
+            });
+        }
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        json.nowpage = this.state.nowpage;
+        let okTelFingerprint = Tool.localItem('okTelFingerprint');
+        if(okTelFingerprint == null){
+            json.fingerprint = '';
+        }else{
+            json.fingerprint = okTelFingerprint;
+        }
         json.type = 3;
-        json.size = 50;
         Tool.get('Customer/GetCustomerList.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    let NewSeDa = [];
-                    let page = this.state.nowpage;
-                    if(res.listdata.length === 0){
+                    this.setState({loadingS:false,reccount:res.reccount});
+                    let Fingerprint = res.fingerprint;
+                    Tool.localItem('okTelFingerprint',Fingerprint);
+                    if(res.ischange == 1){
+                        this.state.DATA = [];
+                        for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
+                        let NewSeDa = [];
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          let jsons = {
+                            'customname':res.listdata[i].customname,
+                            'customphone':res.listdata[i].customphone,
+                            'customid':res.listdata[i].customid,
+                            'followname':res.listdata[i].followname,
+                            'lastlinktime':res.listdata[i].lastlinktime,
+                          }
+                          NewSeDa.push(jsons);
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          if ( her === -1) {this.state.DATA.push(item);}
+                        }
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          let json = {
+                                        'customname':res.listdata[i].customname,
+                                        'customphone':res.listdata[i].customphone,
+                                        'customid':res.listdata[i].customid,
+                                        'lastlinktime':res.listdata[i].lastlinktime,
+                                        'isfavorites':res.listdata[i].isfavorites
+                                      };
+                          if ( her !== -1) {this.state.Lis[her].push(json);}
+                        }
+                        let okTel = JSON.stringify(this.state.DATA);
+                        Tool.localItem('okTel',okTel);
+                        let okAZ = JSON.stringify(this.state.Lis);
+                        Tool.localItem('okAZ',okAZ);
+                        this.setState({
+                            DATA:this.state.DATA,
+                            Lis:this.state.Lis,
+                        });
+                        let SearchData = JSON.parse(Tool.localItem('SearchData'));
+                        if(SearchData !== null){
+                            for(let i=0;i < SearchData.length; i++){
+                                for(let is=0;is < NewSeDa.length; is++){
+                                    if(SearchData[i].customphone==NewSeDa[is].customphone){
+                                        NewSeDa.splice(is,1);
+                                    }
+                                }
+                            }
+                            let newDS = SearchData.concat(NewSeDa);
+                            Tool.localItem('SearchData',JSON.stringify(newDS));
+                        }else{
+                            Tool.localItem('SearchData',JSON.stringify(NewSeDa));
+                        }
+                    }
+                    if(this.state.DATA.length === 0){
                         this.setState({isDatas:true});
                     }else{
                         this.setState({isDatas:false});
-                    }
-                    if(res.listdata.length < 10){
-                        this.setState({loadingS:false});
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      let jsons = {
-                        'customname':res.listdata[i].customname,
-                        'customphone':res.listdata[i].customphone,
-                        'customid':res.listdata[i].customid,
-                        'followname':res.listdata[i].followname,
-                        'lastlinktime':res.listdata[i].lastlinktime,
-                      }
-                      NewSeDa.push(jsons);
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      if ( her === -1) {this.state.DATA.push(item);}
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      let json = {
-                                    'customname':res.listdata[i].customname,
-                                    'customphone':res.listdata[i].customphone,
-                                    'customid':res.listdata[i].customid,
-                                    'lastlinktime':res.listdata[i].lastlinktime,
-                                    'isfavorites':res.listdata[i].isfavorites
-                                  };
-                      if ( her !== -1) {this.state.Lis[her].push(json);}
-                    }
-                    if(res.pagecount == page){
-                        this.setState({loadingS:false});
-                    }else{
-                        page++;
-                        this.setState({
-                            nowpage:page                     
-                        });
-                    }
-                    let SearchData = JSON.parse(Tool.localItem('SearchData'));
-                    if(SearchData !== null){
-                        for(let i=0;i < SearchData.length; i++){
-                            for(let is=0;is < NewSeDa.length; is++){
-                                if(SearchData[i].customphone==NewSeDa[is].customphone){
-                                    NewSeDa.splice(is,1);
-                                }
-                            }
-                        }
-                        let newDS = SearchData.concat(NewSeDa);
-                        Tool.localItem('SearchData',JSON.stringify(newDS));
-                    }else{
-                        Tool.localItem('SearchData',JSON.stringify(NewSeDa));
                     }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
@@ -145,24 +160,7 @@ class Clues extends React.Component {
         var ulHeight = goUl.parentNode.offsetTop;
         Uls.scrollTop = ulHeight - 45;
     }
-    handleScroll(e){
-      let BodyMin = e.target;
-      let DataMin,Hit,LastLi,goNumb;
-      DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-55;
-      LastLi = BodyMin.scrollTop;
-      goNumb = DataMin - Hit - LastLi;
-      if(goNumb <= 0){
-        // BodyMin.scrollTop = DataMin;
-        if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
-        }
-      }
-    }
+
     componentDidMount() {
         for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
         this.upDATA();
@@ -207,16 +205,16 @@ class Clues extends React.Component {
         });
     }
     render() {
-        const {loadingS,DATA,Lis,isDatas} = this.state;
+        const {loadingS,DATA,Lis,isDatas,reccount} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
         }
         return (
-            <div className="clueBody cluePending crmPend CRMtitle"  onScroll={this.handleScroll}>
+            <div className="clueBody cluePending crmPend CRMtitle">
             {DATA.map(function(e,indexs){
                 return(
                 <Panel key={indexs}>
@@ -232,11 +230,10 @@ class Clues extends React.Component {
                             <MediaBoxBody>
                                 <MediaBoxTitle>
                                     <span>{ele.customname}</span>
-                                    <i>跟进人员：{ele.followname}</i>
+                                    <i>跟进人：{ele.followname}</i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{ele.lastlinktime}</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta className="crmMesc" title={ele.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>

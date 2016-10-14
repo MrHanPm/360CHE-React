@@ -36,9 +36,14 @@ class CellDemo extends React.Component {
             
         };
         this.nameInput = (e) => {
-            this.state.name = e.target.value;
+            this.setState({name:e.target.value});
+            Tool.localItem('nameUs',e.target.value);
         }
         this.goNext = this.goNext.bind(this);
+    }
+    componentWillMount(){
+        let names = Tool.localItem('nameUs');
+        this.setState({name:names});
     }
     componentDidMount() {
         document.title="销售信息"
@@ -51,12 +56,16 @@ class CellDemo extends React.Component {
         }
     }
     checkForm(){
+        if(this.state.brands.length === 0){
+            Alert.to("请选择品牌");
+            return false;
+        }
         if(this.state.name == '' || this.state.name.length == 0){
             Alert.to("请输入姓名");
             return false;
         }
-        if(this.state.brands.length === 0){
-            Alert.to("请选择品牌");
+        if(this.state.name.length > 4){
+            Alert.to("姓名不能超过4个字符");
             return false;
         }
         return true;
@@ -83,6 +92,8 @@ class CellDemo extends React.Component {
                         Tool.localItem('vipLodData',Vd);
                         this.context.router.push({pathname: '/loaddata'});
                     }else if(res.status === 801){
+                        Alert.to(res.msg);
+                    }else{
                         Alert.to(res.msg);
                     }
                 },
@@ -119,7 +130,7 @@ class CellDemo extends React.Component {
                             <Label>姓名</Label>
                         </CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请输入真实姓名" onInput={this.nameInput}/>
+                            <Input type="text" placeholder="请输入真实姓名" onInput={this.nameInput} value={this.state.name}/>
                         </CellBody>
                     </FormCell>
                 </Form>

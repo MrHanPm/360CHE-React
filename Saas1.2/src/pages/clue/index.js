@@ -17,7 +17,6 @@ import {
 } from 'react-weui';
 
 import './index.less';
-import ShowAlert from '../../component/Alert.js'
 import Already from '../clueAlready/index.js';
 import Defeat from '../clueDefeat/index.js';
 import FollowUp from '../clueFollowUp/index.js';
@@ -56,8 +55,15 @@ class Clues extends React.Component {
     }
     componentDidMount(){
         document.title="线索";
+        let self = this;
         //let Hashs = window.location.hash;
         //console.log(Hashs);
+        [].forEach.call(document.querySelectorAll('.clueBtnXbg'), function (el) {  
+          el.addEventListener('touchend', function(e) {
+            self.setState({show:false});
+            e.preventDefault();
+          }, false);
+        });
     }
     render() {
         let Pages;

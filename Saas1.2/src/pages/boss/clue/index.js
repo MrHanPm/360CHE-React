@@ -16,7 +16,6 @@ import {
     Button,
 } from 'react-weui';
 
-import ShowAlert from '../../../component/Alert.js'
 import Already from '../clueAlready/index.js';
 import Defeat from '../clueDefeat/index.js';
 import FollowUp from '../clueFollowUp/index.js';
@@ -90,7 +89,6 @@ class Clues extends React.Component {
                     <li className={tab == 3 ? 'active':''} onClick={e=>{this.setState({tab:3});this.context.router.push({pathname: '/boss/nav/x/b'})}}>已战败</li>
                 </ul>
                 {Pages}
-                <ShowAlert />
             </div>
         );
     }

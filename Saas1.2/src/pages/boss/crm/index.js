@@ -15,7 +15,6 @@ import {
     MediaBoxInfoMeta,
     Button,
 } from 'react-weui';
-import ShowAlert from '../../../component/Alert.js'
 import OkTel from '../okTel/index.js';
 import NoTel from '../noTel/index.js';
 import Collect from '../collectTel/index.js';
@@ -73,7 +72,6 @@ class Clues extends React.Component {
                     <li className={this.state.tab == 3 ? 'active':''} onClick={e=>{this.setState({tab:3});this.context.router.push({pathname: '/boss/nav/c/o'})}}>已购车</li>
                 </ul>
                 {Pages}
-                <ShowAlert />
             </div>
         );
     }

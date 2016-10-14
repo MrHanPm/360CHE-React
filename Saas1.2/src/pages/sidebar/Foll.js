@@ -46,6 +46,8 @@ class Sidebar extends React.Component{
       this.Resets = this.Resets.bind(this);
       this.strTime = this.strTime.bind(this);
       this.endTime = this.endTime.bind(this);
+      this.buildOn = this.buildOn.bind(this);
+      this.focusOn = this.focusOn.bind(this);
   }
   PPsd(e){
     if(e.target.getAttribute('class') == 'activ'){
@@ -175,8 +177,17 @@ class Sidebar extends React.Component{
       Inputs[i].value = '';
     }
   }
+  buildOn(){
+    document.querySelectorAll('.FollBtn')[0].removeAttribute('style');
+  }
+  focusOn(){
+    document.querySelectorAll('.FollBtn')[0].setAttribute('style','z-index:-1');
+  }
   componentDidMount(){
     let self = this;
+    // let DoFolls = document.getElementById('Folls');
+    // let Hcss = window.screen.height + 'px';
+    // DoFolls.style.height = Hcss;
     let brandlist = JSON.parse(Tool.localItem('brandlist'));
     let PPDAtas = [];
     for(let i=0;i<brandlist.brandlist.length;i++){
@@ -251,10 +262,10 @@ class Sidebar extends React.Component{
                     <p>已跟进次数</p>
                   </dt>
                   <dd>
-                    <input type="number" placeholder="最低次数" onInput={this.min_follInput}/>
+                    <input type="number" className="weui_input" placeholder="最低次数" onFocus={this.focusOn} onBlur={this.buildOn} onInput={this.min_follInput}/>
                   </dd>
                   <dd>
-                    <input type="number" placeholder="最高次数" onInput={this.max_follInput}/>
+                    <input type="number" className="weui_input" placeholder="最高次数" onFocus={this.focusOn} onBlur={this.buildOn} onInput={this.max_follInput}/>
                   </dd>
                 </dl>
                 <dl className="PPstyle">
@@ -271,10 +282,10 @@ class Sidebar extends React.Component{
                     <p>购买台数</p>
                   </dt>
                   <dd>
-                    <input type="number" placeholder="最低台数" onInput={this.min_expeInput}/>
+                    <input type="number" className="weui_input" placeholder="最低台数" onFocus={this.focusOn} onBlur={this.buildOn} onInput={this.min_expeInput}/>
                   </dd>
                   <dd>
-                    <input type="number" placeholder="最高台数" onInput={this.max_expeInput}/>
+                    <input type="number" className="weui_input" placeholder="最高台数" onFocus={this.focusOn} onBlur={this.buildOn} onInput={this.max_expeInput}/>
                   </dd>
                 </dl>
                 <dl className="PPstyle">
@@ -291,12 +302,13 @@ class Sidebar extends React.Component{
                     <p>最后跟进时间</p>
                   </dt>
                   <dd className="Ftimes">
-                    <input type="date" onChange={this.strTime}/>
+                    <input type="date" className="weui_input" onChange={this.strTime}/>
                   </dd>
-                  <dd className="FtimeT">开始到结束</dd>
-                  <dd className="Ftimes">
-                    <input type="date" onChange={this.endTime}/>
+                  <dd className="Ftimes right">
+                    <input type="date" className="weui_input" onChange={this.endTime}/>
                   </dd>
+                  <dd className="Ftimes FtimeT">开始时间</dd>
+                  <dd className="Ftimes right FtimeT">结束时间</dd>
                 </dl>
               </div>
             <ul className="FollBtn">

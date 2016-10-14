@@ -60,8 +60,14 @@ class MsgDemo extends React.Component {
         this.isBuys = (e) => {this.setState({isbuy:e.target.value});}
         this.SFCS = this.SFCS.bind(this);
     }
-    componentDidMount() {
-        document.title = '修改客户信息';
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
+    componentWillMount(){
         let crmData = JSON.parse(Tool.localItem('RobClues'));
         if(crmData.customphone !== ''){
             this.setState({
@@ -80,6 +86,10 @@ class MsgDemo extends React.Component {
                 customerid:crmData.customid
             });
         }
+    }
+    componentDidMount() {
+        document.title = '修改客户信息';
+        
         //console.log(crmData);
     }
     showConfirm(){this.setState({showConfirm: true});}
@@ -106,6 +116,10 @@ class MsgDemo extends React.Component {
 
         if(this.state.isbuy == '' || this.state.isbuy == 2){
             Alert.to("请选择是否购车");
+            return false;
+        }
+        if(this.state.msg.length > 800){
+            Alert.to("备注字数不能超过800");
             return false;
         }
         return true;
@@ -229,7 +243,7 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" value={msg} placeholder="请填写限800字" onInput={this.msgInput}/>
+                            <TextArea placeholder="请填写备注" rows="2" maxlength="800" onInput={this.msgInput} value={msg}></TextArea>
                         </CellBody>
                     </Cell>
                 </Cells>

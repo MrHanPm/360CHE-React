@@ -223,6 +223,13 @@ class Clues extends React.Component {
         });
         this.upDATA(Stdat,Endat);
     }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
     render() {
         const {loadShow,name,actvs,startdate,enddate} = this.state;
         return (

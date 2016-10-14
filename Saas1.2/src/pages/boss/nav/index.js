@@ -17,7 +17,7 @@ import Clues from '../clue/index.js';
 import Crms from '../crm/index.js';
 import Finds from '../find/index.js';
 import Count from '../count/index.js';
-
+import ShowAlert from '../../../component/Alert.js';
 class TabBarDemo extends React.Component {
     state={
         tab:0,
@@ -92,6 +92,7 @@ class TabBarDemo extends React.Component {
                         label="发现"
                     />
                 </TabBar>
+                <ShowAlert />
             </Tab>
         );
     }

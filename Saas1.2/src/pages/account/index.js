@@ -62,16 +62,14 @@ class MsgDemo extends React.Component {
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        Tool.get('User/LoginOut.aspx',json,
+        Tool.get('WeiXin/Unbind.aspx',json,
             (res) => {
                 if(res.status == 1){
                     Tool.localItem('vipLodData',null);
                     Tool.localItem('Uphone',null);
                     Tool.localItem('BrandKey',null);
                     WeixinJSBridge.call('closeWindow');
-                    // this.context.router.push({
-                    //     pathname: '/loading'
-                    // });
+                    //() => {wx.closeWindow();}
                 }else{
                     Alert.to(res.msg);
                 }
@@ -80,6 +78,13 @@ class MsgDemo extends React.Component {
                 Alert.to('网络异常，稍后重试。。');
             }
         )
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
     }
     render() {
         let oldData = JSON.parse(Tool.localItem('vipLodData'));

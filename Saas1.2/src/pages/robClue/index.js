@@ -13,6 +13,7 @@ import {Button,
     Cell,
     CellFooter,
     Dialog,
+    Toast,
     Checkbox,
     CellBody
 } from 'react-weui';
@@ -27,9 +28,11 @@ class MsgDemo extends React.Component {
             DATArob:'',
             Messrob:[],
             reccount:0,
+            showToast: false,
             showConfirm: false,
             showAlertCfm:false,
             showDonwn:true,
+            linkCrm:true,
             SDSrandoms:'',
             confirm: {
                 title: '确认放弃这条线索？',
@@ -46,7 +49,7 @@ class MsgDemo extends React.Component {
                 ],
             },
             AlertCfm: {
-                title: '跟进24小时内未设置客户级别的线索将返回到公共线索池',
+                title: '24小时内未跟进,将返回到公共线索池',
                 buttons: [
                     {
                         type: 'primary',
@@ -64,12 +67,19 @@ class MsgDemo extends React.Component {
         this.goChengs = this.goChengs.bind(this);
         this.addPursue = this.addPursue.bind(this);
         this.SDS = this.SDS.bind(this);
+        this.addCRM = this.addCRM.bind(this);
     }
     ShoDonwn(){this.setState({showDonwn:true});}
     HidDonwn(){this.setState({showDonwn:false});}
     SDS(e){
         let st = parseInt(e.target.title);
         this.setState({SDSrandoms:st});
+    }
+    showToast() {
+        this.setState({showToast: true});
+        this.state.toastTimer = setTimeout(()=> {
+            this.setState({showToast: false});
+        }, 1200);
     }
     goBeac(){
         let persId = Tool.getQueryString('id');
@@ -97,9 +107,7 @@ class MsgDemo extends React.Component {
             }
         )
     }
-
-    componentDidMount() {
-        document.title = '线索详情';
+    componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
         let sessionid;
@@ -114,25 +122,8 @@ class MsgDemo extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.setState({DATArob:res.data});
-                }else if(res.status == 901){
-                    Alert.to(res.msg);
-                    this.context.router.push({pathname: '/loading'});
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('网络异常，稍后重试。。');
-            }
-        )
-        Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
-            (res) => {
-                if(res.status == 1){
-                    //console.log(JSON.stringify(res.listdata[0]));
-                    if(res.reccount > 0){
-                        this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
-                    }else{
-                        this.setState({Messrob:res.listdata,showAlertCfm:true});
+                    if(res.data.customid > 0){
+                        this.setState({linkCrm:false});
                     }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
@@ -144,7 +135,34 @@ class MsgDemo extends React.Component {
             (err) => {
                 Alert.to('网络异常，稍后重试。。');
             }
-        )
+        );
+        Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
+            (res) => {
+                if(res.status == 1){
+                    //console.log(JSON.stringify(res.listdata[0]));
+                    if(res.reccount > 0){
+                        this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
+                    }else{
+                        if(this.state.DATArob.clueresourcename == '卡车之家'){
+                            this.setState({Messrob:res.listdata,showAlertCfm:true});
+                        }else{
+                            this.setState({Messrob:res.listdata});
+                        }
+                    }
+                }else if(res.status == 901){
+                    Alert.to(res.msg);
+                    this.context.router.push({pathname: '/loading'});
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        );
+    }
+    componentDidMount() {
+        document.title = '线索详情';
     }
 
     showConfirm(){this.setState({showConfirm: true});}
@@ -159,17 +177,42 @@ class MsgDemo extends React.Component {
         let urlTxt = '/addPursue?id=' + e.target.title;
         this.context.router.push({pathname: urlTxt});
     }
+    addCRM(e){
+        let doms = e.target;
+        let json={};
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
+        json.cluesextendid = e.target.title;
+        Tool.get('Customer/AddCustomerFromClues.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                    this.showToast();
+                    doms.setAttribute('class','');
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
     render() {
         let showBtns = false;
+        let loadShow=true;
         let self = this;
         if(this.state.DATArob !== '' && typeof(this.state.DATArob.realname) !== 'undefined'){
              
         }else{
             
         }
-        const {showDonwn,reccount,Messrob} = this.state;
+        const {showDonwn,reccount,Messrob,linkCrm} = this.state;
         const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid} = this.state.DATArob;
         if(clueslevelname !== '' && typeof(clueslevelname) !== 'undefined'){showBtns = true;}
+        if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
         return (
             <Page className="account robClues">
                 <Form>
@@ -184,6 +227,7 @@ class MsgDemo extends React.Component {
                         <CellBody>
                             {realname}
                         </CellBody>
+                        <CellFooter className={linkCrm?'cleAddAft':''} title={cluesextendid} onClick={this.addCRM}/>
                     </FormCell>
                     <FormCell>
                         <CellHeader><Label>客户电话</Label></CellHeader>
@@ -333,6 +377,12 @@ class MsgDemo extends React.Component {
                 <Confirm title={this.state.AlertCfm.title} buttons={this.state.AlertCfm.buttons} show={this.state.showAlertCfm}>
                 </Confirm>
                 <SideRob data={this.state.Messrob} showD={this.state.SDSrandoms} onChange={val => this.setState({SDSrandoms: val})}/>
+                <Toast show={this.state.showToast}>关联成功</Toast>
+                <div className="jump-cover" id="jump_cover" style={{'display':loadShow?'block':'none'}}>
+                    <div className="loading visible">
+                        <span className="loading-ring"> </span>
+                    </div>
+                </div>
             </Page>
         );
     }

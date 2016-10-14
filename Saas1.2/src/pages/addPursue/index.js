@@ -26,7 +26,7 @@ import JB from '../sidebar/JB';//客户级别
 import GJ from '../sidebar/GJ';//跟进方式
 import ZB from '../sidebar/ZB';//战败原因
 import {Tool,Alert} from '../../tool.js';
-import './index.less';
+
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
@@ -84,14 +84,36 @@ class MsgDemo extends React.Component {
         this.ZB = this.ZB.bind(this);
         this.GJ = this.GJ.bind(this);
     }
+    getTimeLocal(){
+        let format = "";
+        var nTime = new Date();
+        format += nTime.getFullYear()+"-";
+        format += (nTime.getMonth()+1)<10?"0"+(nTime.getMonth()+1):(nTime.getMonth()+1);
+        format += "-";
+        format += nTime.getDate()<10?"0"+(nTime.getDate()):(nTime.getDate());
+        format += "T";
+        format += nTime.getHours()<10?"0"+(nTime.getHours()):(nTime.getHours());
+        format += ":";
+        format += nTime.getMinutes()<10?"0"+(nTime.getMinutes()):(nTime.getMinutes());
+        format += ":00";
+        document.getElementById("pursueTime").value = format;
+    }
     componentDidMount() {
         document.title = '添加跟进记录';
         document.getElementById('FailTime').valueAsDate = new Date();
         document.getElementById('DealTime').valueAsDate = new Date();
+        this.getTimeLocal();
         this.setState({
             dealTime:document.getElementById('DealTime').value,
             failTime:document.getElementById('FailTime').value
         });
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
     }
     CPLB(){this.setState({
         CPLBrandoms: Math.random(),
@@ -239,6 +261,10 @@ class MsgDemo extends React.Component {
             Alert.to("跟进时间不能为空");
             return false;
         }
+        if(this.state.msg.length > 800){
+            Alert.to("备注字数不能超过800");
+            return false;
+        }
         return true;
     }
     onSaves(){
@@ -252,10 +278,12 @@ class MsgDemo extends React.Component {
             }
             json.cluesextendid = persId;
             let Uptimes = this.state.followupdate.replace(/T/g,' ');
-            let Followupdate = Uptimes + ':00';
+            let Followupdate = Uptimes ;
+            if(Uptimes.length == 16){
+                Followupdate = Uptimes + ':00';
+            }
             json.followupdate = Followupdate;
             json.followuptypeid = this.state.GJv.values;
-
             if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
                 json.clueslevel = '';
             }else{
@@ -463,7 +491,7 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字" onInput={this.msgInput}/>
+                            <TextArea placeholder="请填写备注" rows="2" maxlength="800" onInput={this.msgInput}></TextArea>
                         </CellBody>
                     </Cell>
                 </Cells>

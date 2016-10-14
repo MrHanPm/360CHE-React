@@ -16,8 +16,7 @@ import {Button,
     Checkbox,
     CellBody
 } from 'react-weui';
-
-import Page from '../../component/page';
+import ShowAlert from '../../component/Alert.js'
 import SF from '../sidebar/SF';//省份
 import LB from '../sidebar/LB';//类别
 import PP from '../sidebar/PP';//品牌
@@ -75,8 +74,9 @@ class MsgDemo extends React.Component {
             pay:'',
             faildate:'',
             id:'',
-            Checkbox:1,
+            Checkboxs:'',
             showConfirm: false,
+            linkCRM:false,
         };
         this.nameInput = (e) => {this.setState({name:e.target.value});}
         this.phoneInput = (e) => {this.setState({phone:e.target.value});}
@@ -103,8 +103,7 @@ class MsgDemo extends React.Component {
         this.ZB = this.ZB.bind(this);
         this.onSaves = this.onSaves.bind(this);
     }
-    componentDidMount() {
-        document.title = '修改线索';
+    componentWillMount(){
         let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
         //console.log(RobClueVal);
         this.setState({
@@ -169,10 +168,30 @@ class MsgDemo extends React.Component {
             phone:RobClueVal.tel,
             numb:RobClueVal.expectedbycarnum,
             msg:RobClueVal.remark,
-            pay:RobClueVal.transactionprice,
             dealdate:RobClueVal.dealtdate,
             faildate:RobClueVal.faildate,
         });
+        if(RobClueVal.transactionprice > 0){
+            this.state.pay = RobClueVal.transactionprice;
+        }else{
+            this.state.pay = '';
+        }
+        if(RobClueVal.customid > 0){
+            this.setState({Checkboxs:1});
+        }else{
+            this.setState({Checkboxs:0,linkCRM:true});
+        }
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
+    componentDidMount() {
+        document.title = '修改线索';
+        let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
         if(RobClueVal.dealtdate == ''){
             document.getElementById('DealDate').valueAsDate = new Date();
             this.setState({
@@ -188,9 +207,9 @@ class MsgDemo extends React.Component {
     }
     Checkbox(e){
         if(e.target.checked){
-            this.setState({Checkbox:1});
+            this.setState({Checkboxs:1});
         }else{
-            this.setState({Checkbox:0});
+            this.setState({Checkboxs:0});
         }
     }
     CPLB(){this.setState({
@@ -493,6 +512,10 @@ class MsgDemo extends React.Component {
             Alert.to("省份城市不能为空");
             return false;
         }
+        if(this.state.msg.length > 800){
+            Alert.to("备注字数不能超过800");
+            return false;
+        }
         return true;
     }
     onSaves(){
@@ -553,7 +576,7 @@ class MsgDemo extends React.Component {
                 json.addday = this.state.KHJBv.addday;
             }
 
-            json.isrelationcustomer = this.state.Checkbox;
+            json.isrelationcustomer = this.state.Checkboxs;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
             //console.log(this.state,json);
@@ -561,7 +584,7 @@ class MsgDemo extends React.Component {
                 (res) => {
                     if(res.status == 1){
                         this.context.router.push({
-                            pathname: '/nav'
+                            pathname: '/nav/x/g'
                         });
                     }else if(res.status == 901){
                         Alert.to(res.msg);
@@ -662,9 +685,9 @@ class MsgDemo extends React.Component {
         }else{
             ZBval = '';
         }
-        const {name,phone,pay,dealdate,faildate,msg,numb,XSLYv}=this.state;
+        const {name,phone,pay,dealdate,faildate,msg,numb,XSLYv,linkCRM}=this.state;
         return (
-            <Page className="account">
+            <div className="Acot">
                 <Cells access>
                     <Cell>
                         <CellHeader><Label>选择类别</Label></CellHeader>
@@ -828,15 +851,15 @@ class MsgDemo extends React.Component {
                     <FormCell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字"onInput={this.msgInput} value={msg}/>
+                            <TextArea placeholder="请填写备注" rows="2" maxlength="800" onInput={this.msgInput} value={msg}></TextArea>
                         </CellBody>
                         <CellFooter></CellFooter>
                     </FormCell>
                 </Form>
-                <Form style={{'display':'none'}} checkbox>
+                <Form style={{'display':linkCRM ? '':'none'}} className="weuiCheckbo" checkbox>
                     <FormCell checkbox>
                         <CellHeader>
-                            <Checkbox onChange={this.Checkbox} defaultChecked/>
+                            <Checkbox onChange={this.Checkbox} />
                         </CellHeader>
                         <CellBody>关联已有用户</CellBody>
                     </FormCell>
@@ -870,7 +893,8 @@ class MsgDemo extends React.Component {
                 <DCX Drandoms={this.state.DqCCXrandoms}
                     seriesid={this.state.DqCXLv.seriesid}
                     onChange={val => this.setState({DqCCXv: val,DqCCXrandoms:''})}/>
-            </Page>
+                <ShowAlert />
+            </div>
         );
     }
 };

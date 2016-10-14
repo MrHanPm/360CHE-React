@@ -102,12 +102,12 @@ class CellDemo extends React.Component {
             }else if(this.state.vcode.length !== 4){
                 Alert.to("图形码位数不正确");
             }else{
-                
-                this.settime(Btns);
-                this.showToast();
                 Tool.get('User/SendSMSYanMa.aspx',{tel:this.state.phone,captcha:this.state.vcode},
                     (res) => {
-                        if(res.status !== 1){
+                        if(res.status){
+                            this.showToast();
+                            this.settime(Btns);
+                        }else{
                             this.setState({
                                 iscode: true
                             });
@@ -136,7 +136,7 @@ class CellDemo extends React.Component {
             obj.removeAttribute("disabled");
             obj.setAttribute('class','weui_btn weui_btn_primary weui_btn_mini');  
             obj.innerHTML="重新获取"; 
-            this.setState({countdown:10})
+            this.setState({countdown:60})
             clearTimeout(t)
         } else {
             obj.setAttribute("disabled", true);
@@ -148,29 +148,37 @@ class CellDemo extends React.Component {
             t = setTimeout(() => this.settime(obj),1000);
         }
     }
+    hideDisabled(){
+
+    }
     goNext(){
+        //console.log(this);
+        let Doms = document.getElementById('goNextP');
         if(this.checkForm()){
+            Doms.setAttribute("disabled", true);
             Tool.localItem('Uphone',this.state.phone);
-            Tool.get('WeiXin/BindTel.aspx',{tel:this.state.phone,vercode:this.state.mcode},
+            let json = {};
+            json.tel = this.state.phone;
+            json.vercode = this.state.mcode;
+            Tool.get('WeiXin/BindTel.aspx',json,
                 (res) => {
-                    if(res.status === 1){
-                        let Vd = JSON.stringify(res.data);
-                        let Sessionid = res.data.sessionid;
-                        Tool.localItem('vipLodData',Vd);
-                        // if(res.data.usercategory == '1'){
-                        this.context.router.push({pathname: '/loaddata'});
-                        // }
-                        //this.context.router.push({pathname: '/name'});
-                    }else if(res.status === 912){
-                        this.context.router.push({
-                            pathname: '/login'
-                        });
-                    }else{
-                        Alert.to(res.msg);
+                    switch(res.status){
+                        case 1:
+                            let Vd = JSON.stringify(res.data);
+                            Tool.localItem('vipLodData',Vd);
+                            this.context.router.push({pathname:'/loaddata'});
+                            return;
+                        case 912 :
+                            this.context.router.push({pathname:'/login'});
+                            return;
+                        default:
+                            Alert.to(res.msg);
+                            Doms.removeAttribute("disabled");
                     }
                 },
                 (err) => {
                     Alert.to(err.msg);
+                    Doms.removeAttribute("disabled");
                 }
             )
         }
@@ -178,7 +186,6 @@ class CellDemo extends React.Component {
     render() {
         return (
             <Page className="cell" title="手机验证">
-
                 <Form>
                     <FormCell>
                         <CellHeader>
@@ -216,7 +223,7 @@ class CellDemo extends React.Component {
                 </Form>
 
                 <ButtonArea>
-                    <Button onClick={this.goNext}>确定</Button>
+                    <Button id="goNextP" onClick={this.goNext}>确定</Button>
                 </ButtonArea>
                 <Toast show={this.state.showToast}>验证码已发送</Toast>
                 <p className="FootTxt">验证手机号码，使用升级版营销助手<br/>手机号码仅用于登录和保护账号安全</p>

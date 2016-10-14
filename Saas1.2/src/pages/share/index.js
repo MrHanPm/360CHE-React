@@ -23,20 +23,62 @@ export default class MsgDemo extends React.Component {
         this.state = {
             loadingS:true,
             DATA:[],
-            url:'',
-            title:'',
+            id:'',
             isDatas:false,
-            ico:'',
             shows:false,
         }
         this.hidFx = this.hidFx.bind(this);
         this.ShowFx = this.ShowFx.bind(this);
+        this.CopyURL = this.CopyURL.bind(this);
     }
     hidFx(){
         this.setState({shows:false,});
     }
-    ShowFx(){
+    ShowFx(e){
+        this.state.id = e.target.title;
         this.setState({shows:true,});
+    }
+    CopyURL(){
+        let Doms = document.getElementById('copyURL');
+        let ids = this.state.id;
+        let DATAlist = this.state.DATA;
+        let urls='';
+        for(let i=0;i<DATAlist.length;i++){
+            if(DATAlist[i].id == ids){
+                urls = DATAlist[i].shareurl;
+                break;
+            }
+        }
+        // let httPs = Tool.ShareURL;
+        // let links = httPs + urls;
+        Doms.innerHTML = urls;
+        // if(window.clipboardData){
+        //     window.clipboardData.setData('Text',links);
+        // }else{
+        document.execCommand('Copy','false',urls);
+        // }
+        // if (document.body.createTextRange) {
+        //     var range = document.body.createTextRange();
+        //     range.moveToElementText(Doms);
+        //     range.select();
+        //     document.execCommand('Copy','false',null);
+        //     alert('已复制到剪切版');
+        // } else if (window.getSelection) {
+        //     var selection = window.getSelection();
+        //     var range = document.createRange();
+        //     range.selectNodeContents(Doms);
+        //     selection.removeAllRanges();
+        //     selection.addRange(range);
+        //     /*if(selection.setBaseAndExtent){
+        //         selection.setBaseAndExtent(text, 0, text, 1);
+        //     }*/
+        //     document.execCommand('Copy','false',null);
+        //     alert('已复制到剪切版');
+        // } else {
+        //     alert('暂不支持');
+        // }
+        alert('暂不支持,请通过点击右上角进行复制分享～');
+        window.location.href = urls;
     }
     upDATA(){
         let json = {};
@@ -69,9 +111,11 @@ export default class MsgDemo extends React.Component {
             }
         )
     }
+    componentWillMount(){
+        this.upDATA();
+    }
     componentDidMount() {
         document.title = '选择店铺';
-        this.upDATA();
         let self = this;
         [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
           el.addEventListener('touchend', function(e) {
@@ -84,6 +128,196 @@ export default class MsgDemo extends React.Component {
                 e.preventDefault();
             }
           }, false);
+        });
+        
+        wx.ready(function(){
+            wx.hideOptionMenu();
+          // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+          document.querySelector('#onMenuShareAppMessage').onclick = function () {
+            let ids = self.state.id;
+            let DATAlist = self.state.DATA;
+            let Obj={};
+            for(let i=0;i<DATAlist.length;i++){
+                if(DATAlist[i].id == ids){
+                    Obj = DATAlist[i];
+                    break;
+                }
+            }
+            //let httPs = Tool.ShareURL;
+            let links = Obj.shareurl;
+            let sharetitle = Obj.sharetitle;
+            let sharesummary= Obj.sharesummary;
+            let shareimgurl= Obj.shareimgurl;
+            wx.onMenuShareAppMessage({
+              title: sharetitle,
+              desc: sharesummary,
+              link: links,
+              imgUrl: shareimgurl,
+              trigger: function (res) {
+                alert('暂不支持,请通过点击右上角进行复制分享～');
+                window.location.href = links;
+              },
+              success: function (res) {
+                alert('已分享');
+              },
+              cancel: function (res) {
+                alert('已取消');
+              },
+              fail: function (res) {
+                alert(JSON.stringify(res));
+              }
+            });
+          };
+
+          // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+          document.querySelector('#onMenuShareTimeline').onclick = function () {
+            let ids = self.state.id;
+            let DATAlist = self.state.DATA;
+            let Obj={};
+            for(let i=0;i<DATAlist.length;i++){
+                if(DATAlist[i].id == ids){
+                    Obj = DATAlist[i];
+                    break;
+                }
+            }
+            let links = Obj.shareurl;
+            let sharetitle = Obj.sharetitle;
+            let sharesummary= Obj.sharesummary;
+            let shareimgurl= Obj.shareimgurl;
+            wx.onMenuShareTimeline({
+              title: sharetitle,
+              desc: sharesummary,
+              link: links,
+              imgUrl: shareimgurl,
+              trigger: function (res) {
+                alert('暂不支持,请通过点击右上角进行复制分享～');
+                window.location.href = links;
+              },
+              success: function (res) {
+                alert('已分享');
+              },
+              cancel: function (res) {
+                alert('已取消');
+              },
+              fail: function (res) {
+                alert(JSON.stringify(res));
+              }
+            });
+          };
+
+          // 2.3 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+          document.querySelector('#onMenuShareQQ').onclick = function () {
+            let ids = self.state.id;
+            let DATAlist = self.state.DATA;
+            let Obj={};
+            for(let i=0;i<DATAlist.length;i++){
+                if(DATAlist[i].id == ids){
+                    Obj = DATAlist[i];
+                    break;
+                }
+            }
+            let links = Obj.shareurl;
+            let sharetitle = Obj.sharetitle;
+            let sharesummary= Obj.sharesummary;
+            let shareimgurl= Obj.shareimgurl;
+            wx.onMenuShareQQ({
+              title: sharetitle,
+              desc: sharesummary,
+              link: links,
+              imgUrl: shareimgurl,
+              trigger: function (res) {
+                alert('暂不支持,请通过点击右上角进行复制分享～');
+                window.location.href = links;
+              },
+              complete: function (res) {
+                alert(JSON.stringify(res));
+              },
+              success: function (res) {
+                alert('已分享');
+              },
+              cancel: function (res) {
+                alert('已取消');
+              },
+              fail: function (res) {
+                alert(JSON.stringify(res));
+              }
+            });
+          };
+          
+          // 2.4 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
+          document.querySelector('#onMenuShareWeibo').onclick = function () {
+            let ids = self.state.id;
+            let DATAlist = self.state.DATA;
+            let Obj={};
+            for(let i=0;i<DATAlist.length;i++){
+                if(DATAlist[i].id == ids){
+                    Obj = DATAlist[i];
+                    break;
+                }
+            }
+            let links = Obj.shareurl;
+            let sharetitle = Obj.sharetitle;
+            let sharesummary= Obj.sharesummary;
+            let shareimgurl= Obj.shareimgurl;
+            wx.onMenuShareWeibo({
+              title: sharetitle,
+              desc: sharesummary,
+              link: links,
+              imgUrl: shareimgurl,
+              trigger: function (res) {
+                alert('暂不支持,请通过点击右上角进行复制分享～');
+                window.location.href = links;
+              },
+              complete: function (res) {
+                alert(JSON.stringify(res));
+              },
+              success: function (res) {
+                alert('已分享');
+              },
+              cancel: function (res) {
+                alert('已取消');
+              },
+              fail: function (res) {
+                alert(JSON.stringify(res));
+              }
+            });
+          };
+
+          // 2.5 监听“分享到QZone”按钮点击、自定义分享内容及分享接口
+          document.querySelector('#onMenuShareQZone').onclick = function () {
+            let ids = self.state.id;
+            let DATAlist = self.state.DATA;
+            let Obj={};
+            for(let i=0;i<DATAlist.length;i++){
+                if(DATAlist[i].id == ids){
+                    Obj = DATAlist[i];
+                    break;
+                }
+            }
+            let links = Obj.shareurl;
+            let sharetitle = Obj.sharetitle;
+            let sharesummary= Obj.sharesummary;
+            let shareimgurl= Obj.shareimgurl;
+            wx.onMenuShareQZone({
+              title: sharetitle,
+              desc: sharesummary,
+              link: links,
+              imgUrl: shareimgurl,
+              trigger: function (res) {},
+              complete: function (res) {
+                alert(JSON.stringify(res));
+              },
+              success: function (res) {
+                alert('已分享');
+              },
+              cancel: function (res) {
+                alert('已取消');
+              },
+              fail: function (res) {
+                alert(JSON.stringify(res));
+              }
+            });
+          };
         });
     }
     render() {
@@ -103,12 +337,12 @@ export default class MsgDemo extends React.Component {
                         <Cells access>
                         {DATA.map(function(e,index){ 
                             return(  
-                            <Cell key={index} data-url={e.shareurl} data-name={e.sharesummary} onClick={self.ShowFx}>
-                                <CellHeader>
-                                    <img src={e.shareimgurl} />
+                            <Cell key={index} title={e.id} onClick={self.ShowFx}>
+                                <CellHeader title={e.id}>
+                                    <img src={e.shareimgurl} title={e.id} />
                                 </CellHeader>
-                                <CellBody>
-                                    <p>{e.sharetitle}</p>
+                                <CellBody title={e.id}>
+                                    <p title={e.id}>{e.sharetitle}</p>
                                 </CellBody>
                                 <CellFooter/>
                             </Cell>
@@ -122,33 +356,35 @@ export default class MsgDemo extends React.Component {
                 <dl id="FenXDL">
                     <dt className="pit">分享这个店铺</dt>
                     <dd>
-                        <div></div>
+                        <div id="onMenuShareAppMessage"></div>
                         <p>微信好友</p>
                     </dd>
                     <dd>
-                        <div className="fq"></div>
+                        <div className="fq" id="onMenuShareTimeline"></div>
                         <p>微信朋友圈</p>
                     </dd>
                     <dd>
-                        <div className="qq"></div>
+                        <div className="qq" id="onMenuShareQQ"></div>
                         <p>QQ</p>
                     </dd>
                     <dd>
-                        <div className="qk"></div>
+                        <div className="qk" id="onMenuShareQZone"></div>
                         <p>QQ空间</p>
                     </dd>
                     <dd>
-                        <div className="sina"></div>
+                        <div className="sina" id="onMenuShareWeibo"></div>
                         <p>新浪微博</p>
                     </dd>
                     <dd>
-                        <div className="url"></div>
+                        <div className="url" onClick={this.CopyURL}></div>
                         <p>复制链接</p>
                     </dd>
                 </dl>
             </div>
+            <div id="copyURL" style={{'display':'none'}}></div>
         </Page>
         );
     }
 };
+
 

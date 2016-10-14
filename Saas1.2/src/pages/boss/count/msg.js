@@ -28,6 +28,8 @@ class Clues extends React.Component {
                     this.setState({
                         DATA:res.data.detaillist
                     });
+                }else{
+                    Alert.to(res.msg);
                 }
             },
             (err) => {
@@ -50,6 +52,13 @@ class Clues extends React.Component {
                 visible: true
             });
         }
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
     }
     render() {
         const {visible,DATA} = this.state;

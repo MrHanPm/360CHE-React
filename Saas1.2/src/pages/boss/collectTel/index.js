@@ -18,7 +18,7 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
+import {LoadAd,Reccount,NoDataS} from '../../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -27,9 +27,9 @@ class Clues extends React.Component {
             nowpage:1,
             DATA:[],
             Lis:[],
+            reccount:0,
             isDatas:false,
         }
-        this.handleScroll = this.handleScroll.bind(this);
         this.Liclick = this.Liclick.bind(this);
         this.CrmMesc = this.CrmMesc.bind(this);
     }
@@ -40,53 +40,68 @@ class Clues extends React.Component {
     }
     
     upDATA(){
+        let coTel = JSON.parse(Tool.localItem('coTel'));
+        let coAZ = JSON.parse(Tool.localItem('coAZ'));
+        if(coTel !== null){
+            this.setState({
+                DATA:coTel,
+                Lis:coAZ,
+            });
+        }
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        json.nowpage = this.state.nowpage;
+        let coTelFingerprint = Tool.localItem('coTelFingerprint');
+        if(coTelFingerprint == null){
+            json.fingerprint = '';
+        }else{
+            json.fingerprint = coTelFingerprint;
+        }
         json.type = 1;
-        json.size = 50;
         Tool.get('Customer/GetCustomerList.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    let page = this.state.nowpage;
-                    if(res.listdata.length === 0){
+                    this.setState({loadingS:false,reccount:res.reccount});
+                    let Fingerprint = res.fingerprint;
+                    Tool.localItem('coTelFingerprint',Fingerprint);
+                    if(res.ischange == 1){
+                        this.state.DATA = [];
+                        for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          if ( her === -1) {this.state.DATA.push(item);}
+                        }
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          let json = {
+                                        'customname':res.listdata[i].customname,
+                                        'customphone':res.listdata[i].customphone,
+                                        'customid':res.listdata[i].customid,
+                                        'lastlinktime':res.listdata[i].lastlinktime,
+                                        'isfavorites':res.listdata[i].isfavorites
+                                      };
+                          if ( her !== -1) {this.state.Lis[her].push(json);}
+                        }
+                        let coTel = JSON.stringify(this.state.DATA);
+                        Tool.localItem('coTel',coTel);
+                        let coAZ = JSON.stringify(this.state.Lis);
+                        Tool.localItem('coAZ',coAZ);
+                        this.setState({
+                            DATA:this.state.DATA,
+                            Lis:this.state.Lis,
+                        });
+                    }
+                    if(this.state.DATA.length === 0){
                         this.setState({isDatas:true});
                     }else{
                         this.setState({isDatas:false});
-                    }
-                    if(res.listdata.length < 10){
-                        this.setState({loadingS:false});
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      if ( her === -1) {this.state.DATA.push(item);}
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      let json = {
-                                    'customname':res.listdata[i].customname,
-                                    'customphone':res.listdata[i].customphone,
-                                    'customid':res.listdata[i].customid,
-                                    'lastlinktime':res.listdata[i].lastlinktime,
-                                    'isfavorites':res.listdata[i].isfavorites
-                                  };
-                      if ( her !== -1) {this.state.Lis[her].push(json);}
-                    }
-                    if(res.pagecount == page){
-                        this.setState({loadingS:false});
-                    }else{
-                        page++;
-                        this.setState({
-                            nowpage:page                     
-                        });
                     }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
@@ -121,24 +136,6 @@ class Clues extends React.Component {
         var Uls = document.querySelector('.clueBody');
         var ulHeight = goUl.parentNode.offsetTop;
         Uls.scrollTop = ulHeight - 45;
-    }
-    handleScroll(e){
-      let BodyMin = e.target;
-      let DataMin,Hit,LastLi,goNumb;
-      DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-55;
-      LastLi = BodyMin.scrollTop;
-      goNumb = DataMin - Hit - LastLi;
-      if(goNumb <= 0){
-        // BodyMin.scrollTop = DataMin;
-        if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
-        }
-      }
     }
     componentDidMount() {
         for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
@@ -183,17 +180,24 @@ class Clues extends React.Component {
           }, false);
         });
     }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
     render() {
-        const {loadingS,DATA,Lis,isDatas} = this.state;
+        const {loadingS,DATA,Lis,isDatas,reccount} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
         }
         return (
-            <div className="clueBody cluePending crmPend CRMtitle"  onScroll={this.handleScroll}>
+            <div className="clueBody cluePending crmPend CRMtitle">
             {DATA.map(function(e,indexs){
                 return(
                 <Panel key={indexs}>
@@ -212,8 +216,7 @@ class Clues extends React.Component {
                                     <i>跟进人：{ele.followname}</i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{ele.lastlinktime}</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta className="crmMesc" title={ele.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>

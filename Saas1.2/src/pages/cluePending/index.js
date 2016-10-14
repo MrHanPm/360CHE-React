@@ -83,7 +83,7 @@ class Clues extends React.Component {
         }else{
             sessionid = Tool.SessionId.get();
         }
-        Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
+        Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid:e.target.title},
             (res) => {
                 if(res.status == 1){
                     let urlTxt = '/robClue?id=' + res.data.cluesextendid;
@@ -139,7 +139,7 @@ class Clues extends React.Component {
                     <PanelBody>
                         <MediaBox type="text">
                             <MediaBoxHeader>
-                                <Button type="primary" title={e.maincluesid} onClick={self.RobLine} plain>立即抢</Button>
+                                <Button type="primary" title={e.cluesextendid} onClick={self.RobLine} plain>立即抢</Button>
                             </MediaBoxHeader>
                             <MediaBoxBody>
                                 <MediaBoxTitle>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Button, Msg} from 'react-weui';
-import Page from '../../component/page';
+import ShowAlert from '../../component/Alert.js'
 import {Tool,Alert} from '../../tool.js';
 class MsgDemo extends React.Component {
     state = {
@@ -96,6 +96,7 @@ class MsgDemo extends React.Component {
                 <div className="loading visible">
                     <span className="loading-ring"> </span>
                 </div>
+                <ShowAlert />
             </div>
         );
     }

@@ -1,9 +1,15 @@
 body,select,textarea,input{ font:16px/1.6 'Helvetica Neue','Helvetica','Arial','sans-serif'; }
 html, body, .container {
     height: 100%;
+    -webkit-touch-action:none;
+    touch-action:none;
 }
 i,em{font-style: normal;}
-ul,ol,li{list-style: none;}
+dl,ul,ol,li{list-style: none;}
+dl{
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+}
 body {
     background-color: #f7f7fa;
     -webkit-touch-callout: none;
@@ -12,7 +18,15 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility:hidden;
+    -webkit-perspective:1000;
 }
+
 @font-face {
   font-family: 'saas_ico';
   src: url('//at.alicdn.com/t/font_1474281008_8263974.eot'); /* IE9*/
@@ -22,7 +36,7 @@ body {
   url('//at.alicdn.com/t/font_1474281008_8263974.svg#user') format('svg'); /* iOS 4.1- */
 }
 
-                    
+::-webkit-scrollbar{display: none;}
 .container{
     height: 100%;
     width: 100%;
@@ -35,6 +49,8 @@ body {
 }
 
 .page {
+    height: 100%;
+    width: 100%;
     position: absolute;
     top: 0;
     right: 0;
@@ -98,7 +114,7 @@ body {
     z-index: 1024;
     opacity: 0.01;
     transform: translate3d(100%, 0, 0);
-    transition: all .2s ease;
+    transition: all 0s ease;
     &.page-enter-active {
         opacity: 1;
         transform: translate3d(0, 0, 0);
@@ -109,7 +125,7 @@ body {
     z-index: 24;
     opacity: 1;
     transform: translate3d(0, 0, 0);
-    transition: all .18s ease;
+    transition: all 0s ease;
     &.page-leave-active {
         opacity: 0;
         transform: translate3d(100%, 0, 0);
@@ -119,23 +135,17 @@ body {
 
 .FootTxt{
     display: block;
-    position:absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
     height: auto;
     line-height: 30px;
-    margin:0 auto;
-    padding-bottom: 10px;
+    margin:30px auto 0;
     font-size: .9em;
     color: #999;
     text-align: center;
-    z-index: 6;
     i{
         color: #E83436;
     }
 }
-
 .cleAft a{
     display: block;
     width: 20px;
@@ -152,7 +162,28 @@ body {
         top: -6px;
     }
 }
-
+.cleAddAft{
+  display: block;
+  width: 20px;
+  height: 24px;
+  &:before{
+      content: '\e60f';
+      font-family: 'saas_ico';
+      color: #04be02;
+      display: block;
+      width: 20px;
+      height: 24px;
+      font-size: 26px;
+      position: relative;
+      top: -6px;
+  }
+}
+.weuiCheckbo{
+  padding-left: 105px;
+  background: none;
+  &:before{display:none;}
+}
+.weuiCheckbo:after{display:none;}
 /*-----------弹窗--@import "./global";-------*/
 
 .notification {
@@ -214,3 +245,11 @@ body {
   opacity: .5;
 }
 .weui_media_box.weui_media_text .weui_media_info{color: #888;}
+input[type="datetime-local"]{
+  display: block;
+  word-break:keep-all;
+  white-space:nowrap;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+

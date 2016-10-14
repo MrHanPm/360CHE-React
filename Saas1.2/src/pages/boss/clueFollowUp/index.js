@@ -179,6 +179,13 @@ class Clues extends React.Component {
     componentDidMount() {
         this.upDATA();
     }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
     render() {
         const {loadingS, DATA,p,buycarnum,follownum,pf,isDatas} = this.state;
         let self = this;

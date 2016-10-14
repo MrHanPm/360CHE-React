@@ -20,7 +20,7 @@ import Clues from '../clue/index.js';
 import Crms from '../crm/index.js';
 import Finds from '../find/index.js';
 import Count from '../count/index.js';
-
+import ShowAlert from '../../component/Alert.js';
 class TabBarDemo extends React.Component {
     state={
         tab:0,
@@ -64,7 +64,15 @@ class TabBarDemo extends React.Component {
     }
     componentDidMount(){
         let sessionid;
-        
+        //let SDK = JSON.parse(Toll.localItem('jsSDK'));
+        // wx.config({
+        //     debug: false,
+        //     appId: SDK.appId,
+        //     timestamp: SDK.timestamp,
+        //     nonceStr: SDK.noncestr,
+        //     signature: SDK.signature,
+        //     jsApiList: ['hideOptionMenu','showOptionMenu']
+        // });
         // let oldData = JSON.parse(Tool.localItem('vipLodData'));
         // sessionid = oldData.sessionid;
         // if(oldData.alermsg !== '' && oldData.alermsg.length > 0){
@@ -127,6 +135,7 @@ class TabBarDemo extends React.Component {
                 </TabBar>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>{this.state.HelloMes}</Confirm>
                 <div className="initUrlKey" style={{'display':this.state.initData?'block':'none'}}>初始数据加载中…</div>
+                <ShowAlert />
             </Tab>
         );
     }

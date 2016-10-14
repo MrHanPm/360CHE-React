@@ -1,10 +1,20 @@
-import * as config from './config.js';
+//import * as config from './config.js';
+import {target,SessionId,getWxConfig,shareURL} from './config.js';
 
-const {target} = config;
-const {SessionId} = config;
 const Tool = {};
 Tool.HTTPs = target;
 Tool.SessionId = SessionId;
+Tool.ShareURL = shareURL;
+
+window.routerChange = function(){
+    wx.config(getWxConfig.get());
+    wx.ready(function(){wx.hideOptionMenu();});
+}
+window.AlertTimeOut = '';
+window.XHRLIST = [];
+// window.addEventListener("touchstart", function(e){e.preventDefault();});
+// window.addEventListener("click", function(e){});
+
 /**
  * 发送ajax请求和服务器交互
  * @param {object} mySetting 配置ajax的配置
@@ -35,6 +45,7 @@ Tool.ajax = function (mySetting) {
     setting.type = setting.type.toUpperCase();
 
     var xhr = new XMLHttpRequest();
+    XHRLIST.push(xhr);
     try {
         if (setting.type == 'GET') { //get方式请求
             if(setting.url.indexOf('?') > 0){
@@ -202,13 +213,12 @@ Tool.getQueryString = function(name) {
 //弹窗提示的封装
 var Alert = {};
 Alert.to = function(val) {
-        let t;
-        t && clearTimeout(t);
+        clearTimeout(AlertTimeOut);
         let AlertCont = document.getElementById("AlertCont");
         let AlertTxt = document.getElementById("AlertTxt");
         AlertTxt.innerHTML = val;
         AlertCont.setAttribute('class','notification notification-in');
-        t = setTimeout(() => Alert.out(),4000);
+        AlertTimeOut = setTimeout(() => Alert.out(),4000);
 }
 Alert.out = function(){
     let AlertCont = document.getElementById("AlertCont");

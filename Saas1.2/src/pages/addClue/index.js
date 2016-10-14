@@ -17,7 +17,7 @@ import {Button,
     CellBody
 } from 'react-weui';
 const { Confirm } = Dialog;
-import Page from '../../component/page';
+import ShowAlert from '../../component/Alert.js'
 import SF from '../sidebar/SF';//省份
 import LB from '../sidebar/LB';//类别
 import PP from '../sidebar/PP';//品牌
@@ -28,7 +28,6 @@ import XS from '../sidebar/XS';//线索
 import YT from '../sidebar/YT';//用途
 import ZB from '../sidebar/ZB';//战败原因
 import {Tool,Alert} from '../../tool.js';
-import './index.less';
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
@@ -58,7 +57,7 @@ class MsgDemo extends React.Component {
             dealdate:'',
             pay:'',
             faildate:'',
-            Checkbox:1,
+            Checkboxs:1,
             crmShow:false,
             showConfirm: false,
             confirm: {
@@ -133,9 +132,9 @@ class MsgDemo extends React.Component {
     }
     Checkbox(e){
         if(e.target.checked){
-            this.setState({Checkbox:1});
+            this.setState({Checkboxs:1});
         }else{
-            this.setState({Checkbox:0});
+            this.setState({Checkboxs:0});
         }
     }
     CPLB(){this.setState({
@@ -307,6 +306,10 @@ class MsgDemo extends React.Component {
             Alert.to("省份城市不能为空");
             return false;
         }
+        if(this.state.msg.length > 800){
+            Alert.to("备注字数不能超过800");
+            return false;
+        }
         return true;
     }
     onSaves(){
@@ -363,7 +366,7 @@ class MsgDemo extends React.Component {
                 json.addday = this.state.KHJBv.addday;
             }
 
-            json.isrelationcustomer = this.state.Checkbox;
+            json.isrelationcustomer = this.state.Checkboxs;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
             //console.log(JSON.stringify(this.state));
@@ -388,9 +391,7 @@ class MsgDemo extends React.Component {
                 Tool.get('Clues/AddClues.aspx',json,
                     (res) => {
                         if(res.status == 1){
-                            this.context.router.push({
-                                pathname: '/nav'
-                            });
+                            window.history.back();
                         }else if(res.status == 901){
                             Alert.to(res.msg);
                             this.context.router.push({pathname: '/loading'});
@@ -404,6 +405,13 @@ class MsgDemo extends React.Component {
                 )
             }
         }
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
     }
     render() {
         let CPLBval;
@@ -466,7 +474,7 @@ class MsgDemo extends React.Component {
         }
         const {name,phone,crmShow}=this.state;
         return (
-            <Page className="account">
+            <div className="Acot">
                 <Cells access>
                     <Cell>
                         <CellHeader><Label>选择类别</Label></CellHeader>
@@ -587,12 +595,12 @@ class MsgDemo extends React.Component {
                     <FormCell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字"onInput={this.msgInput}/>
+                            <TextArea placeholder="请填写备注" rows="2" maxlength="800" onInput={this.msgInput}></TextArea>
                         </CellBody>
                         <CellFooter></CellFooter>
                     </FormCell>
                 </Form>
-                <Form style={{'display':crmShow?'none':''}} checkbox>
+                <Form style={{'display':crmShow?'none':''}} className="weuiCheckbo" checkbox>
                     <FormCell checkbox>
                         <CellHeader>
                             <Checkbox onChange={this.Checkbox} defaultChecked/>
@@ -620,7 +628,8 @@ class MsgDemo extends React.Component {
                 <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:''})}/>
                 <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:''})}/>
                 <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})}/>
-            </Page>
+                <ShowAlert />
+            </div>
         );
     }
 };

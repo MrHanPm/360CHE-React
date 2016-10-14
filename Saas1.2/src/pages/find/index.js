@@ -21,6 +21,9 @@ import {
 } from 'react-weui';
 import './index.less';
 export default class MsgDemo extends React.Component {
+    componentDidMount(){
+        document.title = '发现';
+    }
     render() {
         return (
         <div className="findBodys findBoxs">

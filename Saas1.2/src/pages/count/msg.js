@@ -27,6 +27,8 @@ class Clues extends React.Component {
                     this.setState({
                         DATA:res.data.detaillist
                     });
+                }else{
+                    Alert.to(res.msg);
                 }
             },
             (err) => {

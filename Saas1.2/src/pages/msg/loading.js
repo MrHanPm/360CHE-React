@@ -2,14 +2,27 @@
 
 import React from 'react';
 import {Button, Msg} from 'react-weui';
-import Page from '../../component/page';
+import ShowAlert from '../../component/Alert.js'
 import {Tool,Alert} from '../../tool.js';
 import './loading.less';
 class MsgDemo extends React.Component {
     state = {
     }
+    componentWillMount(){
+        Tool.get('WeiXin/WXJSsignature.aspx',{},
+            (res) => {
+                if(res.status){
+                    let datas = JSON.stringify(res.data);
+                    Tool.localItem('jsSDK',datas);
+                }
+            },
+            (err) => {
+                Alert.to(err.msg);
+            }
+        );
+    }
     componentDidMount() {
-        document.title="Loading";
+        document.title="卡销宝";
         Tool.localItem('vipLodData',null);
         Tool.localItem('Uphone',null);
         Tool.localItem('BrandKey',null);
@@ -39,6 +52,7 @@ class MsgDemo extends React.Component {
                 <div className="loading visible">
                     <span className="loading-ring"> </span>
                 </div>
+                <ShowAlert />
             </div>
         );
     }

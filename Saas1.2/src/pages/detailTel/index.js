@@ -60,8 +60,7 @@ class MsgDemo extends React.Component {
         Tool.localItem('RobClues',data);
         this.context.router.push({pathname: '/alterTel'});
     }
-    componentDidMount(){
-        document.title = '联系人信息';
+    componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
@@ -85,6 +84,10 @@ class MsgDemo extends React.Component {
                 Alert.to('网络异常，稍后重试。。');
             }
         )
+    }
+    componentDidMount(){
+        document.title = '联系人信息';
+        
     }
     render() {
         const {customname,customphone,provincename,citynamne,adress,company,isbuy,remark,cluenum,customid,cluesextendid} = this.state.DATA;
@@ -150,9 +153,9 @@ class MsgDemo extends React.Component {
                 </Cells>
                 <Cells style={{'display':cluenum==0?'':'none'}} access>
                     <Cell title={customid} onClick={this.goAdd}>
-                        <CellHeader><Label>添加线索</Label></CellHeader>
-                        <CellBody />
-                        <CellFooter />
+                        <CellHeader><Label title={customid}>添加线索</Label></CellHeader>
+                        <CellBody title={customid} />
+                        <CellFooter title={customid} />
                     </Cell>
                 </Cells>
                 <span className="ChengClues" onClick={this.goChengs}></span>

@@ -81,12 +81,7 @@ class Sidebar extends React.Component{
                     <li key={indexs} 
                     className={e.productname == Fes ? "active" :''}
                     >
-                      <span 
-                      title={e.productid}
-                      onClick={self.upDatas}
-                      >
-                        {e.productname}
-                      </span>
+                      <span className="hangP" title={e.productid} onClick={self.upDatas}>{e.productname}</span>
                       <Icon value="success" />
                     </li>
                   )

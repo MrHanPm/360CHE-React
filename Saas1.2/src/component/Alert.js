@@ -4,6 +4,7 @@ class Alert extends Component {
   componentDidMount() {
     [].forEach.call(document.querySelectorAll('#AlertCont'), function (el) {  
       el.addEventListener('touchend', function(e) {
+        clearTimeout(AlertTimeOut);
         this.setAttribute('class','notification');
       }, false);
     });

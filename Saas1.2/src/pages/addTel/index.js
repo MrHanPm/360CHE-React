@@ -67,8 +67,17 @@ class MsgDemo extends React.Component {
     goWell(){ this.context.router.push({pathname: '/nav'});}
     SFCS(){this.setState({SFCSrandoms: Math.random()});}
     checkForm(){
+        let regHZ=/^[\u2E80-\u9FFF]+$/;
         if(this.state.name == ''){
             Alert.to("姓名不能为空");
+            return false;
+        }
+        if(regHZ.test(this.state.name)){}else{
+            Alert.to("姓名必须是中文");
+            return false;
+        }
+        if(this.state.name.length >4){
+            Alert.to("姓名字符过长");
             return false;
         }
         if(this.state.tel == ''){
@@ -121,6 +130,7 @@ class MsgDemo extends React.Component {
             Tool.get('Customer/AddCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
+                        
                         let urlTxt = '/detailTel?id=' + res.data.customid;
                         this.context.router.push({pathname: urlTxt});
                     }else if(res.status == 901){
@@ -135,6 +145,13 @@ class MsgDemo extends React.Component {
                 }
             )
         }
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
     }
     render() {
         let SFCSval;

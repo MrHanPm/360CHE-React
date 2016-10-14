@@ -20,7 +20,7 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
+import {LoadAd,NoDataS,Reccount} from '../../component/more.js';
 const {Confirm} = Dialog;
 class Clues extends React.Component {
     constructor(){
@@ -33,6 +33,7 @@ class Clues extends React.Component {
             nowpage:1,
             DATA:[],
             Lis:[],
+            reccount:0,
             DelId:'',
             DelInO:'',
             DelInd:'',
@@ -52,7 +53,7 @@ class Clues extends React.Component {
                 ]
             }
         }
-        this.handleScroll = this.handleScroll.bind(this);
+        //this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
         this.Liclick = this.Liclick.bind(this);
         this.CrmStar = this.CrmStar.bind(this);
@@ -154,76 +155,92 @@ class Clues extends React.Component {
         )
     }
     upDATA(){
+        let noTel = JSON.parse(Tool.localItem('noTel'));
+        let noAZ = JSON.parse(Tool.localItem('noAZ'));
+        if(noTel !== null){
+            this.setState({
+                DATA:noTel,
+                Lis:noAZ,
+            });
+        }
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        json.nowpage = this.state.nowpage;
+        let noTelFingerprint = Tool.localItem('noTelFingerprint');
+        if(noTelFingerprint == null){
+            json.fingerprint = '';
+        }else{
+            json.fingerprint = noTelFingerprint;
+        }
         json.type = 2;
-        json.size = 50;
         Tool.get('Customer/GetCustomerList.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    let page = this.state.nowpage;
-                    if(res.listdata.length === 0){
+                    this.setState({loadingS:false,reccount:res.reccount});
+                    let Fingerprint = res.fingerprint;
+                    Tool.localItem('noTelFingerprint',Fingerprint);
+                    if(res.ischange == 1){
+                        this.state.DATA = [];
+                        for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
+                        let NewSeDa = [];
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          let jsons = {
+                            'customname':res.listdata[i].customname,
+                            'customphone':res.listdata[i].customphone,
+                            'customid':res.listdata[i].customid,
+                            'followname':res.listdata[i].followname,
+                            'lastlinktime':res.listdata[i].lastlinktime,
+                          }
+                          NewSeDa.push(jsons);
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          if ( her === -1) {this.state.DATA.push(item);}
+                        }
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          let json = {
+                                        'customname':res.listdata[i].customname,
+                                        'customphone':res.listdata[i].customphone,
+                                        'customid':res.listdata[i].customid,
+                                        'lastlinktime':res.listdata[i].lastlinktime,
+                                        'isfavorites':res.listdata[i].isfavorites
+                                      };
+                          if ( her !== -1) {this.state.Lis[her].push(json);}
+                        }
+
+                        let noTel = JSON.stringify(this.state.DATA);
+                        Tool.localItem('noTel',noTel);
+                        let noAZ = JSON.stringify(this.state.Lis);
+                        Tool.localItem('noAZ',noAZ);
+                        this.setState({
+                            DATA:this.state.DATA,
+                            Lis:this.state.Lis,
+                        });
+                        let SearchData = JSON.parse(Tool.localItem('SearchData'));
+                        if(SearchData !== null){
+                            for(let i=0;i < SearchData.length; i++){
+                                for(let is=0;is < NewSeDa.length; is++){
+                                    if(SearchData[i].customphone==NewSeDa[is].customphone){
+                                        NewSeDa.splice(is,1);
+                                    }
+                                }
+                            }
+                            let newDS = SearchData.concat(NewSeDa);
+                            Tool.localItem('SearchData',JSON.stringify(newDS));
+                        }else{
+                            Tool.localItem('SearchData',JSON.stringify(NewSeDa));
+                        }
+                    }
+                    if(this.state.DATA.length === 0){
                         this.setState({isDatas:true});
                     }else{
                         this.setState({isDatas:false});
-                    }
-                    if(res.listdata.length < 10){
-                        this.setState({loadingS:false});
-                    }
-                    let NewSeDa = [];
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      let jsons = {
-                        'customname':res.listdata[i].customname,
-                        'customphone':res.listdata[i].customphone,
-                        'customid':res.listdata[i].customid,
-                        'followname':res.listdata[i].followname,
-                        'lastlinktime':res.listdata[i].lastlinktime,
-                      }
-                      NewSeDa.push(jsons);
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      if ( her === -1) {this.state.DATA.push(item);}
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      let json = {
-                                    'customname':res.listdata[i].customname,
-                                    'customphone':res.listdata[i].customphone,
-                                    'customid':res.listdata[i].customid,
-                                    'lastlinktime':res.listdata[i].lastlinktime,
-                                    'isfavorites':res.listdata[i].isfavorites
-                                  };
-                      if ( her !== -1) {this.state.Lis[her].push(json);}
-                    }
-                    if(res.pagecount == page){
-                        this.setState({loadingS:false});
-                    }else{
-                        page++;
-                        this.setState({
-                            nowpage:page                     
-                        });
-                    }
-                    let SearchData = JSON.parse(Tool.localItem('SearchData'));
-                    if(SearchData !== null){
-                        for(let i=0;i < SearchData.length; i++){
-                            for(let is=0;is < NewSeDa.length; is++){
-                                if(SearchData[i].customphone==NewSeDa[is].customphone){
-                                    NewSeDa.splice(is,1);
-                                }
-                            }
-                        }
-                        let newDS = SearchData.concat(NewSeDa);
-                        Tool.localItem('SearchData',JSON.stringify(newDS));
-                    }else{
-                        Tool.localItem('SearchData',JSON.stringify(NewSeDa));
                     }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
@@ -280,24 +297,23 @@ class Clues extends React.Component {
         var ulHeight = goUl.parentNode.offsetTop;
         Uls.scrollTop = ulHeight - 45;
     }
-    handleScroll(e){
-      let BodyMin = e.target;
-      let DataMin,Hit,LastLi,goNumb;
-      DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-55;
-      LastLi = BodyMin.scrollTop;
-      goNumb = DataMin - Hit - LastLi;
-      if(goNumb <= 0){
-        // BodyMin.scrollTop = DataMin;
-        if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
-        }
-      }
-    }
+    // handleScroll(e){
+    //   let BodyMin = e.target;
+    //   let DataMin,Hit,LastLi,goNumb;
+    //   DataMin = BodyMin.scrollHeight;
+    //   Hit  = window.screen.height-55;
+    //   LastLi = BodyMin.scrollTop;
+    //   goNumb = DataMin - Hit - LastLi;
+    //   if(goNumb <= 0){
+    //     if(this.state.loadingS){
+    //         let t
+    //         t && clearTimeout(t);
+    //         t = setTimeout(function(){
+    //             this.upDATA(undefined,'handleScroll');
+    //         }.bind(this),800);
+    //     }
+    //   }
+    // }
     componentDidMount() {
         for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
         this.upDATA();
@@ -342,16 +358,16 @@ class Clues extends React.Component {
         });
     }
     render() {
-        const {loadingS,DATA,Lis,isDatas} = this.state;
+        const {loadingS,DATA,Lis,isDatas,reccount} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
         }
         return (
-            <div className="clueBody cluePending crmPend"  onScroll={this.handleScroll}>
+            <div className="clueBody cluePending crmPend">
             {DATA.map(function(e,indexs){
                 return(
                 <Panel key={indexs}>
@@ -371,8 +387,7 @@ class Clues extends React.Component {
                                     <i className="crmDels" title={ele.customid} data={indexs} alt={index} onClick={self.CrmDels}></i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{ele.lastlinktime}</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta className="crmMesc" title={ele.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>

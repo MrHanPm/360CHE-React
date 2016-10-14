@@ -6,12 +6,33 @@ const sessidS = {
         return oldData.sessionid;
     }
 };
-
-//const sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+export const getWxConfig = {
+    get:function(){
+        let jsSDK = JSON.parse(localStorage.getItem('jsSDK'));
+        if(jsSDK !== null){
+            let json = {debug:false,appId:jsSDK.appId,timestamp:jsSDK.timestamp,nonceStr:jsSDK.nonceStr,signature:jsSDK.signature,jsApiList: ['hideOptionMenu','showOptionMenu','closeWindow','onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone',]};
+            return json;
+        }else{
+            return {debug:false,appId:'',timestamp:'',nonceStr:'',signature:'',jsApiList: ['hideOptionMenu','showOptionMenu','closeWindow','onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone',]};
+        }
+    }
+}
+const sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
 
 //boos
-const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
-const devBug = true;
+//const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+const devBug = false;
+
+//分享地址
+export const shareURL = 'http://dealersaas.m.360che.com/';
 
 export const SessionId = devBug ? sessionid : sessidS;
 
@@ -20,6 +41,7 @@ export const target = devBug ? 'http://192.168.0.247:804/' : 'http://didi.360che
 
 
 /*本地存储数据名称表(Tool.localItem)
+jsSDK
 //Uphone               客户注册电话
 
 //vipLodData           vip登陆获取的数据
@@ -28,7 +50,24 @@ export const target = devBug ? 'http://192.168.0.247:804/' : 'http://didi.360che
 //
 //fingerprint          初始指纹包
 //
-//  SearchData   储存所有联系人信息
+// SearchData   储存所有联系人信息
+
+crm储存区
+
+noTel 未购车列表
+noAZ 
+noTelFingerprint
+
+okTel 购车列表
+okAZ
+okTelFingerprint
+
+coTel 收藏列表
+coAZ
+coTelFingerprint
+
+reTel 最近联系人
+reTelFingerprint
 
  RobClues  抢到的线索
 

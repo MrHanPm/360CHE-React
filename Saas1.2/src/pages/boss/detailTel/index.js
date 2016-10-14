@@ -46,9 +46,7 @@ class MsgDemo extends React.Component {
             this.context.router.push({pathname: urlTxt});
         }
     }
-
-    componentDidMount(){
-        document.title = '联系人信息';
+    componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
         let sessionid;
@@ -74,6 +72,10 @@ class MsgDemo extends React.Component {
                 Alert.to('网络异常，稍后重试。。');
             }
         )
+    }
+    componentDidMount(){
+        document.title = '联系人信息';
+        
     }
     render() {
         const {customname,customphone,provincename,citynamne,adress,company,isbuy,remark,cluenum,customid,cluesextendid,followname} = this.state.DATA;

@@ -20,8 +20,8 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
-const {Confirm} = Dialog;
+import {LoadAd,Reccount,NoDataS} from '../../component/more.js';
+// const {Confirm} = Dialog;
 class Clues extends React.Component {
     constructor(){
         super();
@@ -33,34 +33,18 @@ class Clues extends React.Component {
             isDatas:false,
             DATA:[],
             Lis:[],
+            reccount:0,
             DelId:'',
             DelInO:'',
             DelInd:'',
-            confirm: {
-                title: '确认删除这位联系人吗？',
-                buttons: [
-                    {
-                        type: 'default',
-                        label: '取消',
-                        onClick: this.hideConfirm.bind(this)
-                    },
-                    {
-                        type: 'primary',
-                        label: '删除',
-                        onClick: this.DelActive.bind(this)
-                    }
-                ]
-            }
         }
-        this.handleScroll = this.handleScroll.bind(this);
+        //this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
         this.Liclick = this.Liclick.bind(this);
         this.CrmStar = this.CrmStar.bind(this);
-        this.CrmDels = this.CrmDels.bind(this);
+
         this.CrmMesc = this.CrmMesc.bind(this);
     }
-    showConfirm(){this.setState({showConfirm: true});}
-    hideConfirm(){this.setState({showConfirm: false});}
     showToast() {
         this.setState({showToast: true});
         this.state.toastTimer = setTimeout(()=> {
@@ -69,64 +53,22 @@ class Clues extends React.Component {
     }
     CrmStar(e){
         let doms = e.target;
+        let DelInO = doms.getAttribute('data-inds');
+        let DelInd = doms.getAttribute('alt');
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        json.customerid = e.target.title;
+        json.customerid = doms.title;
         json.status = doms.getAttribute('data') == '1' ? 0 :1;
         //console.log(json);
         Tool.get('Customer/ChangeCustomerStatus.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    this.showToast();
-                    if(doms.getAttribute('data') == '1'){
-                        doms.setAttribute('data','0');
-                        doms.setAttribute('class','crmStar');
-                    }else{
-                        doms.setAttribute('data','1');
-                        doms.setAttribute('class','crmStar active');
-                    }
-                }else if(res.status == 901){
-                    Alert.to(res.msg);
-                    this.context.router.push({pathname: '/loading'});
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('网络异常，稍后重试。。');
-            }
-        )
-    }
-    CrmDels(e){
-        let doms = e.target;
-        this.state.DelInO = doms.getAttribute('data');
-        this.state.DelInd = doms.getAttribute('alt');
-        this.state.DelId = e.target.title;
-        this.showConfirm();
-    }
-    CrmMesc(e){
-        let urlTxt = '/detailTel?id=' + e.target.title;
-        this.context.router.push({pathname: urlTxt});
-    }
-    DelActive(){
-        let json={};
-        if(typeof(Tool.SessionId) == 'string'){
-            json.sessionid = Tool.SessionId;
-        }else{
-            json.sessionid = Tool.SessionId.get();
-        }
-        json.customerid = this.state.DelId;
-        //console.log(json);
-        Tool.get('Customer/DelCustomer.aspx',json,
-            (res) => {
-                if(res.status == 1){
-                    let k = parseInt(this.state.DelInO);
-                    let n = parseInt(this.state.DelInd);
-                    this.setState({showConfirm: false});
+                    let k = parseInt(DelInO);
+                    let n = parseInt(DelInd);
                     let newLI = this.state.Lis[k];
                     let newDa = this.state.DATA;
                     let newLIs = this.state.Lis;
@@ -137,10 +79,14 @@ class Clues extends React.Component {
                     }else{
                         newLIs.splice(k,1,newLI);
                     }
+                    let Pcot = this.state.reccount;
+                    Pcot--;
                     this.setState({
                         DATA:newDa,
-                        Lis:newLIs
+                        Lis:newLIs,
+                        reccount:Pcot
                     });
+                    this.showToast();
                 }else if(res.status == 901){
                     Alert.to(res.msg);
                     this.context.router.push({pathname: '/loading'});
@@ -153,55 +99,75 @@ class Clues extends React.Component {
             }
         )
     }
+
+    CrmMesc(e){
+        let urlTxt = '/detailTel?id=' + e.target.title;
+        this.context.router.push({pathname: urlTxt});
+    }
+
     upDATA(){
+        let coTel = JSON.parse(Tool.localItem('coTel'));
+        let coAZ = JSON.parse(Tool.localItem('coAZ'));
+        if(coTel !== null){
+            this.setState({
+                DATA:coTel,
+                Lis:coAZ,
+            });
+        }
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        json.nowpage = this.state.nowpage;
+        let coTelFingerprint = Tool.localItem('coTelFingerprint');
+        if(coTelFingerprint == null){
+            json.fingerprint = '';
+        }else{
+            json.fingerprint = coTelFingerprint;
+        }
         json.type = 1;
-        json.size = 50;
         Tool.get('Customer/GetCustomerList.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    let page = this.state.nowpage;
-                    if(res.listdata.length === 0){
+                    this.setState({loadingS:false,reccount:res.reccount});
+                    let Fingerprint = res.fingerprint;
+                    Tool.localItem('coTelFingerprint',Fingerprint);
+                    if(res.ischange == 1){
+                        this.state.DATA = [];
+                        for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          if ( her === -1) {this.state.DATA.push(item);}
+                        }
+                        for(let i=0;i < res.listdata.length; i++){
+                          let item = res.listdata[i].firstnameletter;
+                          if(item == ''){item = '☆';}
+                          let her = this.state.DATA.indexOf(item);
+                          let json = {
+                                        'customname':res.listdata[i].customname,
+                                        'customphone':res.listdata[i].customphone,
+                                        'customid':res.listdata[i].customid,
+                                        'lastlinktime':res.listdata[i].lastlinktime,
+                                        'isfavorites':res.listdata[i].isfavorites
+                                      };
+                          if ( her !== -1) {this.state.Lis[her].push(json);}
+                        }
+                        let coTel = JSON.stringify(this.state.DATA);
+                        Tool.localItem('coTel',coTel);
+                        let coAZ = JSON.stringify(this.state.Lis);
+                        Tool.localItem('coAZ',coAZ);
+                        this.setState({
+                            DATA:this.state.DATA,
+                            Lis:this.state.Lis,
+                        });
+                    }
+                    if(this.state.DATA.length === 0){
                         this.setState({isDatas:true});
                     }else{
                         this.setState({isDatas:false});
-                    }
-                    if(res.listdata.length < 10){
-                        this.setState({loadingS:false});
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      if ( her === -1) {this.state.DATA.push(item);}
-                    }
-                    for(let i=0;i < res.listdata.length; i++){
-                      let item = res.listdata[i].firstnameletter;
-                      if(item == ''){item = '☆';}
-                      let her = this.state.DATA.indexOf(item);
-                      let json = {
-                                    'customname':res.listdata[i].customname,
-                                    'customphone':res.listdata[i].customphone,
-                                    'customid':res.listdata[i].customid,
-                                    'lastlinktime':res.listdata[i].lastlinktime,
-                                    'isfavorites':res.listdata[i].isfavorites
-                                  };
-                      if ( her !== -1) {this.state.Lis[her].push(json);}
-                    }
-                    
-                    if(res.pagecount == page){
-                        this.setState({loadingS:false});
-                    }else{
-                        page++;
-                        this.setState({
-                            nowpage:page                     
-                        });
                     }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
@@ -258,24 +224,24 @@ class Clues extends React.Component {
         var ulHeight = goUl.parentNode.offsetTop;
         Uls.scrollTop = ulHeight - 45;
     }
-    handleScroll(e){
-      let BodyMin = e.target;
-      let DataMin,Hit,LastLi,goNumb;
-      DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-55;
-      LastLi = BodyMin.scrollTop;
-      goNumb = DataMin - Hit - LastLi;
-      if(goNumb <= 0){
-        // BodyMin.scrollTop = DataMin;
-        if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
-        }
-      }
-    }
+    // handleScroll(e){
+    //   let BodyMin = e.target;
+    //   let DataMin,Hit,LastLi,goNumb;
+    //   DataMin = BodyMin.scrollHeight;
+    //   Hit  = window.screen.height-55;
+    //   LastLi = BodyMin.scrollTop;
+    //   goNumb = DataMin - Hit - LastLi;
+    //   if(goNumb <= 0){
+    //     // BodyMin.scrollTop = DataMin;
+    //     if(this.state.loadingS){
+    //         let t
+    //         t && clearTimeout(t);
+    //         t = setTimeout(function(){
+    //             this.upDATA(undefined,'handleScroll');
+    //         }.bind(this),800);
+    //     }
+    //   }
+    // }
     componentDidMount() {
         for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
         this.upDATA();
@@ -320,16 +286,16 @@ class Clues extends React.Component {
         });
     }
     render() {
-        const {loadingS,DATA,Lis,isDatas} = this.state;
+        const {loadingS,DATA,Lis,isDatas,reccount} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
         }
         return (
-            <div className="clueBody cluePending crmPend"  onScroll={this.handleScroll}>
+            <div className="clueBody cluePending crmPend">
             {DATA.map(function(e,indexs){
                 return(
                 <Panel key={indexs}>
@@ -345,11 +311,10 @@ class Clues extends React.Component {
                             <MediaBoxBody>
                                 <MediaBoxTitle>
                                     <span>{ele.customname}</span>
-                                    <i className={ele.isfavorites?"crmStar active" :"crmStar" } title={ele.customid} data={ele.isfavorites} onClick={self.CrmStar}></i>
+                                    <i className={ele.isfavorites?"crmStar active" :"crmStar" } title={ele.customid} data={ele.isfavorites} data-inds={indexs} alt={index} onClick={self.CrmStar}></i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{ele.lastlinktime}</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta className="crmMesc" title={ele.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>
@@ -368,8 +333,6 @@ class Clues extends React.Component {
                  )})
               }
             </ul>
-            <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
-            </Confirm>
             <Toast show={this.state.showToast}>操作成功</Toast>
         </div>
         );
@@ -380,3 +343,4 @@ Clues.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 export default Clues
+// <MediaBoxInfoMeta className="crmMesc" title={ele.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>

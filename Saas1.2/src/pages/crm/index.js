@@ -16,7 +16,6 @@ import {
     Button,
 } from 'react-weui';
 import './index.less';
-import ShowAlert from '../../component/Alert.js'
 import OkTel from '../okTel/index.js';
 import NoTel from '../noTel/index.js';
 import Collect from '../collectTel/index.js';
@@ -77,7 +76,6 @@ class Clues extends React.Component {
                 </ul>
                 {Pages}
                 <span className="butX" onClick={()=> this.context.router.push({pathname: '/addTel'})}></span>
-                <ShowAlert />
             </div>
         );
     }

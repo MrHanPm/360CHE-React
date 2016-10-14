@@ -82,6 +82,13 @@ class Clues extends React.Component {
         let urlTxt = '/boss/robClue?id=' + e.target.title;
         this.context.router.push({pathname: urlTxt});
     }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
     handleScroll(e){
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;

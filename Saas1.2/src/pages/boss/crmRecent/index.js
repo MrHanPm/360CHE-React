@@ -19,7 +19,7 @@ import {
 } from 'react-weui';
 //import ImgseCrm from './crm.png';
 import {Tool,Alert} from '../../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
+import {LoadAd,Reccount,NoDataS} from '../../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -29,9 +29,9 @@ class Clues extends React.Component {
             DelInO:'',
             nowpage:1,
             DATA:[],
+            reccount:0,
             isDatas:false,
         }
-        this.handleScroll = this.handleScroll.bind(this);
         this.goSearchPage = this.goSearchPage.bind(this);
         this.CrmMesc = this.CrmMesc.bind(this);
     }
@@ -44,37 +44,47 @@ class Clues extends React.Component {
         this.context.router.push({pathname: urlTxt});
     }
     upDATA(){
+        let reTel = JSON.parse(Tool.localItem('reTel'));
+        if(reTel !== null){
+            this.setState({
+                DATA:reTel,
+            });
+        }
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        json.nowpage = this.state.nowpage;
+        let reTelFingerprint = Tool.localItem('reTelFingerprint');
+        if(reTelFingerprint == null){
+            json.fingerprint = '';
+        }else{
+            json.fingerprint = reTelFingerprint;
+        }
         json.type = -1;
         Tool.get('Customer/GetCustomerList.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    let page = this.state.nowpage;
-                    if(res.listdata.length === 0){
+                    this.setState({loadingS:false,reccount:res.reccount});
+                    let Fingerprint = res.fingerprint;
+                    Tool.localItem('reTelFingerprint',Fingerprint);
+                    if(res.ischange == 1){
+                        this.state.DATA = [];
+                        let ReData=[];
+                        for(let i=0; i<res.listdata.length;i++){
+                            ReData.push(res.listdata[i]);
+                        }
+                        let reTel = JSON.stringify(ReData);
+                        Tool.localItem('reTel',reTel);
+                        this.setState({
+                            DATA:ReData,
+                        });
+                    }
+                    if(this.state.DATA.length === 0){
                         this.setState({isDatas:true});
                     }else{
                         this.setState({isDatas:false});
-                    }
-                    if(res.listdata.length < 10){
-                        this.setState({loadingS:false});
-                    }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
-                    //console.log(page,this.state.DATA);
-                    if(res.pagecount == page){
-                        this.setState({loadingS:false});
-                    }else{
-                        page++;
-                        this.setState({
-                            nowpage:page
-                        });
                     }
                 }else if(res.status == 901){
                     Alert.to(res.msg);
@@ -88,38 +98,20 @@ class Clues extends React.Component {
             }
         )
     }
-    handleScroll(e){
-      let BodyMin = e.target;
-      let DataMin,Hit,LastLi,goNumb;
-      DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-55;
-      LastLi = BodyMin.scrollTop;
-      goNumb = DataMin - Hit - LastLi;
-      if(goNumb <= 0){
-        // BodyMin.scrollTop = DataMin;
-        if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
-        }
-      }
-    }
     componentDidMount() {
         this.upDATA();
     }
     render() {
-        const {loadingS, DATA,isDatas} = this.state;
+        const {loadingS, DATA,isDatas,reccount} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
         }
         return (
-            <div className="clueBody cluePending cluePend crmRecent goSe CRMtitle"  onScroll={this.handleScroll}>
+            <div className="clueBody cluePending cluePend crmRecent goSe CRMtitle">
                 <div className="goSear" onClick={this.goSearchPage}>搜索</div>
             {DATA.map(function(e,index){
                 return(
@@ -136,8 +128,7 @@ class Clues extends React.Component {
                                     <i>跟进人：{e.followname}</i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{e.lastlinktime}</MediaBoxInfoMeta>
-                                    <MediaBoxInfoMeta className="crmMesc" title={e.customid} onClick={self.CrmMesc}></MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{e.lastlinktime.substring(0,4) < '2000'?'近期无联系':e.lastlinktime}</MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>

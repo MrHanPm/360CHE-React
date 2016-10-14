@@ -41,9 +41,7 @@ class MsgDemo extends React.Component {
         let st = parseInt(e.target.title);
         this.setState({SDSrandoms:st});
     }
-
-    componentDidMount() {
-        document.title = '线索详情';
+    componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
         let sessionid;
@@ -68,7 +66,7 @@ class MsgDemo extends React.Component {
             (err) => {
                 Alert.to('网络异常，稍后重试。。');
             }
-        )
+        );
         Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
             (res) => {
                 if(res.status == 1){
@@ -88,11 +86,14 @@ class MsgDemo extends React.Component {
             (err) => {
                 Alert.to('网络异常，稍后重试。。');
             }
-        )
+        );
+    }
+    componentDidMount() {
+        document.title = '线索详情';
     }
 
     render() {
-
+        let loadShow=true;
         let self = this;
         if(this.state.DATArob !== '' && typeof(this.state.DATArob.realname) !== 'undefined'){
              
@@ -101,7 +102,7 @@ class MsgDemo extends React.Component {
         }
         const {showDonwn,reccount,Messrob} = this.state;
         const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,cluefollowname} = this.state.DATArob;
-
+        if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
         return (
             <Page className="account robClues">
                 <Form>
@@ -257,6 +258,11 @@ class MsgDemo extends React.Component {
                             </dd>
                         )})}
                     </dl>
+                </div>
+                <div className="jump-cover" id="jump_cover" style={{'display':loadShow?'block':'none'}}>
+                    <div className="loading visible">
+                        <span className="loading-ring"> </span>
+                    </div>
                 </div>
                 <SideRob data={this.state.Messrob} showD={this.state.SDSrandoms} onChange={val => this.setState({SDSrandoms: val})}/>
             </Page>

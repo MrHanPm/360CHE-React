@@ -172,15 +172,15 @@ class Sidebar extends React.Component{
                     )
                   })
                 }
-                <aside className="scale" id="index_selected">A</aside>
-                <ul id="index_nav">
-                  {R.map(function(e,indexs){
-                      return(
-                       <li key={indexs} onClick={self.Liclick}>{e}</li>
-                     )})
-                  }
-                </ul>
             </div>
+            <aside className="scale" id="index_selected">A</aside>
+            <ul id="index_nav">
+              {R.map(function(e,indexs){
+                  return(
+                   <li key={indexs} onClick={self.Liclick}>{e}</li>
+                 )})
+              }
+            </ul>
           </aside>
         </div>
         )

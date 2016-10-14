@@ -22,6 +22,13 @@ class NoMor extends Component{
     )
   }
 }
+class Reccount extends Component{
+  render(){
+    return(
+        <p className="noMor">～共{this.props.DATA}位联系人～</p>
+    )
+  }
+}
 
 class NoDataS extends Component{
   render(){
@@ -30,4 +37,4 @@ class NoDataS extends Component{
     )
   }
 }
-export default {LoadAd,NoMor,NoDataS}
+export default {LoadAd,NoMor,NoDataS,Reccount}
