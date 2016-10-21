@@ -111,6 +111,7 @@ class Clues extends React.Component {
                             for(let i=0;i < SearchData.length; i++){
                                 for(let is=0;is < NewSeDa.length; is++){
                                     if(SearchData[i].customphone==NewSeDa[is].customphone){
+                                        SearchData[i].lastlinktime = NewSeDa[is].lastlinktime;
                                         NewSeDa.splice(is,1);
                                     }
                                 }
@@ -127,7 +128,7 @@ class Clues extends React.Component {
                         this.setState({isDatas:false});
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -156,7 +157,7 @@ class Clues extends React.Component {
     }
     UlScroll(el){
         var goUl = document.getElementById(el);
-        var Uls = document.querySelector('.clueBody');
+        var Uls = document.querySelector('.CrmScoll');
         var ulHeight = goUl.parentNode.offsetTop;
         Uls.scrollTop = ulHeight - 45;
     }
@@ -222,35 +223,37 @@ class Clues extends React.Component {
         }
         return (
             <div className="clueBody cluePending crmPend CRMtitle">
-            {DATA.map(function(e,indexs){
-                return(
-                <Panel key={indexs}>
-                    <PanelHeader id={e}>{e}</PanelHeader>
-                    {Lis[indexs].map(function(ele,index){
-                        return(
-                    <PanelBody key={index}>
-                        <MediaBox type="text">
-                            <MediaBoxHeader>
-                                <a href={`tel:${ele.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={ele.customid} > </a>
-                            </MediaBoxHeader>
-                            <div className="Cfocus" title={ele.customid} onClick={self.CrmMesc}></div>
-                            <MediaBoxBody>
-                                <MediaBoxTitle>
-                                    <span>{ele.customname}</span>
-                                    <i>跟进人：{ele.followname}</i>
-                                </MediaBoxTitle>
-                                <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
-                                </MediaBoxInfo>
-                            </MediaBoxBody>
-                        </MediaBox>
-                    </PanelBody>
-                        )})
-                    }
-                </Panel>
-                )})
-            }
-            {footerS}
+                <div className="CrmScoll">
+                {DATA.map(function(e,indexs){
+                    return(
+                    <Panel key={indexs}>
+                        <PanelHeader id={e}>{e}</PanelHeader>
+                        {Lis[indexs].map(function(ele,index){
+                            return(
+                        <PanelBody key={index}>
+                            <MediaBox type="text">
+                                <MediaBoxHeader>
+                                    <a href={`tel:${ele.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={ele.customid} > </a>
+                                </MediaBoxHeader>
+                                <div className="Cfocus" title={ele.customid} onClick={self.CrmMesc}></div>
+                                <MediaBoxBody>
+                                    <MediaBoxTitle>
+                                        <span>{ele.customname}</span>
+                                        <i>跟进人：{ele.followname}</i>
+                                    </MediaBoxTitle>
+                                    <MediaBoxInfo>
+                                        <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
+                                    </MediaBoxInfo>
+                                </MediaBoxBody>
+                            </MediaBox>
+                        </PanelBody>
+                            )})
+                        }
+                    </Panel>
+                    )})
+                }
+                {footerS}
+            </div>
             <aside className="scale" id="index_selected">A</aside>
             <ul id="index_nav">
               {DATA.map(function(e,index){

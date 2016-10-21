@@ -42,7 +42,7 @@ class CellDemo extends React.Component {
         this.goNext = this.goNext.bind(this);
     }
     componentDidMount() {
-        document.title="账号登陆"
+        document.title="账号登录"
     }
 
     checkForm(){
@@ -63,7 +63,21 @@ class CellDemo extends React.Component {
                     if(res.status === 1){
                         let Vd = JSON.stringify(res.data);
                         Tool.localItem('vipLodData',Vd);
+                        Tool.localItem('okTel',null);
+                        Tool.localItem('okAZ',null);
+                        Tool.localItem('okTelFingerprint',null);
+                        Tool.localItem('noTel',null);
+                        Tool.localItem('noAZ',null);
+                        Tool.localItem('noTelFingerprint',null);
+                        Tool.localItem('coTel',null);
+                        Tool.localItem('coAZ',null);
+                        Tool.localItem('coTelFingerprint',null);
+                        Tool.localItem('reTel',null);
+                        Tool.localItem('reTelFingerprint',null);
                         this.context.router.push({pathname: '/name'});
+                    }else if(res.status == 901){
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }
@@ -76,7 +90,7 @@ class CellDemo extends React.Component {
     }
     render() {
         return (
-            <Page className="login" title="账号登录">
+            <Page className="login CrmScoll" title="账号登录">
                 <Form>
                     <FormCell>
                         <CellHeader>
@@ -101,7 +115,7 @@ class CellDemo extends React.Component {
                 <ButtonArea>
                     <Button onClick={this.goNext}>登录</Button>
                 </ButtonArea>
-                <p className="FootTxt">如遇登录问题，欢迎致电 <i>4006-136-188</i><br/>致电时间：周一至周日09:00~18:00</p>
+                <p className="FootTxt">如遇登录问题，欢迎致电 <a href="tel:4006136188">4006-136-188</a><br/>致电时间：周一至周日09:00~18:00</p>
             </Page>
         );
     }

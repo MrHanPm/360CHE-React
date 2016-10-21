@@ -32,7 +32,7 @@ class MsgDemo extends React.Component {
             tel:'',
             address:'',
             company:'',
-            isbuy:'',
+            isbuy:2,
             msg:'',
             customerid:'',
             showConfirm: false,
@@ -51,22 +51,21 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-        this.msgInput = (e) => {this.setState({msg:e.target.value});}
-        this.nameInput = (e) => {this.setState({name:e.target.value});}
-        this.telInput = (e) => {this.setState({tel:e.target.value});}
-        this.addressInput = (e) => {this.setState({address:e.target.value});}
-        this.companyInput = (e) => {this.setState({company:e.target.value});}
+        this.msgInput = (e) => {this.setState({SFCSrandoms:'',msg:e.target.value});}
+        this.nameInput = (e) => {this.setState({SFCSrandoms:'',name:e.target.value});}
+        this.telInput = (e) => {
+            let phs = e.target.value;
+            let phos = phs.replace(/(^\s+)|(\s+$)/g, "");
+            let phones = phos.substring(0,11);
+            this.setState({SFCSrandoms:'',tel:phones});
+        }
+        this.addressInput = (e) => {this.setState({SFCSrandoms:'',address:e.target.value});}
+        this.companyInput = (e) => {this.setState({SFCSrandoms:'',company:e.target.value});}
         this.onSaves = this.onSaves.bind(this);
-        this.isBuys = (e) => {this.setState({isbuy:e.target.value});}
+        this.isBuys = (e) => {this.setState({SFCSrandoms:'',isbuy:e.target.value});}
         this.SFCS = this.SFCS.bind(this);
     }
-    componentWillUnmount(){
-        clearTimeout(AlertTimeOut);
-        for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
-        }
-        XHRLIST = [];
-    }
+
     componentWillMount(){
         let crmData = JSON.parse(Tool.localItem('RobClues'));
         if(crmData.customphone !== ''){
@@ -92,13 +91,29 @@ class MsgDemo extends React.Component {
         
         //console.log(crmData);
     }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].end();
+        }
+        XHRLIST = [];
+    }
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
     goWell(){ this.context.router.push({pathname: '/nav'});}
     SFCS(){this.setState({SFCSrandoms: Math.random()});}
     checkForm(){
+        let regHZ=/^[\u2E80-\u9FFF]+$/;
         if(this.state.name == ''){
             Alert.to("姓名不能为空");
+            return false;
+        }
+        if(regHZ.test(this.state.name)){}else{
+            Alert.to("姓名必须是中文");
+            return false;
+        }
+        if(this.state.name.length > 6){
+            Alert.to("姓名字符过长");
             return false;
         }
         if(this.state.tel == ''){
@@ -113,8 +128,7 @@ class MsgDemo extends React.Component {
             Alert.to("省份城市不能为空");
             return false;
         }
-
-        if(this.state.isbuy == '' || this.state.isbuy == 2){
+        if(this.state.isbuy === 2 ){
             Alert.to("请选择是否购车");
             return false;
         }
@@ -156,12 +170,15 @@ class MsgDemo extends React.Component {
                 (res) => {
                     if(res.status == 1){
                         let crmData = JSON.parse(Tool.localItem('RobClues'));
-                        if(crmData.customphone !== ''){
+                        // if(crmData.customphone !== ''){
                             let urlTxt = '/detailTel?id=' + crmData.customid;
                             this.context.router.push({pathname: urlTxt});
-                        }else{
-                           Alert.to('修改数据异常，请返回重试～');
-                        }
+                        // }else{
+                        //    Alert.to(res.msg);
+                        // }
+                    }else if(res.status == 901){
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }
@@ -224,7 +241,8 @@ class MsgDemo extends React.Component {
                             <Select data={[
                                 {
                                     value: 2,
-                                    label: '请选择'
+                                    label: '',
+                                    disabled:true
                                 },
                                 {
                                     value: 0,

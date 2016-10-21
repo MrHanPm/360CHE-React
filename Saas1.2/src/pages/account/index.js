@@ -68,8 +68,12 @@ class MsgDemo extends React.Component {
                     Tool.localItem('vipLodData',null);
                     Tool.localItem('Uphone',null);
                     Tool.localItem('BrandKey',null);
-                    WeixinJSBridge.call('closeWindow');
+                    this.context.router.push({pathname: '/loading'});
+                    //WeixinJSBridge.call('closeWindow');
                     //() => {wx.closeWindow();}
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -88,7 +92,7 @@ class MsgDemo extends React.Component {
     }
     render() {
         let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        const {realname,tel,dealername} = oldData;
+        const {realname,tel,dealername,ishavingpwd} = oldData;
         return (
             <Page className="account">
                 <Form>
@@ -117,10 +121,18 @@ class MsgDemo extends React.Component {
                         </CellBody>
                     </FormCell>
                 </Form>
-                <Cells access>
+                <Cells style={{'display':ishavingpwd=='0'?'none':''}} access>
                     <Cell href="#mdfPwd">
                         <CellBody>
                             修改密码
+                        </CellBody>
+                        <CellFooter />
+                    </Cell>
+                </Cells>
+                <Cells style={{'display':ishavingpwd=='1'?'none':''}} access>
+                    <Cell href="#addPwd">
+                        <CellBody>
+                            设置密码
                         </CellBody>
                         <CellFooter />
                     </Cell>

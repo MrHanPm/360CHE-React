@@ -75,14 +75,48 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-        this.nameInput = (e) => {this.setState({name:e.target.value});}
-        this.phoneInput = (e) => {this.setState({phone:e.target.value});}
-        this.numbInput = (e) => {this.state.numb = e.target.value;}
+        this.nameInput = (e) => {this.setState({name:e.target.value,
+                QCPPrandoms:'',
+                CPLBrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+        });}
+        this.phoneInput = (e) => {
+            let phs = e.target.value;
+            let phos = phs.replace(/(^\s+)|(\s+$)/g, "");
+            let phones = phos.substring(0,11);
+            this.setState({
+                phone:phones,
+                QCPPrandoms:'',
+                CPLBrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
+        }
+        this.numbInput = (e) => {
+            let nu = e.target.value;
+            let num = parseInt(nu);
+            e.target.value = '';
+            e.target.value = num;
+            this.state.numb = num;
+        }
         this.msgInput = (e) => {this.state.msg = e.target.value;}
         this.dealInput = (e) => {this.state.dealdate = e.target.value;}
         this.payInput = (e) => {this.state.pay = e.target.value;}
         this.failInput = (e) => {this.state.faildate = e.target.value;}
-        this.Checkbox = this.Checkbox.bind(this);
+        this.Checkboxx = this.Checkboxx.bind(this);
         this.SFCS = this.SFCS.bind(this);
         this.QCPP = this.QCPP.bind(this);
         this.QCXL = this.QCXL.bind(this);
@@ -130,11 +164,11 @@ class MsgDemo extends React.Component {
         // let star = {title:"title",url: window.location.href};
         // window.history.pushState(star,"title",window.location.href);
     }
-    Checkbox(e){
+    Checkboxx(e){
         if(e.target.checked){
-            this.setState({Checkboxs:1});
+            this.state.Checkboxs=1;
         }else{
-            this.setState({Checkboxs:0});
+            this.state.Checkboxs=0;
         }
     }
     CPLB(){this.setState({
@@ -280,9 +314,22 @@ class MsgDemo extends React.Component {
             Alert.to("卡车系列不能为空");
             return false;
         }
+        if(this.state.QCCXv == '' || typeof(this.state.QCCXv.productid) == 'undefined'){
+            Alert.to("卡车车型不能为空");
+            return false;
+        }
         let nam = (this.state.name).replace(/\s+$|^\s+/g,"");
+        let regHZ=/^[\u2E80-\u9FFF]+$/;
         if(nam == ''){
             Alert.to("姓名不能为空");
+            return false;
+        }
+        if(regHZ.test(this.state.name)){}else{
+            Alert.to("姓名必须是中文");
+            return false;
+        }
+        if(this.state.name.length > 6){
+            Alert.to("姓名字符过长");
             return false;
         }
         if(this.state.phone == ''){
@@ -293,17 +340,42 @@ class MsgDemo extends React.Component {
             Alert.to("手机号码格式有误");
             return false;
         }
+        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
+            Alert.to("客户级别不能为空");
+            return false;
+        }else if(this.state.KHJBv.values == 5){
+            if(this.state.pay == ''){
+                Alert.to("成交价格不能为空");
+                return false;
+            }
+            if(this.state.pay > '9999999'){
+                Alert.to("成交价格数值过大");
+                return false;
+            }
+            if(this.state.dealdate == ''){
+                Alert.to("成交时间不能为空");
+                return false;
+            }
+        }else if(this.state.KHJBv.values == 6){
+            if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined' || this.state.ZBv.key==''){
+                Alert.to("战败原因不能为空");
+                return false;
+            }
+            if(this.state.faildate == ''){
+                Alert.to("战败时间不能为空");
+                return false;
+            }
+        }
+        if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
+            Alert.to("省份城市不能为空");
+            return false;
+        }
         if(this.state.XSLYv == '' || typeof(this.state.XSLYv.values) == 'undefined'){
             Alert.to("线索来源不能为空");
             return false;
         }
-
-        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
-            Alert.to("客户级别不能为空");
-            return false;
-        }
-        if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
-            Alert.to("省份城市不能为空");
+        if(this.state.numb > '999'){
+            Alert.to("购车数值过大");
             return false;
         }
         if(this.state.msg.length > 800){
@@ -313,7 +385,9 @@ class MsgDemo extends React.Component {
         return true;
     }
     onSaves(){
+        let Doms = document.getElementById('goNextP');
         if(this.checkForm()){
+            Doms.setAttribute("disabled", true);
             let json = {};
             if(typeof(Tool.SessionId) == 'string'){
                 json.sessionid = Tool.SessionId;
@@ -377,14 +451,16 @@ class MsgDemo extends React.Component {
                             let urlTxt = '/detailTel?id=' + res.data.customerId;
                             this.context.router.push({pathname: urlTxt});
                         }else if(res.status == 901){
-                            Alert.to(res.msg);
+                            alert(res.msg);
                             this.context.router.push({pathname: '/loading'});
                         }else{
                             Alert.to(res.msg);
+                            Doms.removeAttribute("disabled");
                         }
                     },
                     (err) => {
-                        Alert.to('网络异常，稍后重试。。');
+                        Alert.to(res.msg);
+                        Doms.removeAttribute("disabled");
                     }
                 )
             }else{
@@ -393,14 +469,16 @@ class MsgDemo extends React.Component {
                         if(res.status == 1){
                             window.history.back();
                         }else if(res.status == 901){
-                            Alert.to(res.msg);
+                            alert(res.msg);
                             this.context.router.push({pathname: '/loading'});
                         }else{
                             Alert.to(res.msg);
+                            Doms.removeAttribute("disabled");
                         }
                     },
                     (err) => {
-                        Alert.to('网络异常，稍后重试。。');
+                        Alert.to(res.msg);
+                        Doms.removeAttribute("disabled");
                     }
                 )
             }
@@ -441,7 +519,8 @@ class MsgDemo extends React.Component {
             QCXLval = '';
         }
         if(this.state.QCCXv !== '' && typeof(this.state.QCCXv.productname) !== 'undefined'){
-             QCCXval = this.state.QCCXv.productname;
+             let txt = this.state.QCCXv.productname;
+             QCCXval = txt.substring(0,11)+'...';
         }else{
             QCCXval = '';
         }
@@ -472,9 +551,10 @@ class MsgDemo extends React.Component {
         }else{
             ZBval = '';
         }
-        const {name,phone,crmShow}=this.state;
+        const {name,phone,crmShow,numb}=this.state;
         return (
-            <div className="Acot">
+            <div style={{'height':'100%'}}>
+                <div className="Acot">
                 <Cells access>
                     <Cell>
                         <CellHeader><Label>选择类别</Label></CellHeader>
@@ -499,7 +579,7 @@ class MsgDemo extends React.Component {
                     </Cell>
                     <Cell>
                         <CellHeader><Label>选择车型</Label></CellHeader>
-                        <CellBody onClick={this.QCCX}>
+                        <CellBody className="CX" onClick={this.QCCX}>
                             <Input type="text" placeholder="请选择车型" value={QCCXval} disabled={true}/>
                         </CellBody>
                         <CellFooter />
@@ -557,7 +637,7 @@ class MsgDemo extends React.Component {
                     <FormCell>
                         <CellHeader><Label>购车数量</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请填写购车数量"onInput={this.numbInput}/>
+                            <Input type="number" placeholder="请填写购车数量" onInput={this.numbInput}/>
                         </CellBody>
                         <CellFooter />
                     </FormCell>
@@ -603,14 +683,15 @@ class MsgDemo extends React.Component {
                 <Form style={{'display':crmShow?'none':''}} className="weuiCheckbo" checkbox>
                     <FormCell checkbox>
                         <CellHeader>
-                            <Checkbox onChange={this.Checkbox} defaultChecked/>
+                            <Checkbox onChange={this.Checkboxx} defaultChecked/>
                         </CellHeader>
-                        <CellBody>关联已有用户</CellBody>
+                        <CellBody>关联已有CRM客户</CellBody>
                     </FormCell>
                 </Form>
                 <ButtonArea>
-                    <Button onClick={this.onSaves}  style={{'marginBottom':'100px'}}>保存</Button>
+                    <Button onClick={this.onSaves} id="goNextP" style={{'marginBottom':'100px'}}>保存</Button>
                 </ButtonArea>
+                </div>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})}/>

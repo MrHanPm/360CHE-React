@@ -83,22 +83,22 @@ class Clues extends React.Component {
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
-                    if(page == 1){
-                        this.state.DATA =[];
-                    }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
+                    if(page == 1){this.state.DATA =[];}
+                    // for(let i=0; i<res.listdata.length;i++){
+                    //     this.state.DATA.push(res.listdata[i]);
+                    // }
+                    let ConData = this.state.DATA.concat(res.listdata);
                     if(res.pagecount == page){
-                        this.setState({loadingS:false});
+                        this.setState({loadingS:false,DATA:ConData});
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page
+                            nowpage:page,
+                            DATA:ConData
                         });
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -118,16 +118,18 @@ class Clues extends React.Component {
             this.setState({pf:1});
         }
         this.state.FollV = val;
+        this.state.DATA=[];
+        this.state.nowpage=1;
         this.upDATA();
     }
     FilterS(e){
+        this.state.DATA=[];
+        this.state.nowpage=1;
         if(e.target.title == 'zh'){
             this.state.p=1;
-            this.state.nowpage=1;
             this.state.s_sortfield='zh';
         }else if(e.target.title == 'follownum'){
             this.state.p=2;
-            this.state.nowpage=1;
             this.state.s_sortfield='follownum';
             if(this.state.follownum == 2){
                 this.state.follownum=1;
@@ -138,7 +140,6 @@ class Clues extends React.Component {
             }
         }else if(e.target.title == 'buycarnum'){
             this.state.p=3;
-            this.state.nowpage=1;
             this.state.s_sortfield='buycarnum';
             if(this.state.buycarnum == 2){
                 this.state.buycarnum=1;
@@ -154,6 +155,9 @@ class Clues extends React.Component {
         document.getElementById('Folls').setAttribute('class','PubSidebar visible');
     }
     RobLine(e){
+        let clusUrl = window.location.hash.replace(/#/g,'');
+        let goUrlclus = clusUrl.split("?");
+        Tool.localItem('clueURl',goUrlclus[0]);
         let urlTxt = '/robClue?id=' + e.target.title;
         this.context.router.push({
             pathname: urlTxt

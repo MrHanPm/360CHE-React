@@ -45,16 +45,13 @@ class CellDemo extends React.Component {
         document.title="销售品牌"
         Tool.get('WeiXin/GetWXDealerUserAddBrand.aspx',{},
             (res) => {
-                // if(res.status === 901){
-                //     Alert.to(res.msg);
-                //     this.context.router.push({
-                //         pathname: '/loading'
-                //     });
-                // }
                 if(res.status === 1){
                     this.setState({
                         brands:res.listdata
                     });
+                }else if(res.status == 901){
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -96,7 +93,7 @@ class CellDemo extends React.Component {
             )
         })
         return (
-            <Page className="brand" title="销售品牌">
+            <Page className="brand CrmScoll" title="销售品牌">
 
                 <Form checkbox>
                     {list}
@@ -105,7 +102,7 @@ class CellDemo extends React.Component {
                 <ButtonArea>
                     <Button onClick={this.GoSub}>确定</Button>
                 </ButtonArea>
-                <p className="FootTxt">如遇登录问题，欢迎致电 <i>4006-136-188</i><br/>致电时间：周一至周日09:00~18:00</p>
+                <p className="FootTxt">如遇登录问题，欢迎致电 <a href="tel:4006136188">4006-136-188</a><br/>致电时间：周一至周日09:00~18:00</p>
             </Page>
         );
     }

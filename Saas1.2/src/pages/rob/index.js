@@ -59,6 +59,9 @@ class Clues extends Component {
             (res) => {
                 if(res.status == 1){
                     Alert.to(res.msg);
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -70,66 +73,44 @@ class Clues extends Component {
     }
     SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:''});}
     upBrand(val){
-        //this.setState({brandid: val,showBrands:'showBrands'});
         this.state.brandid = val;
+        this.state.nowpage = 1;
+        this.state.DATA = [];
         this.state.showBrands = '';
-        this.upDATA(val);
+        this.upDATA();
     }
     upSF(val){
-        // this.setState({
-        //     SFCSv: val,
-        //     SFCSrandoms:'SFCSrandoms'
-        // });
         this.state.SFCSv = val;
+        this.state.nowpage = 1;
+        this.state.DATA = [];
         this.state.SFCSrandoms = '';
-        this.upDATA(val);
+        this.upDATA();
     }
-    upDATA(val,typ){
-        //console.log(typ,'typ');
-        //console.log(val,'val');
+    upDATA(){
+        this.state.SFCSrandoms = '';
+        this.state.showBrands = '';
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
         }else{
             json.sessionid = Tool.SessionId.get();
         }
-        if(typeof(val) == 'undefined'){
-            json.brandid = this.state.brandid;
-            json.nowpage = this.state.nowpage;
-            if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincesn) !== 'undefined'){
-                 json.provincesn = this.state.SFCSv.provincesn;
-                 json.citysn = this.state.SFCSv.citysn;
-            }else{
-                json.provincesn = '';
-                json.citysn = '';
-            }
+        json.brandid = this.state.brandid;
+        json.nowpage = this.state.nowpage;
+        if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincesn) !== 'undefined'){
+             json.provincesn = this.state.SFCSv.provincesn;
+             json.citysn = this.state.SFCSv.citysn;
+        }else{
+            json.provincesn = '';
+            json.citysn = '';
         }
-        if(typeof(val) == 'string'){
-            this.state.DATA = [];
-            json.nowpage = 1;
-            json.brandid = val;
-            if(this.state.SFCSv !== '' && typeof(this.state.SFCSv.provincesn) !== 'undefined'){
-                 json.provincesn = this.state.SFCSv.provincesn;
-                 json.citysn = this.state.SFCSv.citysn;
-            }else{
-                json.provincesn = '';
-                json.citysn = '';
-            }
-        }
-        if(typeof(val) == 'object'){
-            this.state.DATA = [];
-            json.nowpage = 1;
-            json.brandid = this.state.brandid;
-            json.provincesn = val.provincesn;
-            json.citysn = val.citysn;
-        }
-
         Tool.get('PublicClues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    this.setState({loadingS:true});
                     let page = this.state.nowpage;
-                    this.state.SFCSrandoms = 'SFCSrandoms';
-                    this.state.showBrands = 'showBrands';
+                    // this.state.SFCSrandoms = '';
+                    // this.state.showBrands = '';
                     if(res.listdata.length === 0){
                         this.setState({isDatas:true});
                     }else{
@@ -138,21 +119,26 @@ class Clues extends Component {
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
-                    if(res.pagecount == page){
-                        this.setState({loadingS:false});
+                    // for(let i=0; i<res.listdata.length;i++){
+                    //     this.state.DATA.push(res.listdata[i]);
+                    // }
+                    let ConData = this.state.DATA.concat(res.listdata);
+
+                    if(res.pagecount === page){
+                        this.setState({loadingS:false,
+                            DATA:ConData,
+                        });
                     }else{
                         page++;
                         this.setState({
                             topnotice:res.topnotice,
-                            nowpage:page
+                            nowpage:page,
+                            DATA:ConData,
                         });
                     }
                     //console.log(this.state);
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -175,6 +161,9 @@ class Clues extends Component {
                 if(res.status == 1){
                     let urlTxt = '/robClue?id=' + res.data.cluesextendid;
                     this.context.router.push({pathname: urlTxt});
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -198,13 +187,13 @@ class Clues extends Component {
             let t
             t && clearTimeout(t);
             t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
+                this.upDATA();
             }.bind(this),800);
         }
       }
     }
     componentDidMount() {
-        this.upDATA(undefined,'componentDidMount');
+        this.upDATA();
     }
     showBrand(){ this.setState({showBrands:Math.random(),SFCSrandoms:''});}
     render() {

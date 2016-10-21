@@ -56,20 +56,21 @@ export default class Clues extends React.Component {
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
+                    // for(let i=0; i<res.listdata.length;i++){
+                    //     this.state.DATA.push(res.listdata[i]);
+                    // }
+                    let ConData = this.state.DATA.concat(res.listdata);
                     //console.log(page,this.state.DATA);
                     if(res.pagecount == page){
-                        this.setState({loadingS:false});
+                        this.setState({loadingS:false,DATA:ConData});
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page
+                            nowpage:page,DATA:ConData
                         });
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -124,31 +125,33 @@ export default class Clues extends React.Component {
         }
         return (
             <div className="clueBody clueDef crmCols"  onScroll={this.handleScroll}>
-                {DATA.map(function(e,index){
-                    return(
-                    <Panel key={index}>
-                        <PanelBody>
-                            <MediaBox className="Follov" title={e.cluesextendid} onClick={self.RobLine}></MediaBox>
-                            <MediaBox type="text">
-                                <MediaBoxHeader>
-                                    <CellFooter/>
-                                </MediaBoxHeader>
-                                <MediaBoxBody>
-                                    <MediaBoxTitle>{e.realname}</MediaBoxTitle>
-                                    <MediaBoxDescription>
-                                        {e.truckname}
-                                    </MediaBoxDescription>
-                                    <MediaBoxInfo>
-                                        <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
-                                    </MediaBoxInfo>
-                                </MediaBoxBody>
-                            </MediaBox>
-                        </PanelBody>
-                    </Panel>
-                    )})
-                }
-                {footerS}
+                <div className="CrmScoll">
+                    {DATA.map(function(e,index){
+                        return(
+                        <Panel key={index}>
+                            <PanelBody>
+                                <MediaBox className="Follov" title={e.cluesextendid} onClick={self.RobLine}></MediaBox>
+                                <MediaBox type="text">
+                                    <MediaBoxHeader>
+                                        <CellFooter/>
+                                    </MediaBoxHeader>
+                                    <MediaBoxBody>
+                                        <MediaBoxTitle>{e.realname}</MediaBoxTitle>
+                                        <MediaBoxDescription>
+                                            {e.truckname}
+                                        </MediaBoxDescription>
+                                        <MediaBoxInfo>
+                                            <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
+                                            <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
+                                        </MediaBoxInfo>
+                                    </MediaBoxBody>
+                                </MediaBox>
+                            </PanelBody>
+                        </Panel>
+                        )})
+                    }
+                    {footerS}
+                </div>
                 <ShowAlert />
             </div>
         );

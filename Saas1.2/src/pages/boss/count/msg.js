@@ -28,6 +28,9 @@ class Clues extends React.Component {
                     this.setState({
                         DATA:res.data.detaillist
                     });
+                }else if(res.status == 901){
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

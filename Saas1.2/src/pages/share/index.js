@@ -15,9 +15,20 @@ import {
 } from 'react-weui';
 import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
+import {NoMor,NoDataS} from '../../component/more.js';
 import './index.less';
-export default class MsgDemo extends React.Component {
+import ImgSRC from './find.png';
+class ImgBox extends React.Component {
+    render(){
+        return(
+            <div className="crmBox">
+                <img src={ImgSRC}/>
+            </div>
+        )
+    }
+}
+
+class MsgDemo extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -100,7 +111,7 @@ export default class MsgDemo extends React.Component {
                         loadingS:false
                     });
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -327,54 +338,29 @@ export default class MsgDemo extends React.Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoCentding /> : <NoMor />;
         }
         return (
-        <Page className="account addPursd ShareBox">
-            <Panel>
-                <PanelBody>
-                    <MediaBox type="small_appmsg">
-                        <Cells access>
-                        {DATA.map(function(e,index){ 
-                            return(  
-                            <Cell key={index} title={e.id} onClick={self.ShowFx}>
-                                <CellHeader title={e.id}>
-                                    <img src={e.shareimgurl} title={e.id} />
-                                </CellHeader>
-                                <CellBody title={e.id}>
-                                    <p title={e.id}>{e.sharetitle}</p>
-                                </CellBody>
-                                <CellFooter/>
-                            </Cell>
-                        )})}
-                        </Cells>
-                    </MediaBox>
-                </PanelBody>
-            </Panel>
+        <div className="account addPursd ShareBox">
+            <Cells access>
+            {DATA.map(function(e,index){
+                return(  
+                <Cell key={index} title={e.id} onClick={self.ShowFx}>
+                    <CellHeader title={e.id}>
+                        <img src={e.shareimgurl} title={e.id} />
+                    </CellHeader>
+                    <CellBody title={e.id}>
+                        <p title={e.id}>{e.sharetitle}</p>
+                    </CellBody>
+                    <CellFooter/>
+                </Cell>
+            )})}
             {footerS}
+            </Cells>
             <div className="FXBox" style={{'display':shows?'':'none'}}>
                 <dl id="FenXDL">
                     <dt className="pit">分享这个店铺</dt>
-                    <dd>
-                        <div id="onMenuShareAppMessage"></div>
-                        <p>微信好友</p>
-                    </dd>
-                    <dd>
-                        <div className="fq" id="onMenuShareTimeline"></div>
-                        <p>微信朋友圈</p>
-                    </dd>
-                    <dd>
-                        <div className="qq" id="onMenuShareQQ"></div>
-                        <p>QQ</p>
-                    </dd>
-                    <dd>
-                        <div className="qk" id="onMenuShareQZone"></div>
-                        <p>QQ空间</p>
-                    </dd>
-                    <dd>
-                        <div className="sina" id="onMenuShareWeibo"></div>
-                        <p>新浪微博</p>
-                    </dd>
+                    
                     <dd>
                         <div className="url" onClick={this.CopyURL}></div>
                         <p>复制链接</p>
@@ -382,9 +368,82 @@ export default class MsgDemo extends React.Component {
                 </dl>
             </div>
             <div id="copyURL" style={{'display':'none'}}></div>
-        </Page>
+        </div>
         );
     }
 };
+class LoCentding extends React.Component{
+    render(){
+        return(
+            <div className="jump-cover" id="jump_cover">
+                <div className="loading visible">
+                    <span className="loading-ring"> </span>
+                </div>
+            </div>
+        )
+    }
+}
+class CluesImgBox extends React.Component {
+    state={
+        perm:false
+    }
+    componentWillMount(){
+        let oldData = JSON.parse(localStorage.getItem('vipLodData'));
+        if(oldData !== null){
+            if(oldData.permission.length > 0){
+                for(let i=0;i<oldData.permission.length;i++){
+                    if(oldData.permission[i].key == 'find_share' && oldData.permission[i].value == '1'){
+                        this.setState({perm:true});
+                        break;
+                    }
+                }
+            }else{
+                this.setState({perm:false});
+            }
+        }else{
+            this.setState({perm:false});
+        }
+        //let permission=[{key: "crm", value: "1", remark: ""}, {key: "find_share", value: "1", remark: ""}];
+        //let permission=[];
+    }
+    render(){
+        let domBox;
+        if(this.state.perm){
+            domBox = <MsgDemo/> ;
+        }else{
+            domBox = <ImgBox/>;
+        }
+        return(
+            <div style={{'height':'100%'}}>
+                {domBox}
+            </div>
+        )
+    }
+}
+
+export default CluesImgBox
+//export default MsgDemo
 
 
+
+
+                    // <dd>
+                    //     <div id="onMenuShareAppMessage"></div>
+                    //     <p>微信好友</p>
+                    // </dd>
+                    // <dd>
+                    //     <div className="fq" id="onMenuShareTimeline"></div>
+                    //     <p>微信朋友圈</p>
+                    // </dd>
+                    // <dd>
+                    //     <div className="qq" id="onMenuShareQQ"></div>
+                    //     <p>QQ</p>
+                    // </dd>
+                    // <dd>
+                    //     <div className="qk" id="onMenuShareQZone"></div>
+                    //     <p>QQ空间</p>
+                    // </dd>
+                    // <dd>
+                    //     <div className="sina" id="onMenuShareWeibo"></div>
+                    //     <p>新浪微博</p>
+                    // </dd>

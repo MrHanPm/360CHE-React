@@ -16,10 +16,21 @@ import {
     Button,
 } from 'react-weui';
 import './index.less';
+
 import OkTel from '../okTel/index.js';
 import NoTel from '../noTel/index.js';
 import Collect from '../collectTel/index.js';
 import Recent from '../crmRecent/index.js';
+import ImgSRC from './crm.png';
+class ImgBox extends React.Component {
+    render(){
+        return(
+            <div className="crmBox">
+                <img src={ImgSRC}/>
+            </div>
+        )
+    }
+}
 
 class Clues extends React.Component {
     constructor(props){
@@ -86,5 +97,44 @@ Clues.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
-export default Clues
+class CluesImgBox extends React.Component {
+    state={
+        perm:false
+    }
+    componentWillMount(){
+        let oldData = JSON.parse(localStorage.getItem('vipLodData'));
+        if(oldData !== null){
+            if(oldData.permission.length > 0){
+                for(let i=0;i<oldData.permission.length;i++){
+                    if(oldData.permission[i].key == 'crm' && oldData.permission[i].value == '1'){
+                        this.setState({perm:true});
+                        break;
+                    }
+                }
+            }else{
+                this.setState({perm:false});
+            }
+        }else{
+            this.setState({perm:false});
+        }
+        //let permission=[{key: "crm", value: "1", remark: ""}, {key: "find_share", value: "1", remark: ""}];
+        //let permission=[];
+    }
+    render(){
+        let domBox;
+        if(this.state.perm){
+            domBox = <Clues/> ;
+        }else{
+            domBox = <ImgBox/>;
+        }
+        return(
+            <div style={{'height':'100%'}}>
+                {domBox}
+            </div>
+        )
+    }
+}
+
+export default CluesImgBox
+//export default Clues
 

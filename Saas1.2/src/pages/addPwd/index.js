@@ -38,25 +38,34 @@ class CellDemo extends React.Component {
             phone:'',
             vcode:'',
             mcode:'',
+            pwd:'',
+            newpwd:'',
             vcodeSrc: vcodeSrc,
             iscode: false
         };
-        this.phoneInput = (e) => {
-            this.state.phone = e.target.value;
-        }
         this.vcodeInput = (e) => {
             this.state.vcode = e.target.value;
         }
         this.mcodeInput = (e) => {
             this.state.mcode = e.target.value;
         }
+        this.pwdInput = (e) => {
+            this.state.pwd = e.target.value;
+        }
+        this.newpwdInput = (e) => {
+            this.state.newpwd = e.target.value;
+        }
         this.getvcodes = (e) => {this.setState({vcodeSrc:vcodeSrc})}
         this.getVcode = this.getVcode.bind(this);
         this.getMcode = this.getMcode.bind(this);
         this.goNext = this.goNext.bind(this);
     }
+    componentWillMount(){
+       let tels = Tool.localItem('Uphone');
+       this.setState({phone:tels});
+    }
     componentDidMount() {
-        document.title="手机认证"
+        document.title="设置密码";
         this.getVcode();
     }
 
@@ -75,10 +84,6 @@ class CellDemo extends React.Component {
         },400)
     }
     checkForm(){
-        if(!Tool.checkPhone(this.state.phone)){
-            Alert.to("请输入正确手机号");
-            return false;
-        }
         if(this.state.vcode == '' || this.state.vcode.length == 0){
             Alert.to("请输入图形码数字");
             return false;
@@ -91,39 +96,49 @@ class CellDemo extends React.Component {
             Alert.to("请输入短信验证码");
             return false;
         }
+        if(this.state.pwd.length == 0){
+            Alert.to("请输入密码");
+            return false;
+        }
+        if(this.state.pwd.length < 6 || this.state.pwd.length > 16){
+            Alert.to("密码长度不符合规范");
+            return false;
+        }
+        let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/;
+        if(!reg.test(this.state.pwd)){
+            Alert.to("密码不符合规范");
+            return false;
+        }
+        if(this.state.newpwd !== this.state.pwd){
+            Alert.to("密码与确认密码不一致");
+            return false;
+        }
         return true;
     }
     //获取验证码
     getMcode(e){
         let Btns = e.target;
-        if(Tool.checkPhone(this.state.phone)){
-            if(this.state.vcode == '' || this.state.vcode.length == 0){
-                Alert.to("请输入图形码数字");
-            }else if(this.state.vcode.length !== 4){
-                Alert.to("图形码位数不正确");
-            }else{
-                Tool.get('User/SendSMSYanMa.aspx',{tel:this.state.phone,captcha:this.state.vcode},
-                    (res) => {
-                        if(res.status){
-                            this.showToast();
-                            this.setState({
-                                iscode: false
-                            });
-                            this.settime(Btns);
-                        }else{
-                            this.setState({
-                                iscode: true
-                            });
-                            Alert.to(res.msg);
-                        }
-                    },
-                    (err) => {
-                        Alert.to(err.msg);
-                    }
-                )
-            }
+        if(this.state.vcode == '' || this.state.vcode.length == 0){
+            Alert.to("请输入图形码数字");
+        }else if(this.state.vcode.length !== 4){
+            Alert.to("图形码位数不正确");
         }else{
-            Alert.to("请输入正确手机号");
+            Tool.get('User/SendSMSYanMa.aspx',{tel:this.state.phone,captcha:this.state.vcode},
+                (res) => {
+                    if(res.status){
+                        this.showToast();
+                        this.settime(Btns);
+                    }else{
+                        this.setState({
+                            iscode: true
+                        });
+                        Alert.to(res.msg);
+                    }
+                },
+                (err) => {
+                    Alert.to(err.msg);
+                }
+            )
         }
     }
     showToast() {
@@ -135,7 +150,7 @@ class CellDemo extends React.Component {
     }
     settime(obj) {
         let t
-        if (this.state.countdown == 0) { 
+        if (this.state.countdown == 0) {
             obj.removeAttribute("disabled");
             obj.setAttribute('class','weui_btn weui_btn_primary weui_btn_mini');  
             obj.innerHTML="重新获取"; 
@@ -159,39 +174,35 @@ class CellDemo extends React.Component {
         let Doms = document.getElementById('goNextP');
         if(this.checkForm()){
             Doms.setAttribute("disabled", true);
-            Tool.localItem('Uphone',this.state.phone);
             let json = {};
-            json.tel = this.state.phone;
+            if(typeof(Tool.SessionId) == 'string'){
+                json.sessionid = Tool.SessionId;
+            }else{
+                json.sessionid = Tool.SessionId.get();
+            }
+            json.newpwd = this.state.pwd;
+            json.confirmpwd = this.state.newpwd;
             json.vercode = this.state.mcode;
-            Tool.get('WeiXin/BindTel.aspx',json,
+            Tool.get('User/ChangePwdTel.aspx',json,
                 (res) => {
                     switch(res.status){
                         case 1:
-                            let Vd = JSON.stringify(res.data);
-                            Tool.localItem('vipLodData',Vd);
-                            Tool.localItem('okTel',null);
-                            Tool.localItem('okAZ',null);
-                            Tool.localItem('okTelFingerprint',null);
-                            Tool.localItem('noTel',null);
-                            Tool.localItem('noAZ',null);
-                            Tool.localItem('noTelFingerprint',null);
-                            Tool.localItem('coTel',null);
-                            Tool.localItem('coAZ',null);
-                            Tool.localItem('coTelFingerprint',null);
-                            Tool.localItem('reTel',null);
-                            Tool.localItem('reTelFingerprint',null);
-                            this.context.router.push({pathname:'/loaddata'});
+                            let oldData = JSON.parse(Tool.localItem('vipLodData'));
+                            oldData.ishavingpwd=1;
+                            let newOldD = JSON.stringify(oldData);
+                            Tool.localItem('vipLodData',newOldD);
+                            this.context.router.push({pathname: '/nav/f'});
                             return;
-                        case 912 :
-                            this.context.router.push({pathname:'/login'});
-                            return;
+                        case 901 :
+                            alert(res.msg);
+                            this.context.router.push({pathname: '/loading'});
                         default:
                             Alert.to(res.msg);
                             Doms.removeAttribute("disabled");
                     }
                 },
                 (err) => {
-                    Alert.to('网络异常，稍后重试。。');
+                    Alert.to(err.msg);
                     Doms.removeAttribute("disabled");
                 }
             )
@@ -199,14 +210,14 @@ class CellDemo extends React.Component {
     }
     render() {
         return (
-            <Page className="cell CrmScoll" title="手机验证">
+            <Page className="mdfPwd">
                 <Form>
                     <FormCell>
                         <CellHeader>
                             <Label>手机号</Label>
                         </CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="输入手机号" onInput={this.phoneInput}/>
+                            <Input type="number" placeholder="输入手机号" value={this.state.phone} disabled/>
                         </CellBody>
                     </FormCell>
 
@@ -234,13 +245,35 @@ class CellDemo extends React.Component {
                             <Button size="small" onClick={this.getMcode}>获取验证码</Button>
                         </CellFooter>
                     </FormCell>
+                    <FormCell>
+                        <CellHeader>
+                            <Label>密码</Label>
+                        </CellHeader>
+                        <CellBody>
+                            <Input type="password" placeholder="输入密码" onInput={this.pwdInput}/>
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader>
+                            <Label>确认密码</Label>
+                        </CellHeader>
+                        <CellBody>
+                            <Input type="password" placeholder="确认密码" onInput={this.newpwdInput}/>
+                        </CellBody>
+                    </FormCell>
                 </Form>
 
                 <ButtonArea>
                     <Button id="goNextP" onClick={this.goNext}>确定</Button>
                 </ButtonArea>
                 <Toast show={this.state.showToast}>验证码已发送</Toast>
-                <p className="FootTxt">验证手机号码，使用升级版营销助手<br/>手机号码仅用于登录和保护账号安全</p>
+                <ul className='PwdFol'>
+                    <li>密码规范说明：</li>
+                    <li>1：密码长度在6~16位范围内；</li>
+                    <li>2：必须由数字和字母组成；</li>
+                    <li>3：不能有空格；</li>
+                    <li>4：字母区分大小写；</li>
+                </ul>
             </Page>
         );
     }

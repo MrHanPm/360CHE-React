@@ -1,17 +1,20 @@
 .crmBox{
     background: #E9FCFF;
+    height: 100%;
     padding: 20px 0;
+    overflow-y: scroll;
     img{
         width: 100%;
         height: auto;
     }
 }
+.weui_tabbar{position: fixed;}
 .clueNav{
     width: 100%;
     height: 45px;
     background: #fff;
     display: flex;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 888;
@@ -87,28 +90,6 @@
             font-family: 'saas_ico';
             font-size: 30px;
         }
-    }
-    .butX{
-        width: 45px;
-        height: 45px;
-        border-radius: 100px;
-        background: #09bb07;
-        box-shadow: 0 0 0 4px rgba(4,190,2,.2);
-        position: absolute;
-        bottom: 14%;
-        right: 20px;
-        z-index: 16;
-        font-family: 'saas_ico';
-    }
-    .butX:before{
-        content: '\e60d';
-        color: #fff;
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        line-height: 45px;
-        text-align: center;
-        font-size: 26px;
     }
     .crmStar{
         margin-left: 20px;

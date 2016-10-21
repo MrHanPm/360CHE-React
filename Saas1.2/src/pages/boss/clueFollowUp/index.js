@@ -85,20 +85,21 @@ class Clues extends React.Component {
                     if(page == 1){
                         this.state.DATA =[];
                     }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
+                    // for(let i=0; i<res.listdata.length;i++){
+                    //     this.state.DATA.push(res.listdata[i]);
+                    // }
+                    let ConData = this.state.DATA.concat(res.listdata);
                     if(res.pagecount == page){
-                        this.setState({loadingS:false});
+                        this.setState({loadingS:false,DATA:ConData});
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page
+                            nowpage:page,DATA:ConData
                         });
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
-                    this.context.router.push({pathname: '/loading'});
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }

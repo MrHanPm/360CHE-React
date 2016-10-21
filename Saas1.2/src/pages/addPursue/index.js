@@ -98,6 +98,19 @@ class MsgDemo extends React.Component {
         format += ":00";
         document.getElementById("pursueTime").value = format;
     }
+    componentWillMount(){
+        let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
+        if(RobClueVal.clueslevel == '5'){
+            this.setState({
+                KHJBv:{
+                    values:String(RobClueVal.clueslevel),
+                    key:RobClueVal.clueslevelname,
+                    addday:'',
+                    adddayname:''
+                },
+            });
+        }
+    }
     componentDidMount() {
         document.title = '添加跟进记录';
         document.getElementById('FailTime').valueAsDate = new Date();
@@ -105,7 +118,8 @@ class MsgDemo extends React.Component {
         this.getTimeLocal();
         this.setState({
             dealTime:document.getElementById('DealTime').value,
-            failTime:document.getElementById('FailTime').value
+            failTime:document.getElementById('FailTime').value,
+            followupdate:document.getElementById("pursueTime").value
         });
     }
     componentWillUnmount(){
@@ -209,6 +223,14 @@ class MsgDemo extends React.Component {
     goWell(){ this.context.router.push({pathname: '/nav'});}
 
     checkForm(){
+        if(this.state.followupdate == ''){
+            Alert.to("跟进时间不能为空");
+            return false;
+        }
+        if(this.state.GJv == '' || typeof(this.state.GJv.values) == 'undefined'){
+            Alert.to("跟进方式不能为空");
+            return false;
+        }
         if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
             Alert.to("客户级别不能为空");
             return false;
@@ -233,6 +255,10 @@ class MsgDemo extends React.Component {
                 Alert.to("成交价格不能为空");
                 return false;
             }
+            if(this.state.pay > '9999999'){
+                Alert.to("成交价格数值过大");
+                return false;
+            }
             if(this.state.dealTime == ''){
                 Alert.to("成交时间不能为空");
                 return false;
@@ -251,15 +277,10 @@ class MsgDemo extends React.Component {
                 Alert.to("预期价格不能为空");
                 return false;
             }
-        }
-        
-        if(this.state.GJv == '' || typeof(this.state.GJv.values) == 'undefined'){
-            Alert.to("跟进方式不能为空");
-            return false;
-        }
-        if(this.state.followupdate == ''){
-            Alert.to("跟进时间不能为空");
-            return false;
+            if(this.state.Ypay > '9999999'){
+                Alert.to("预期价格数值过大");
+                return false;
+            }
         }
         if(this.state.msg.length > 800){
             Alert.to("备注字数不能超过800");
@@ -268,8 +289,10 @@ class MsgDemo extends React.Component {
         return true;
     }
     onSaves(){
+        let Doms = document.getElementById('goNextP');
         let persId = Tool.getQueryString('id');
         if(this.checkForm()){
+            Doms.setAttribute("disabled", true);
             let json = {};
             if(typeof(Tool.SessionId) == 'string'){
                 json.sessionid = Tool.SessionId;
@@ -311,21 +334,24 @@ class MsgDemo extends React.Component {
             }
             json.remark = this.state.msg;
             //console.log(JSON.stringify(this.state),json);
-            Tool.get('Clues/AddClueFollowUp.aspx',json,
+            Tool.post('Clues/AddClueFollowUp.aspx',json,
                 (res) => {
                     if(res.status == 1){
+                        let urlTxt = '/robClue?id=' + persId;
                         this.context.router.push({
-                            pathname: '/nav'
+                            pathname: urlTxt
                         });
                     }else if(res.status == 901){
-                        Alert.to(res.msg);
+                        alert(res.msg);
                         this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
+                        Doms.removeAttribute("disabled");
                     }
                 },
                 (err) => {
                     Alert.to('网络异常，稍后重试。。');
+                    Doms.removeAttribute("disabled");
                 }
             )
         }
@@ -497,23 +523,23 @@ class MsgDemo extends React.Component {
                 </Cells>
 
                 <ButtonArea>
-                    <Button onClick={this.onSaves}  style={{'marginBottom':'100px'}}>保存</Button>
+                    <Button onClick={this.onSaves} id="goNextP" style={{'marginBottom':'100px'}}>保存</Button>
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'CPLBrandoms',QCPPv:'',QCXLv:'',QCCXv:''})}/>
+                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})}/>
                 <PP Datas={this.state.QCPPrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
-                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'QCPPrandoms',QCXLv:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
                     brandid={this.state.QCPPv.brandid}
-                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'QCXLrandoms',QCCXv:''})}/>
+                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
                     seriesid={this.state.QCXLv.seriesid}
-                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:'QCCXrandoms'})}/>
-                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:'KHJBrandoms'})}/>
-                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:'ZBrandoms'})}/>
-                <GJ Datas={this.state.GJrandoms} onChange={val => this.setState({GJv: val,GJrandoms:'GJrandoms'})}/>
+                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
+                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>
+                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})}/>
+                <GJ Datas={this.state.GJrandoms} onChange={val => this.setState({GJv: val,GJrandoms:''})}/>
             </Page>
         );
     }

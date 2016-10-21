@@ -27,6 +27,9 @@ class Clues extends React.Component {
                     this.setState({
                         DATA:res.data.detaillist
                     });
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -57,7 +60,7 @@ class Clues extends React.Component {
         const {visible,DATA} = this.state;
         return (
             <div className="contMesBox" style={{'display':visible?'block':'none'}}>
-                <div className="closD" onClick={this.closD}>关闭</div>
+                <div className="closD" onClick={this.closD}>关闭线索详细</div>
                 <div className="tables">
                     <ul className="titles">
                         <li className="dates">日期</li>

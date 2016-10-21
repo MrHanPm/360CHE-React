@@ -18,7 +18,7 @@ import {Button,
     CellBody
 } from 'react-weui';
 const { Confirm } = Dialog;
-import Page from '../../component/page';
+import ShowAlert from '../../component/Alert.js'
 import {Tool,Alert} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
@@ -33,6 +33,7 @@ class MsgDemo extends React.Component {
             showAlertCfm:false,
             showDonwn:true,
             linkCrm:true,
+            clilinkCrm:false,
             SDSrandoms:'',
             confirm: {
                 title: '确认放弃这条线索？',
@@ -68,6 +69,7 @@ class MsgDemo extends React.Component {
         this.addPursue = this.addPursue.bind(this);
         this.SDS = this.SDS.bind(this);
         this.addCRM = this.addCRM.bind(this);
+        this.CoLines = this.CoLines.bind(this);
     }
     ShoDonwn(){this.setState({showDonwn:true});}
     HidDonwn(){this.setState({showDonwn:false});}
@@ -96,7 +98,7 @@ class MsgDemo extends React.Component {
                         pathname: '/nav'
                     });
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -106,6 +108,31 @@ class MsgDemo extends React.Component {
                 Alert.to('网络异常，稍后重试。。');
             }
         )
+    }
+    CoLines(e){
+        let json={};
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
+        json.cluesextendid = e.target.title;
+        Tool.get('Clues/AddCluesCallTel.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        );
+        // let comId = e.target.getAttribute('data-id');
+        // console.log(comId);
     }
     componentWillMount(){
         let persId = Tool.getQueryString('id');
@@ -121,12 +148,14 @@ class MsgDemo extends React.Component {
         Tool.get('Clues/GetCluesDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    let dataRobClues = JSON.stringify(res.data);
+                    Tool.localItem('RobClues',dataRobClues);
                     this.setState({DATArob:res.data});
                     if(res.data.customid > 0){
                         this.setState({linkCrm:false});
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -140,6 +169,7 @@ class MsgDemo extends React.Component {
             (res) => {
                 if(res.status == 1){
                     //console.log(JSON.stringify(res.listdata[0]));
+                    if(res.listdata.length >0){this.setState({clilinkCrm:true});}
                     if(res.reccount > 0){
                         this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
                     }else{
@@ -150,7 +180,7 @@ class MsgDemo extends React.Component {
                         }
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -169,8 +199,6 @@ class MsgDemo extends React.Component {
     hideConfirm(){this.setState({showConfirm: false});}
     hideAlertCfm(){this.setState({showAlertCfm: false});}
     goChengs(e){
-        let data = JSON.stringify(this.state.DATArob);
-        Tool.localItem('RobClues',data);
         this.context.router.push({pathname: '/alterClue'});
     }
     addPursue(e){
@@ -191,6 +219,9 @@ class MsgDemo extends React.Component {
                 if(res.status == 1){
                     this.showToast();
                     doms.setAttribute('class','');
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -209,160 +240,166 @@ class MsgDemo extends React.Component {
         }else{
             
         }
-        const {showDonwn,reccount,Messrob,linkCrm} = this.state;
-        const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid} = this.state.DATArob;
+        const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm} = this.state;
+        const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,customid} = this.state.DATArob;
         if(clueslevelname !== '' && typeof(clueslevelname) !== 'undefined'){showBtns = true;}
         if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
         return (
-            <Page className="account robClues">
-                <Form>
-                    <FormCell>
-                        <CellHeader><Label>意向车型</Label></CellHeader>
-                        <CellBody>
-                            {truckname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>客户姓名</Label></CellHeader>
-                        <CellBody>
-                            {realname}
-                        </CellBody>
-                        <CellFooter className={linkCrm?'cleAddAft':''} title={cluesextendid} onClick={this.addCRM}/>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>客户电话</Label></CellHeader>
-                        <CellBody>
-                            {tel}
-                        </CellBody>
-                        <CellFooter className="cleAft">
-                            <a href={`tel:${tel}`}> </a>
-                        </CellFooter>
-                    </FormCell>
-                </Form>
-                <Form style={{'display':showDonwn?'block':'none'}}>
-                    <FormCell>
-                        <CellHeader><Label>所属类别</Label></CellHeader>
-                        <CellBody>
-                            {subcategoryname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>所属品牌</Label></CellHeader>
-                        <CellBody>
-                            {brandname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>所属系列</Label></CellHeader>
-                        <CellBody>
-                            {seriesname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>客户级别</Label></CellHeader>
-                        <CellBody>
-                            {clueslevelname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>省份城市</Label></CellHeader>
-                        <CellBody>
-                            {provincename +' '+cityname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>线索来源</Label></CellHeader>
-                        <CellBody>
-                            {clueresourcename}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>车辆用途</Label></CellHeader>
-                        <CellBody>
-                            {cheliangyongtuname}
-                        </CellBody>
-                    </FormCell>
-                    <FormCell>
-                        <CellHeader><Label>购车数量</Label></CellHeader>
-                        <CellBody>
-                            {expectedbycarnum}
-                        </CellBody>
-                    </FormCell>
+            <div className="account robClues">
+                <div className="bd">
+                    <Form>
+                        <FormCell>
+                            <CellHeader><Label>意向车型</Label></CellHeader>
+                            <CellBody>
+                                {truckname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>客户姓名</Label></CellHeader>
+                            <CellBody>
+                                {realname}
+                            </CellBody>
+                            <CellFooter className={linkCrm?'cleAddAft':''} title={cluesextendid} style={{'display':clilinkCrm?'':'none'}} onClick={this.addCRM}/>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>客户电话</Label></CellHeader>
+                            <CellBody>
+                                {tel}
+                            </CellBody>
+                            <CellFooter className="cleAft">
+                                <a href={`tel:${tel}`} title={cluesextendid} data-id={customid} onClick={this.CoLines}> </a>
+                            </CellFooter>
+                        </FormCell>
+                    </Form>
+                    <Form style={{'display':showDonwn?'block':'none'}}>
+                        <FormCell>
+                            <CellHeader><Label>所属类别</Label></CellHeader>
+                            <CellBody>
+                                {subcategoryname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>所属品牌</Label></CellHeader>
+                            <CellBody>
+                                {brandname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>所属系列</Label></CellHeader>
+                            <CellBody>
+                                {seriesname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>客户级别</Label></CellHeader>
+                            <CellBody>
+                                {clueslevelname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>省份城市</Label></CellHeader>
+                            <CellBody>
+                                {provincename +' '+cityname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>线索来源</Label></CellHeader>
+                            <CellBody>
+                                {clueresourcename}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>车辆用途</Label></CellHeader>
+                            <CellBody>
+                                {cheliangyongtuname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>购车数量</Label></CellHeader>
+                            <CellBody>
+                                {expectedbycarnum}
+                            </CellBody>
+                        </FormCell>
 
-                    <Form style={{'display':clueslevel == 5?'block':'none'}}>
+                        <Form style={{'display':clueslevel == 5?'block':'none'}}>
+                            <FormCell>
+                                <CellHeader><Label>成交车型</Label></CellHeader>
+                                <CellBody>
+                                    {dealttruckname}
+                                </CellBody>
+                            </FormCell>
+                            <FormCell>
+                                <CellHeader><Label>成交类别</Label></CellHeader>
+                                <CellBody>
+                                    {dealtsubcategoryname}
+                                </CellBody>
+                            </FormCell>
+                            <FormCell>
+                                <CellHeader><Label>成交品牌</Label></CellHeader>
+                                <CellBody>
+                                    {dealtbrandname}
+                                </CellBody>
+                            </FormCell>
+                            <FormCell>
+                                <CellHeader><Label>成交系列</Label></CellHeader>
+                                <CellBody>
+                                    {dealtseriesname}
+                                </CellBody>
+                            </FormCell>
+                            <FormCell>
+                                <CellHeader><Label>成交价格</Label></CellHeader>
+                                <CellBody>
+                                    {transactionprice}
+                                </CellBody>
+                                <CellFooter className="cleAft">万元</CellFooter>
+                            </FormCell>
+                            <FormCell>
+                                <CellHeader><Label>成交时间</Label></CellHeader>
+                                <CellBody>
+                                    {dealtdate}
+                                </CellBody>
+                            </FormCell>
+                        </Form>
+                        <Form style={{'display':clueslevel == 6?'block':'none'}}>
+                            <FormCell>
+                                <CellHeader><Label>战败原因</Label></CellHeader>
+                                <CellBody>
+                                    {failname}
+                                </CellBody>
+                            </FormCell>
+                            <FormCell>
+                                <CellHeader><Label>战败时间</Label></CellHeader>
+                                <CellBody>
+                                    {faildate}
+                                </CellBody>
+                            </FormCell>
+                        </Form>
                         <FormCell>
-                            <CellHeader><Label>成交车型</Label></CellHeader>
+                            <CellHeader><Label>备注</Label></CellHeader>
                             <CellBody>
-                                {dealttruckname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>成交类别</Label></CellHeader>
-                            <CellBody>
-                                {dealtsubcategoryname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>成交品牌</Label></CellHeader>
-                            <CellBody>
-                                {dealtbrandname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>成交系列</Label></CellHeader>
-                            <CellBody>
-                                {dealtseriesname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>成交价格</Label></CellHeader>
-                            <CellBody>
-                                {transactionprice}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>成交时间</Label></CellHeader>
-                            <CellBody>
-                                {dealtdate}
+                                {remark}
                             </CellBody>
                         </FormCell>
                     </Form>
-                    <Form style={{'display':clueslevel == 6?'block':'none'}}>
-                        <FormCell>
-                            <CellHeader><Label>战败原因</Label></CellHeader>
-                            <CellBody>
-                                {failname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>战败时间</Label></CellHeader>
-                            <CellBody>
-                                {faildate}
-                            </CellBody>
-                        </FormCell>
-                    </Form>
-                    <FormCell>
-                        <CellHeader><Label>备注</Label></CellHeader>
-                        <CellBody>
-                            {remark}
-                        </CellBody>
-                    </FormCell>
-                </Form>
-                <div style={{'display':reccount > 0?'block':'none'}}>
-                    <div className="openClue" style={{'display':showDonwn?'none':'block'}} onClick={this.ShoDonwn}>展开详细信息</div>
-                    <div className="openClue UP" style={{'display':showDonwn?'block':'none'}} onClick={this.HidDonwn}>收起详细信息</div>
-                    <dl className="MessClues">
-                        <dt>跟进记录{reccount}条</dt>
-                        {Messrob.map(function(e,index){
-                        return(
-                            <dd key={index}>
-                                <div title={e.id} onClick={self.SDS}></div>
-                                <p>{e.createdate}</p>
-                                <h4>设置级别为{e.clueslevelname}</h4>
-                                <h4 style={{'display':e.remark == ''?'none':'block'}}>备注：{e.remark}</h4>
-                            </dd>
-                        )})}
-                    </dl>
+                    <div style={{'display':reccount > 0?'block':'none'}}>
+                        <div className="openClue" style={{'display':showDonwn?'none':'block'}} onClick={this.ShoDonwn}>展开详细信息</div>
+                        <div className="openClue UP" style={{'display':showDonwn?'block':'none'}} onClick={this.HidDonwn}>收起详细信息</div>
+                        <dl className="MessClues">
+                            <dt>跟进记录{reccount}条</dt>
+                            {Messrob.map(function(e,index){
+                            return(
+                                <dd key={index}>
+                                    <div title={e.id} onClick={self.SDS}></div>
+                                    <p>{e.createdate}</p>
+                                    <h4>设置级别为{e.clueslevelname}</h4>
+                                    <h4 style={{'display':e.remark == ''?'none':'block'}}>
+                                        <span>备注：</span>
+                                        <span className="Bkc">{e.remark}</span>
+                                    </h4>
+                                </dd>
+                            )})}
+                        </dl>
+                    </div>
                 </div>
                 <ul className="FollBtn" style={{'display':showBtns?'none':'block'}}>
                   <li title={cluesextendid} onClick={this.showConfirm}>放弃这条线索</li>
@@ -383,7 +420,8 @@ class MsgDemo extends React.Component {
                         <span className="loading-ring"> </span>
                     </div>
                 </div>
-            </Page>
+                <ShowAlert />
+            </div>
         );
     }
 };
@@ -419,18 +457,18 @@ class SideRob extends React.Component {
     closeSold(){this.setState({showSid:false},()=> this.props.onChange('SDSrandoms'));}
     render() {
         const {showSid}=this.state;
-        const {followupdate,followuptypename,price,dealtsubcategoryname,clueslevelname,dealtbrandname,dealtseriesname,expectedprice,dealtdate,faildate,dealttruckname,clueslevelid,failname,remark}=this.state.DATA;
+        const {createdate,followuptypename,price,dealtsubcategoryname,clueslevelname,dealtbrandname,dealtseriesname,expectedprice,dealtdate,faildate,dealttruckname,clueslevelid,failname,remark}=this.state.DATA;
         return(
             <div className={showSid?"SideRobClue visible":"SideRobClue"}>
                 <header>
                   <span>跟进记录</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
                 </header>
-                <Form>
+                <Form className="SRCform">
                     <FormCell>
                         <CellHeader><Label>跟进时间</Label></CellHeader>
                         <CellBody>
-                            {followupdate}
+                            {createdate}
                         </CellBody>
                     </FormCell>
                     <FormCell>
@@ -442,7 +480,7 @@ class SideRob extends React.Component {
                     <FormCell style={{'display':clueslevelid !== 5 && clueslevelid !== 6?'':'none'}}>
                         <CellHeader><Label>预期价格</Label></CellHeader>
                         <CellBody>
-                            {price}
+                            {price=='0'?'无':price}
                         </CellBody>
                         <CellFooter>万元</CellFooter>
                     </FormCell>
@@ -480,7 +518,7 @@ class SideRob extends React.Component {
                         <FormCell>
                             <CellHeader><Label>成交价格</Label></CellHeader>
                             <CellBody>
-                                {expectedprice}
+                                {price=='0'?'无':price}
                             </CellBody>
                             <CellFooter>万元</CellFooter>
                         </FormCell>

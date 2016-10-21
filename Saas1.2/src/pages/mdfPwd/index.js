@@ -41,7 +41,7 @@ class MsgDemo extends React.Component {
         this.goSave = this.goSave.bind(this);
     }
     componentDidMount() {
-
+        document.title = '修改密码';
     }
 
     checkForm(){
@@ -57,12 +57,17 @@ class MsgDemo extends React.Component {
             Alert.to("请确认新密码");
             return false;
         }
-        if(this.state.newpwd !== this.state.pwd){
-            Alert.to("新密码与确认密码不一致");
+        if(this.state.pwd.length < 6 || this.state.pwd.length > 16){
+            Alert.to("密码长度不符合规范");
             return false;
         }
-        if(this.state.pwd.length < 6 && this.state.oldpwd.length < 6 &&  this.state.newpwd.length < 6){
-            Alert.to("密码不能少于6位");
+        let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/;
+        if(!reg.test(this.state.pwd)){
+            Alert.to("新密码不符合规范");
+            return false;
+        }
+        if(this.state.newpwd !== this.state.pwd){
+            Alert.to("新密码与确认密码不一致");
             return false;
         }
         return true;
@@ -82,10 +87,10 @@ class MsgDemo extends React.Component {
                 (res) => {
                     if(res.status == 1){
                         this.context.router.push({
-                            pathname: '/nav'
+                            pathname: '/nav/f'
                         });
                     }else if(res.status == 901){
-                        Alert.to(res.msg);
+                        alert(res.msg);
                         this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
@@ -127,7 +132,7 @@ class MsgDemo extends React.Component {
                     </FormCell>
                 </Form>
                 <ul className='PwdFol'>
-                    <li>新密码输入规范说明：</li>
+                    <li>密码规范说明：</li>
                     <li>1：密码长度在6~16位范围内；</li>
                     <li>2：必须由数字和字母组成；</li>
                     <li>3：不能有空格；</li>

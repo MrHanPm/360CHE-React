@@ -121,13 +121,8 @@ class Sidebar extends React.Component{
                 <li><span title="" onClick={self.goSFA}>全部省份</span></li>
                 {this.state.L.map(function(e,indexs){
                   return(
-                    <li key={indexs} 
-                    className={e.provincename == Fes ? "active" :''}
-                    >
-                      <span 
-                      title={e.provincesn}
-                      onClick={self.upDatas}
-                      >
+                    <li key={indexs} className={e.provincename == Fes ? "active" :''}>
+                      <span title={e.provincesn} onClick={self.upDatas}>
                         {e.provincename}
                       </span>
                       <Icon value="success" />
@@ -139,14 +134,8 @@ class Sidebar extends React.Component{
                 <li><span title="" onClick={self.goDatas}>全部城市</span></li>
                 {this.state.R.map(function(el,index){
                   return(
-                    <li key={index} 
-                    className={el.cityname == Ges ? "active" :''}
-                    >
-                      <span 
-                      key={index} 
-                      title={el.citysn}
-                      onClick={self.goDatas}
-                      >
+                    <li key={index} className={el.cityname == Ges ? "active" :''}>
+                      <span key={index} title={el.citysn} onClick={self.goDatas}>
                         {el.cityname}
                       </span>
                       <Icon value="success" />

@@ -79,7 +79,7 @@ export default class SearchBarDemo extends React.Component {
                                                 <MediaBoxTitle>{item.customname}</MediaBoxTitle>
                                                 <MediaBoxDescription>
                                                    <span className="phns">{item.customphone}</span>
-                                                   <span>{item.lastlinktime}</span>
+                                                   <span>{item.lastlinktime.substring(0,4) < '2000'?'近期无联系':item.lastlinktime}</span>
                                                 </MediaBoxDescription>
                                             </MediaBoxBody>
                                         </MediaBox>

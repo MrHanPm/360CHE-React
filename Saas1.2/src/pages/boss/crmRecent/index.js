@@ -70,15 +70,15 @@ class Clues extends React.Component {
                     let Fingerprint = res.fingerprint;
                     Tool.localItem('reTelFingerprint',Fingerprint);
                     if(res.ischange == 1){
-                        this.state.DATA = [];
-                        let ReData=[];
-                        for(let i=0; i<res.listdata.length;i++){
-                            ReData.push(res.listdata[i]);
-                        }
-                        let reTel = JSON.stringify(ReData);
+                        //this.state.DATA = [];
+                        //let ReData=res.listdata;
+                        // for(let i=0; i<res.listdata.length;i++){
+                        //     ReData.push(res.listdata[i]);
+                        // }
+                        let reTel = JSON.stringify(res.listdata);
                         Tool.localItem('reTel',reTel);
                         this.setState({
-                            DATA:ReData,
+                            DATA:res.listdata,
                         });
                     }
                     if(this.state.DATA.length === 0){
@@ -87,7 +87,7 @@ class Clues extends React.Component {
                         this.setState({isDatas:false});
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);

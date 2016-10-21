@@ -3,10 +3,19 @@
     overflow: hidden;
     .BoxC{
         height: 100%;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
         width: 100%;
         box-sizing: border-box;
         padding: 0 15px 10px;
+    }
+    .weui_cell_primary{
+        max-height: 100%;
+        height: auto;
+        overflow: hidden;
+        word-wrap: normal;
+        word-break: normal;
     }
     .weui_cells{border-radius: 6px;}
     .user-title{
@@ -18,11 +27,14 @@
         text-align:center;
         padding-top: 20px;
         button{
-            width: 28%;
+            width: 30%;
+            height: 37px;
+            overflow: hidden;
             display: inline-block;
             background: #fff;
             text-align: center;
-            margin-left: 8%;
+            margin-left: 5%;
+            font-size: 16px;
         }
         button:first-child{margin: 0;}
         .actv{
@@ -74,21 +86,33 @@
             text-align: center;
             font-size: 18px;
             color: #3cc51f;
-            line-height: 60px;
+            line-height: 50px;
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            box-shadow: 0 0 1px #ccc;
+            background: #fff;
+            left: 0;
+            top: 0;
+            z-index: 666;
         }
         .tables{
             width:100%;
-            height: auto;
-            background: #fff;
+            height: 100%;
+            padding-top: 55px;
+            
             border-radius: 6px;
-            ul{width: 100%; height: 40px;border-top: 1px solid #ccc;}
+            overflow-x: hidden;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            ul{width: 100%; height: 40px;border-top: 1px solid #ccc;background: #fff;}
             .titles{
                 background: #E5E5E5;
                 border-top-left-radius: 6px;
                 border-top-right-radius: 6px;
                 border-top: 0;
             }
-            li{height: 40px;line-height: 40px;text-align: center;float: left;border-left: 1px solid #ccc;}
+            li{height: 40px;line-height: 40px;text-align: center;float: left;border-left: 1px solid #ccc; overflow: hidden;}
             .dates{width: 30%;border:0;}
             .adds{width: 20%;}
             .oks{width: 20%;}

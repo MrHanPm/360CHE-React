@@ -52,7 +52,12 @@ class MsgDemo extends React.Component {
         };
         this.msgInput = (e) => {this.state.msg = e.target.value;}
         this.nameInput = (e) => {this.state.name = e.target.value;}
-        this.telInput = (e) => {this.state.tel = e.target.value;}
+        this.telInput = (e) => {
+            let phs = e.target.value;
+            let phos = phs.replace(/(^\s+)|(\s+$)/g, "");
+            let phones = phos.substring(0,11);
+            this.setState({SFCSrandoms:'',tel:phones});
+        }
         this.addressInput = (e) => {this.state.address = e.target.value;}
         this.companyInput = (e) => {this.state.company = e.target.value;}
         this.onSaves = this.onSaves.bind(this);
@@ -76,7 +81,7 @@ class MsgDemo extends React.Component {
             Alert.to("姓名必须是中文");
             return false;
         }
-        if(this.state.name.length >4){
+        if(this.state.name.length > 6){
             Alert.to("姓名字符过长");
             return false;
         }
@@ -97,11 +102,17 @@ class MsgDemo extends React.Component {
             Alert.to("请选择是否购车");
             return false;
         }
+        if(this.state.msg.length > 800){
+            Alert.to("备注字数不能超过800");
+            return false;
+        }
         return true;
     }
     onSaves(){
         //let persId = Tool.getQueryString('id');
+        let Doms = document.getElementById('goNextP');
         if(this.checkForm()){
+            Doms.setAttribute("disabled", true);
             let json = {};
             if(typeof(Tool.SessionId) == 'string'){
                 json.sessionid = Tool.SessionId;
@@ -134,14 +145,16 @@ class MsgDemo extends React.Component {
                         let urlTxt = '/detailTel?id=' + res.data.customid;
                         this.context.router.push({pathname: urlTxt});
                     }else if(res.status == 901){
-                        Alert.to(res.msg);
+                        alert(res.msg);
                         this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
+                        Doms.removeAttribute("disabled");
                     }
                 },
                 (err) => {
                     Alert.to('网络异常，稍后重试。。');
+                    Doms.removeAttribute("disabled");
                 }
             )
         }
@@ -160,6 +173,7 @@ class MsgDemo extends React.Component {
         }else{
             SFCSval = '';
         }
+        const {tel} = this.state;
         return (
             <Page className="account addPursd">
                 
@@ -173,7 +187,7 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="请输入" onChange={this.telInput}/>
+                            <Input type="number" placeholder="请输入" onChange={this.telInput} value={tel}/>
                         </CellBody>
                         <CellFooter className="cleAft"></CellFooter>
                     </Cell>
@@ -204,7 +218,9 @@ class MsgDemo extends React.Component {
                             <Select data={[
                                 {
                                     value: 2,
-                                    label: '请选择'
+                                    label: '',
+                                    disabled:true,
+                                    selected:true
                                 },
                                 {
                                     value: 0,
@@ -214,7 +230,7 @@ class MsgDemo extends React.Component {
                                     value: 1,
                                     label: '已购车'
                                 }
-                            ]} onChange={this.isBuys} />
+                            ]} onChange={this.isBuys}/>
                         </CellBody>
                     </FormCell>
                 </Cells>
@@ -223,13 +239,13 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写限800字" onInput={this.msgInput}/>
+                            <TextArea placeholder="请填写备注" rows="2" maxlength="800" onInput={this.msgInput}></TextArea>
                         </CellBody>
                     </Cell>
                 </Cells>
 
                 <ButtonArea>
-                    <Button onClick={this.onSaves}  style={{'marginBottom':'100px'}}>保存</Button>
+                    <Button onClick={this.onSaves} id="goNextP" style={{'marginBottom':'100px'}}>保存</Button>
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>

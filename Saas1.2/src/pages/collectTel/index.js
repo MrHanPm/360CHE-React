@@ -88,7 +88,7 @@ class Clues extends React.Component {
                     });
                     this.showToast();
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -170,7 +170,7 @@ class Clues extends React.Component {
                         this.setState({isDatas:false});
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -192,7 +192,10 @@ class Clues extends React.Component {
         Tool.get('Customer/UpdateCustomerLastLinkTime.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    
+                    this.upDATA();
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -220,7 +223,7 @@ class Clues extends React.Component {
     }
     UlScroll(el){
         var goUl = document.getElementById(el);
-        var Uls = document.querySelector('.clueBody');
+        var Uls = document.querySelector('.CrmScoll');
         var ulHeight = goUl.parentNode.offsetTop;
         Uls.scrollTop = ulHeight - 45;
     }
@@ -296,35 +299,37 @@ class Clues extends React.Component {
         }
         return (
             <div className="clueBody cluePending crmPend">
-            {DATA.map(function(e,indexs){
-                return(
-                <Panel key={indexs}>
-                    <PanelHeader id={e}>{e}</PanelHeader>
-                    {Lis[indexs].map(function(ele,index){
-                        return(
-                    <PanelBody key={index}>
-                        <MediaBox type="text">
-                            <MediaBoxHeader>
-                                <a href={`tel:${ele.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={ele.customid} onClick={self.RobLine}> </a>
-                            </MediaBoxHeader>
-                            <div className="Cfocus" title={ele.customid} onClick={self.CrmMesc}></div>
-                            <MediaBoxBody>
-                                <MediaBoxTitle>
-                                    <span>{ele.customname}</span>
-                                    <i className={ele.isfavorites?"crmStar active" :"crmStar" } title={ele.customid} data={ele.isfavorites} data-inds={indexs} alt={index} onClick={self.CrmStar}></i>
-                                </MediaBoxTitle>
-                                <MediaBoxInfo>
-                                    <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
-                                </MediaBoxInfo>
-                            </MediaBoxBody>
-                        </MediaBox>
-                    </PanelBody>
-                        )})
-                    }
-                </Panel>
-                )})
-            }
-            {footerS}
+                <div className="CrmScoll">
+                {DATA.map(function(e,indexs){
+                    return(
+                    <Panel key={indexs}>
+                        <PanelHeader id={e}>{e}</PanelHeader>
+                        {Lis[indexs].map(function(ele,index){
+                            return(
+                        <PanelBody key={index}>
+                            <MediaBox type="text">
+                                <MediaBoxHeader>
+                                    <a href={`tel:${ele.customphone}`} className="weui_btn weui_btn_plain_primary crmCall" title={ele.customid} onClick={self.RobLine}> </a>
+                                </MediaBoxHeader>
+                                <div className="Cfocus" title={ele.customid} onClick={self.CrmMesc}></div>
+                                <MediaBoxBody>
+                                    <MediaBoxTitle>
+                                        <span>{ele.customname}</span>
+                                        <i className={ele.isfavorites?"crmStar active" :"crmStar" } title={ele.customid} data={ele.isfavorites} data-inds={indexs} alt={index} onClick={self.CrmStar}></i>
+                                    </MediaBoxTitle>
+                                    <MediaBoxInfo>
+                                        <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>
+                                    </MediaBoxInfo>
+                                </MediaBoxBody>
+                            </MediaBox>
+                        </PanelBody>
+                            )})
+                        }
+                    </Panel>
+                    )})
+                }
+                {footerS}
+            </div>
             <aside className="scale" id="index_selected">A</aside>
             <ul id="index_nav">
               {DATA.map(function(e,index){

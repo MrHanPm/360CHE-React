@@ -17,6 +17,9 @@ class MsgDemo extends React.Component {
             (res) => {
                 if(res.status == 1){
                     this.forAjax(res.listdata);
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg)
                 }

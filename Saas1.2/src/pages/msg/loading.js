@@ -14,6 +14,8 @@ class MsgDemo extends React.Component {
                 if(res.status){
                     let datas = JSON.stringify(res.data);
                     Tool.localItem('jsSDK',datas);
+                }else{
+                    Alert.to(res.msg);
                 }
             },
             (err) => {

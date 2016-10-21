@@ -40,16 +40,6 @@ class Clues extends React.Component {
             accountTotalList:[
                 {accountid: 0, username: ""},
             ],
-            briefingData:[
-                {title:'',value:0},
-                {title:'',value:0},
-                {title:'',value:0},
-                {title:'',value:0},
-            ],
-            successData:[],
-            addData:[],
-            brandData:[{name:'',value:0},],
-            salesData:[{name:'',value:0},],
             successRankData:[{name:'',value:0},],
             tryRankData:[{name:'',value:0},],
             addRankData:[{name:'',value:0},],
@@ -60,6 +50,9 @@ class Clues extends React.Component {
         this.getNames = this.getNames.bind(this);
         this.ChanName = this.ChanName.bind(this);
         this.goMessage = this.goMessage.bind(this);
+        this.addHeight = this.addHeight.bind(this);
+        this.THeight = this.THeight.bind(this);
+        this.SHeight = this.SHeight.bind(this);
     }
     getNames(){this.setState({NameRandoms: Math.random(),Drandoms:'',});}
     ChanName(obj){
@@ -156,6 +149,8 @@ class Clues extends React.Component {
         });
     }
     upDATA(Stdat,Endat){
+        document.querySelector(".coMores").style.display = '';
+        document.querySelector(".bar").style.height = "300px";
         let json={};
         if(this.state.ids !== ''){json.userid = this.state.ids;}
         if(typeof(Tool.SessionId) == 'string'){
@@ -168,18 +163,21 @@ class Clues extends React.Component {
         Tool.get('Statistics/StatisticsList.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    let Sue = [];
+                    let Tue = [];
+                    let Aue = [];
                     this.setState({
                         loadShow:false,
                         accountTotalList:res.data.accountTotalList,
-                        briefingData:res.data.briefingData,
-                        successData:res.data.successData,
-                        addData:res.data.addData,
-                        brandData:res.data.brandData,
-                        salesData:res.data.salesData,
                         successRankData:res.data.successRankData,
                         tryRankData:res.data.tryRankData,
                         addRankData:res.data.addRankData,
                     });
+                    for(let i=0;i<10;i++){
+                        Sue.push(res.data.successRankData[i]);
+                        Tue.push(res.data.tryRankData[i]);
+                        Aue.push(res.data.addRankData[i]);
+                    }
                     // 销售简报图形
                     [].forEach.call(document.querySelector('#pie_charts').children,function(chart,index){
                         var data = res.data.briefingData[index];
@@ -197,11 +195,11 @@ class Clues extends React.Component {
                     Views.funnel(document.querySelector('#sales_chart'),res.data.salesData);
 
                     // 排行榜图形
-                    Echarts.init(document.querySelector('#success_rank_chart')).setOption(Views.bar(res.data.successRankData));
-                    Echarts.init(document.querySelector('#try_rank_chart')).setOption(Views.bar(res.data.tryRankData));
-                    Echarts.init(document.querySelector('#add_rank_chart')).setOption(Views.bar(res.data.addRankData));
+                    Echarts.init(document.querySelector('#success_rank_chart')).setOption(Views.bar(Sue));
+                    Echarts.init(document.querySelector('#try_rank_chart')).setOption(Views.bar(Tue));
+                    Echarts.init(document.querySelector('#add_rank_chart')).setOption(Views.bar(Aue));
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -222,6 +220,27 @@ class Clues extends React.Component {
             enddate: Endat
         });
         this.upDATA(Stdat,Endat);
+    }
+    addHeight(e){
+        let Doms = document.getElementById('add_rank_chart');
+        let widths = this.state.addRankData.length * 20 +'px';
+        Doms.style.height = widths;
+        Echarts.init(document.querySelector('#add_rank_chart')).setOption(Views.bar(this.state.addRankData));
+        e.target.style.display = 'none';
+    }
+    THeight(e){
+        let Doms = document.getElementById('try_rank_chart');
+        let widths = this.state.tryRankData.length * 20 +'px';
+        Doms.style.height = widths;
+        Echarts.init(document.querySelector('#try_rank_chart')).setOption(Views.bar(this.state.tryRankData));
+        e.target.style.display = 'none';
+    }
+    SHeight(e){
+        let Doms = document.getElementById('success_rank_chart');
+        let widths = this.state.successRankData.length * 20 +'px';
+        Doms.style.height = widths;
+        Echarts.init(document.querySelector('#success_rank_chart')).setOption(Views.bar(this.state.successRankData));
+        e.target.style.display = 'none';
     }
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
@@ -322,6 +341,7 @@ class Clues extends React.Component {
                         <div className="weui_cell">
                             <div className="weui_cell_bd weui_cell_primary">
                                 <div className="chart bar" id="success_rank_chart"></div>
+                                <p className="coMores" onClick={this.SHeight}>查看更多</p>
                             </div>
                         </div>
                     </div>
@@ -332,6 +352,7 @@ class Clues extends React.Component {
                         <div className="weui_cell">
                             <div className="weui_cell_bd weui_cell_primary">
                                 <div className="chart bar" id="try_rank_chart"></div>
+                                <p className="coMores" onClick={this.THeight}>查看更多</p>
                             </div>
                         </div>
                     </div>
@@ -342,6 +363,7 @@ class Clues extends React.Component {
                         <div className="weui_cell">
                             <div className="weui_cell_bd weui_cell_primary">
                                 <div className="chart bar" id="add_rank_chart"></div>
+                                <p className="coMores" onClick={this.addHeight}>查看更多</p>
                             </div>
                         </div>
                     </div>

@@ -6,6 +6,7 @@ class Alert extends Component {
       el.addEventListener('touchend', function(e) {
         clearTimeout(AlertTimeOut);
         this.setAttribute('class','notification');
+        e.preventDefault();
       }, false);
     });
   }

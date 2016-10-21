@@ -19,6 +19,7 @@ import LoadData from './pages/msg/data';
 import Feedback from './pages/msg/feedback';
 import Account from './pages/account/index';
 import MdfPwd from './pages/mdfPwd/index';
+import AddPwd from './pages/addPwd/index';
 import Rob from './pages/rob/index';
 import RobClue from './pages/robClue/index';
 import AddClue from './pages/addClue/index';
@@ -63,6 +64,7 @@ ReactDOM.render((
             <Route path="feedback" component={Feedback}/>
             <Route path="account" component={Account}/>
             <Route path="mdfPwd" component={MdfPwd}/>
+            <Route path="addPwd" component={AddPwd}/>
             <Route path="rob" component={Rob}/>
             <Route path="alterClue" component={AlterClue}/>
             <Route path="addTel" component={AddTel}/>

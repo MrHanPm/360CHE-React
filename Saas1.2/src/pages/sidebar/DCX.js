@@ -78,13 +78,8 @@ class Sidebar extends React.Component{
               <ul className="Fnav CXlist">
                 {this.state.L.map(function(e,indexs){
                   return(
-                    <li key={indexs} 
-                    className={e.productname == Fes ? "active" :''}
-                    >
-                      <span 
-                      title={e.productid}
-                      onClick={self.upDatas}
-                      >
+                    <li key={indexs} className={e.productname == Fes ? "active" :''}>
+                      <span className="hangP" title={e.productid} onClick={self.upDatas}>
                         {e.productname}
                       </span>
                       <Icon value="success" />

@@ -22,7 +22,9 @@
 .Rightrob{li{width: 100%;&:first-child{background:#00b800;color: #fff;}}}
 
 .robClues{
-    .bd{padding-bottom: 100px;box-sizing:border-box;}
+    height: 100%;overflow: hidden;
+    .bd{padding-bottom: 100px;box-sizing:border-box;overflow-y: scroll;
+    overflow-x: hidden;height: 100%;-webkit-overflow-scrolling:touch;}
     .openClue{
         width: 100%;
         height: 40px;
@@ -52,7 +54,9 @@
             position: relative;
             border-top: 1px solid #d9d9d9;
             p{font-size: 14px;color: #ccc;line-height: 30px;padding-right: 20px;}
-            h4{font-size: 16px;color: #666;font-weight:300;line-height: 24px;padding-right: 20px;}
+            h4{font-size: 16px;color: #666;font-weight:300;line-height: 24px;padding-right: 20px;height: 24px;
+                span{float: left;display: block;}
+            }
             div{
                 position: absolute;
                 width: 100%;
@@ -62,6 +66,12 @@
                 left: 0;
             }
             &:after{content:''; height:8px; width:8px; display:block; border:3px solid #ccc; border-left-width:0; border-top-width:0; transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-o-transform:rotate(-45deg);-ms-transform:rotate(-45deg); position:absolute; bottom:40%; right:15px;}
+        }
+        .Bkc{
+            width: auto;
+            max-width: 80%;
+            height: 24px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
         }
         
     }
@@ -74,7 +84,7 @@
         border-radius: 100px;
         background: #09bb07;
         box-shadow: 0 0 0 4px rgba(4,190,2,.2);
-        z-index: 116;
+        z-index: 777;
         &:before{
             content: '\e61e';
             font-family: 'saas_ico';
@@ -102,11 +112,12 @@
     top: 0;
     right:-100%;
     z-index: 9999;
+    overflow: hidden;
     box-sizing:border-box;
     background: #f7f7fa;
     -webkit-transition: transform .3s ease-out;
     transition: transform .3s ease-out;
-    header{position: relative;height: 44px; border-bottom: 1px solid #d9d9d9;background-color:#fff;width: 100%; z-index: 100;}
+    header{position: absolute;height: 44px; border-bottom: 1px solid #d9d9d9;background-color:#fff;width: 100%; z-index: 100;}
     header span{
         display:block;
         width: 100%;
@@ -132,6 +143,14 @@
             line-height: 44px;
             font-size: 22px;
         }
+    }
+    .SRCform{
+        height: 100%;
+        box-sizing: border-box;
+        padding-top: 45px;
+        overflow: hidden;
+        margin: 0;
+        overflow-y: scroll;
     }
 }
 .SideRobClue.visible{

@@ -56,6 +56,7 @@ class CellDemo extends React.Component {
         }
     }
     checkForm(){
+        let regHZ=/^[\u2E80-\u9FFF]+$/;
         if(this.state.brands.length === 0){
             Alert.to("请选择品牌");
             return false;
@@ -64,8 +65,12 @@ class CellDemo extends React.Component {
             Alert.to("请输入姓名");
             return false;
         }
-        if(this.state.name.length > 4){
-            Alert.to("姓名不能超过4个字符");
+        if(regHZ.test(this.state.name)){}else{
+            Alert.to("姓名必须是中文");
+            return false;
+        }
+        if(this.state.name.length > 6){
+            Alert.to("姓名不能超过6个字符");
             return false;
         }
         return true;
@@ -93,6 +98,9 @@ class CellDemo extends React.Component {
                         this.context.router.push({pathname: '/loaddata'});
                     }else if(res.status === 801){
                         Alert.to(res.msg);
+                    }else if(res.status == 901){
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
                     }
@@ -115,7 +123,7 @@ class CellDemo extends React.Component {
             )
         });
         return (
-            <Page className="name" title="销售信息">
+            <Page className="CrmScoll" title="销售信息">
                 <Cells access>
                     <Cell href="#brand">
                         <CellBody>
@@ -142,7 +150,7 @@ class CellDemo extends React.Component {
                 <ButtonArea>
                     <Button onClick={this.goNext}>进入营销助手</Button>
                 </ButtonArea>
-                <p className="FootTxt">如遇登录问题，欢迎致电 <i>4006-136-188</i><br/>致电时间：周一至周日09:00~18:00</p>
+                <p className="FootTxt">如遇登录问题，欢迎致电 <a href="tel:4006136188">4006-136-188</a><br/>致电时间：周一至周日09:00~18:00</p>
             </Page>
         );
     }

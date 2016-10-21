@@ -31,6 +31,7 @@ class MsgDemo extends React.Component {
         this.goChengs = this.goChengs.bind(this);
         this.goFun= this.goFun.bind(this);
         this.goAdd = this.goAdd.bind(this);
+        this.RobLine = this.RobLine.bind(this);
     }
 
     goFun(e){
@@ -60,6 +61,30 @@ class MsgDemo extends React.Component {
         Tool.localItem('RobClues',data);
         this.context.router.push({pathname: '/alterTel'});
     }
+    RobLine(e){
+        let json={};
+        if(typeof(Tool.SessionId) == 'string'){
+            json.sessionid = Tool.SessionId;
+        }else{
+            json.sessionid = Tool.SessionId.get();
+        }
+        json.customerid = e.target.title;
+        Tool.get('Customer/UpdateCustomerLastLinkTime.aspx',json,
+            (res) => {
+                if(res.status == 1){
+                    
+                }else if(res.status == 901){
+                    alert(res.msg);
+                    this.context.router.push({pathname: '/loading'});
+                }else{
+                    Alert.to(res.msg);
+                }
+            },
+            (err) => {
+                Alert.to('网络异常，稍后重试。。');
+            }
+        )
+    }
     componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
@@ -74,7 +99,7 @@ class MsgDemo extends React.Component {
                 if(res.status == 1){
                     this.setState({DATA:res.data});
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -107,7 +132,7 @@ class MsgDemo extends React.Component {
                             {customphone}
                         </CellBody>
                         <CellFooter className="cleAft">
-                            <a href={`tel:${customphone}`}> </a>
+                            <a href={`tel:${customphone}`} title={customid} onClick={this.RobLine}> </a>
                         </CellFooter>
                     </Cell>
                 </Cells>

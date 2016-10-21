@@ -54,6 +54,7 @@ class Clues extends React.Component {
                     for(let i=0; i<res.listdata.length;i++){
                         this.state.DATA.push(res.listdata[i]);
                     }
+                    //let ConData = this.state.DATA.concat(res.listdata);
                     //console.log(page,this.state.DATA);
                     if(this.state.DATA.length == 0){this.props.REDS(false);}else{this.props.REDS(true);}
                     if(res.pagecount == page){
@@ -65,8 +66,8 @@ class Clues extends React.Component {
                         });
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
-                    this.context.router.push({pathname: '/loading'});
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -120,7 +121,7 @@ class Clues extends React.Component {
             footerS = loadingS ? <LoadAd /> : <NoMor />;
         }
         return (
-            <div className="clueBody cluePending cluePend" id="clueBody" onScroll={this.handleScroll}>
+            <div className="clueBody cluePending cluePend GoTouch" id="clueBody" onScroll={this.handleScroll}>
             {DATA.map(function(e,index){
                 return(
                 <Panel key={index}>

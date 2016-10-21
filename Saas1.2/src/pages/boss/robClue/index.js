@@ -57,7 +57,7 @@ class MsgDemo extends React.Component {
                 if(res.status == 1){
                     this.setState({DATArob:res.data});
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
@@ -77,7 +77,7 @@ class MsgDemo extends React.Component {
                         this.setState({Messrob:res.listdata});
                     }
                 }else if(res.status == 901){
-                    Alert.to(res.msg);
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);

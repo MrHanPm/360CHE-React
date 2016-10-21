@@ -26,6 +26,7 @@ class Sidebar extends React.Component{
             s_clueslevel:[],//级别
             s_clueresource:[],//线索
             s_cheliangyongtuid:[],//用途
+            SCH:0,
             PP:[],
             LY:[],
             YT:[]
@@ -135,24 +136,37 @@ class Sidebar extends React.Component{
   }
   strTime(e){this.state.s_lastlinktimemin = e.target.value;}
   endTime(e){this.state.s_lastlinktimemax = e.target.value;}
+  checkForm(){
+    if(this.state.s_lastlinktimemin !== '' && this.state.s_lastlinktimemax == ''){
+        Alert.to("时间区间必须完整");
+        return false;
+    }
+    if(this.state.s_lastlinktimemin == '' && this.state.s_lastlinktimemax !== ''){
+        Alert.to("时间区间必须完整");
+        return false;
+    }
+    return true;
+  }
   upDatas(){
-    //console.log(this.state);
-    let json = {};
-    json.s_levelsetstatus=this.state.s_levelsetstatus.join();//级别状态
-    json.s_followstatus=this.state.s_followstatus.join();//跟进状态
-    json.s_follownummin = parseInt(this.state.s_follownummin);//跟进次数
-    json.s_follownummax = parseInt(this.state.s_follownummax);
-    json.s_expectedbycarnummin = parseInt(this.state.s_expectedbycarnummin);//台数开始
-    json.s_expectedbycarnummax = parseInt(this.state.s_expectedbycarnummax);
-    json.s_lastlinktimemin= this.state.s_lastlinktimemin.replace(/-/g,'/');//时间开始
-    json.s_lastlinktimemax= this.state.s_lastlinktimemax.replace(/-/g,'/');
-    json.s_brandids=this.state.s_brandids.join();//品牌id
-    json.s_clueslevel=this.state.s_clueslevel.join();//级别
-    json.s_clueresource=this.state.s_clueresource.join();//线索
-    json.s_cheliangyongtuid=this.state.s_cheliangyongtuid.join();//用途
-    //console.log(json);
-    this.closeSold();
-    this.props.onChange(json);
+    if(this.checkForm()){
+      //console.log(this.state);
+      let json = {};
+      json.s_levelsetstatus=this.state.s_levelsetstatus.join();//级别状态
+      json.s_followstatus=this.state.s_followstatus.join();//跟进状态
+      json.s_follownummin = parseInt(this.state.s_follownummin);//跟进次数
+      json.s_follownummax = parseInt(this.state.s_follownummax);
+      json.s_expectedbycarnummin = parseInt(this.state.s_expectedbycarnummin);//台数开始
+      json.s_expectedbycarnummax = parseInt(this.state.s_expectedbycarnummax);
+      json.s_lastlinktimemin= this.state.s_lastlinktimemin.replace(/-/g,'/');//时间开始
+      json.s_lastlinktimemax= this.state.s_lastlinktimemax.replace(/-/g,'/');
+      json.s_brandids=this.state.s_brandids.join();//品牌id
+      json.s_clueslevel=this.state.s_clueslevel.join();//级别
+      json.s_clueresource=this.state.s_clueresource.join();//线索
+      json.s_cheliangyongtuid=this.state.s_cheliangyongtuid.join();//用途
+      //console.log(json);
+      this.closeSold();
+      this.props.onChange(json);
+    }
   }
   Resets(){
     this.state.s_levelsetstatus=[];//级别状态
@@ -183,8 +197,21 @@ class Sidebar extends React.Component{
   focusOn(){
     document.querySelectorAll('.FollBtn')[0].setAttribute('style','z-index:-1');
   }
+  //onFocus={this.focusOn} onBlur={this.buildOn}
   componentDidMount(){
     let self = this;
+    // let SCH = window.screen.height;
+    // this.state.SCH = SCH;
+    // window.onresize = function(){
+    //   let Schs = window.screen.height;
+    //   if(Schs < this.state.SCH){
+    //     document.querySelectorAll('.FollBtn')[0].setAttribute('style','z-index:-1');
+    //   }
+    //   if(Schs == this.state.SCH){
+    //     document.querySelectorAll('.FollBtn')[0].removeAttribute('style');
+    //   }
+    // }
+
     // let DoFolls = document.getElementById('Folls');
     // let Hcss = window.screen.height + 'px';
     // DoFolls.style.height = Hcss;
@@ -227,7 +254,7 @@ class Sidebar extends React.Component{
                 <dl className="PPstyle">
                   <dt>
                     <p>品牌</p>
-                    <i>全部</i>
+                    <i style={{'display':'none'}}>全部</i>
                   </dt>
                   {PP.map(function(e,index){return(
                     <dd key={index} title={e.brandid} onClick={self.PPsd}>{e.brandname}</dd>
@@ -271,7 +298,7 @@ class Sidebar extends React.Component{
                 <dl className="PPstyle">
                   <dt>
                     <p>线索来源</p>
-                    <i>全部</i>
+                    <i style={{'display':'none'}}>全部</i>
                   </dt>
                   {LY.map(function(e,index){return(
                     <dd key={index} title={e.value} onClick={self.XSsd}>{e.key}</dd>
@@ -291,7 +318,7 @@ class Sidebar extends React.Component{
                 <dl className="PPstyle">
                   <dt>
                     <p>车辆用途</p>
-                    <i>全部</i>
+                    <i style={{'display':'none'}}>全部</i>
                   </dt>
                   {YT.map(function(e,index){return(
                     <dd key={index} title={e.value} onClick={self.YTsd}>{e.key}</dd>
