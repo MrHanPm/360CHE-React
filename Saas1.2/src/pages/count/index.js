@@ -20,7 +20,6 @@ import Echarts from 'echarts';
 import {Tool,Alert} from '../../tool.js';
 import {Views} from '../../component/charts.min.js';
 import './index.less';
-import MsgBox from './msg.js';
 
 class Clues extends React.Component {
     constructor(){
@@ -30,7 +29,6 @@ class Clues extends React.Component {
             startdate:'',
             enddate:'',
             userid:'',
-            Drandoms:'',
             name:'',
             loadShow:true,
             actvs:0,
@@ -121,13 +119,20 @@ class Clues extends React.Component {
         this.upDATA(Stdat,Endat);
     }
     goMessage(){
-        this.setState({
-            Drandoms: Math.random()
-        });
+        let json = {};
+        json.startdate = this.state.startdate;
+        json.enddate = this.state.enddate;
+        json.id = "";
+        let jsonstr = JSON.stringify(json);
+        Tool.localItem('CountMsg',jsonstr);
+        this.context.router.push({pathname: '/countMsg'});
     }
     upDATA(Stdat,Endat){
-        document.querySelector(".coMores").style.display = '';
-        document.querySelector(".bar").style.height = "300px";
+        for(let i=0;i<3;i++){
+            document.querySelectorAll(".weui_btn_default")[i].setAttribute('disabled','true');
+            document.querySelectorAll(".coMores")[i].style.display = '';
+            document.querySelectorAll(".bar")[i].style.height = "300px";
+        }
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
@@ -143,7 +148,6 @@ class Clues extends React.Component {
                     let Tue = [];
                     let Aue = [];
                     this.setState({
-                        Drandoms:'',
                         loadShow:false,
                         name:res.data.accountTotalList.username,
                         successRankData:res.data.successRankData,
@@ -175,6 +179,9 @@ class Clues extends React.Component {
                     Echarts.init(document.querySelector('#success_rank_chart')).setOption(Views.bar(Sue));
                     Echarts.init(document.querySelector('#try_rank_chart')).setOption(Views.bar(Tue));
                     Echarts.init(document.querySelector('#add_rank_chart')).setOption(Views.bar(Aue));
+                    for(let i=0;i<3;i++){
+                        document.querySelectorAll(".weui_btn_default")[i].removeAttribute('disabled');
+                    }
                 }else if(res.status == 901){
                     alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
@@ -183,7 +190,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -210,6 +217,18 @@ class Clues extends React.Component {
     }
     componentDidMount(){
         document.title="数据统计";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         let Stdat = this.GetDateYes();
         let Endat = this.GetDateEes();
         this.setState({
@@ -342,13 +361,12 @@ class Clues extends React.Component {
                         <span className="loading-ring"> </span>
                     </div>
                 </div>
-                <MsgBox startdate={this.state.startdate}
-                        enddate={this.state.enddate}
-                        Drandoms={this.state.Drandoms}
-                        onChange={()=> this.setState({Drandoms:''})} />
             </div>
         );
     }
 };
 
+Clues.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
 export default Clues

@@ -42,6 +42,11 @@ class Clues extends React.Component {
         Tool.get('Clues/GetRobCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    if(res.listdata.length > 0){
+                        this.props.REDS(true);
+                    }else{
+                        this.props.REDS(false);
+                    }
                     let page = this.state.nowpage;
                     if(res.listdata.length === 0){
                         this.setState({isDatas:true});
@@ -51,18 +56,19 @@ class Clues extends React.Component {
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
-                    //let ConData = this.state.DATA.concat(res.listdata);
+                    if(page == 1){this.state.DATA =[];}
+                    // for(let i=0; i<res.listdata.length;i++){
+                    //     this.state.DATA.push(res.listdata[i]);
+                    // }
+                    let ConData = this.state.DATA.concat(res.listdata);
                     //console.log(page,this.state.DATA);
-                    if(this.state.DATA.length == 0){this.props.REDS(false);}else{this.props.REDS(true);}
+                    
                     if(res.pagecount == page){
-                        this.setState({loadingS:false});
+                        this.setState({loadingS:false,DATA:ConData});
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page
+                            nowpage:page,DATA:ConData
                         });
                     }
                 }else if(res.status == 901){
@@ -73,7 +79,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -100,7 +106,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -125,6 +131,13 @@ class Clues extends React.Component {
     componentDidMount() {
         this.props.hideS();
         this.upDATA();
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
     }
     render() {
         const {loadingS, DATA,isDatas} = this.state;

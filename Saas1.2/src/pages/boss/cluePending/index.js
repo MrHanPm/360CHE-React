@@ -51,18 +51,19 @@ class Clues extends React.Component {
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
-                    for(let i=0; i<res.listdata.length;i++){
-                        this.state.DATA.push(res.listdata[i]);
-                    }
-                    //let ConData = this.state.DATA.concat(res.listdata);
+                    
+                    // for(let i=0; i<res.listdata.length;i++){
+                    //     this.state.DATA.push(res.listdata[i]);
+                    // }
+                    let ConData = this.state.DATA.concat(res.listdata);
                     //console.log(page,this.state.DATA);
                     if(this.state.DATA.length == 0){this.props.REDS(false);}else{this.props.REDS(true);}
                     if(res.pagecount == page){
-                        this.setState({loadingS:false});
+                        this.setState({loadingS:false,DATA:ConData});
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page
+                            nowpage:page,DATA:ConData
                         });
                     }
                 }else if(res.status == 901){
@@ -73,7 +74,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -107,7 +108,7 @@ class Clues extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }

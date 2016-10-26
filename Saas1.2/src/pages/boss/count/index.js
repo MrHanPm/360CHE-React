@@ -21,7 +21,6 @@ import Echarts from 'echarts';
 import {Tool,Alert} from '../../../tool.js';
 import {Views} from '../../../component/charts.min.js';
 import './index.less';
-import MsgBox from './msg.js';
 
 class Clues extends React.Component {
     constructor(){
@@ -30,7 +29,6 @@ class Clues extends React.Component {
             DATA:[],
             startdate:'',
             enddate:'',
-            Drandoms:'',
             userid:'',
             name:'全部',
             ids:'',
@@ -54,16 +52,17 @@ class Clues extends React.Component {
         this.THeight = this.THeight.bind(this);
         this.SHeight = this.SHeight.bind(this);
     }
-    getNames(){this.setState({NameRandoms: Math.random(),Drandoms:'',});}
+    getNames(){
+        document.getElementById('BossCom').style.display = 'block';
+        this.setState({NameRandoms: Math.random()});
+    }
     ChanName(obj){
-        this.setState({
-            name:obj.name,
-            NameRandoms:''
-        });
         this.state.ids = obj.ids;
         let Stdat = this.GetDateYes();
         let Endat = this.GetDateEes();
         this.setState({
+            name:obj.name,
+            NameRandoms:'',
             startdate: Stdat,
             enddate: Endat
         });
@@ -143,14 +142,19 @@ class Clues extends React.Component {
         this.upDATA(Stdat,Endat);
     }
     goMessage(){
-        this.setState({
-            Drandoms: Math.random(),
-            NameRandoms:'',
-        });
+        let json = {};
+        json.startdate = this.state.startdate;
+        json.enddate = this.state.enddate;
+        json.id = this.state.ids;
+        let jsonstr = JSON.stringify(json);
+        Tool.localItem('CountMsg',jsonstr);
+        this.context.router.push({pathname: '/countMsg'});
     }
     upDATA(Stdat,Endat){
-        document.querySelector(".coMores").style.display = '';
-        document.querySelector(".bar").style.height = "300px";
+        for(let i=0;i<3;i++){
+            document.querySelectorAll(".coMores")[i].style.display = '';
+            document.querySelectorAll(".bar")[i].style.height = "300px";
+        }
         let json={};
         if(this.state.ids !== ''){json.userid = this.state.ids;}
         if(typeof(Tool.SessionId) == 'string'){
@@ -206,13 +210,25 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
 
     componentDidMount(){
         document.title="数据统计";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         let Stdat = this.GetDateYes();
         let Endat = this.GetDateEes();
         this.setState({
@@ -245,7 +261,7 @@ class Clues extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }
@@ -374,11 +390,6 @@ class Clues extends React.Component {
                         <span className="loading-ring"> </span>
                     </div>
                 </div>
-                <MsgBox startdate={this.state.startdate}
-                        enddate={this.state.enddate}
-                        Drandoms={this.state.Drandoms}
-                        ids={this.state.ids}
-                        onChange={()=> this.setState({Drandoms:''})} />
                 <NameList data={this.state.accountTotalList} showD={this.state.NameRandoms} ChangeName={val => this.ChanName(val)} />
             </div>
         );
@@ -388,7 +399,6 @@ class Clues extends React.Component {
 class NameList extends React.Component{
   constructor(props) {
       super(props);
-          
           this.state ={
             visible:false,
             active:false,
@@ -406,6 +416,7 @@ class NameList extends React.Component{
         'ids':e.target.title,
         'name':e.target.innerHTML
       };
+      document.getElementById('BossCom').style.display = 'none';
       this.setState({
         visible:false,
         values:e.target.title,
@@ -437,8 +448,9 @@ class NameList extends React.Component{
   render(){
     let self = this;
     let Fes = this.state.key;
+    const {visible} = this.state;
       return(
-          <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"}>
+          <aside className={visible ? "PubSidebar visible":"PubSidebar"} id="BossCom">
               <header>
                   <span>选择查看范围</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
@@ -465,5 +477,7 @@ class NameList extends React.Component{
       )
   }
 }
-
+Clues.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
 export default Clues

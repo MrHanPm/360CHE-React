@@ -20,7 +20,7 @@ import {Button,
 const { Confirm } = Dialog;
 import Page from '../../component/page';
 import SF from '../sidebar/SF';//省份
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
     constructor(props){
@@ -88,13 +88,25 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '修改客户信息';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         
         //console.log(crmData);
     }
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }
@@ -113,7 +125,7 @@ class MsgDemo extends React.Component {
             return false;
         }
         if(this.state.name.length > 6){
-            Alert.to("姓名字符过长");
+            Alert.to("姓名过长");
             return false;
         }
         if(this.state.tel == ''){
@@ -166,13 +178,18 @@ class MsgDemo extends React.Component {
             }
             
             //console.log(JSON.stringify(this.state),json);
-            Tool.get('Customer/EditCustomer.aspx',json,
+            Tool.post('Customer/EditCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        let crmData = JSON.parse(Tool.localItem('RobClues'));
+                        AllMsgToast.to("修改成功");
+                        //let crmData = JSON.parse(Tool.localItem('RobClues'));
+                        let urls = localStorage.getItem('clueURl');
+                        this.context.router.push({
+                            pathname: urls
+                        });
                         // if(crmData.customphone !== ''){
-                            let urlTxt = '/detailTel?id=' + crmData.customid;
-                            this.context.router.push({pathname: urlTxt});
+                            // let urlTxt = '/detailTel?id=' + crmData.customid;
+                            // this.context.router.push({pathname: urlTxt});
                         // }else{
                         //    Alert.to(res.msg);
                         // }
@@ -184,7 +201,7 @@ class MsgDemo extends React.Component {
                     }
                 },
                 (err) => {
-                    Alert.to('网络异常，稍后重试。。');
+                    Alert.to('请求超时，稍后重试。。');
                 }
             )
         }

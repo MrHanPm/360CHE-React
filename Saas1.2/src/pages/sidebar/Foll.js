@@ -145,6 +145,21 @@ class Sidebar extends React.Component{
         Alert.to("时间区间必须完整");
         return false;
     }
+    if(this.state.s_lastlinktimemin > this.state.s_lastlinktimemax){
+        Alert.to("跟进开始时间不能大于结束时间");
+        return false;
+    }
+    let dd = new Date();
+    let y = dd.getFullYear(); 
+    let m = dd.getMonth()+1;
+    let d = dd.getDate();
+    if(m<10){m='0'+m;}
+    if(d<10){d='0'+d;}
+    let nowDate = y+"-"+m+"-"+d;
+    if(this.state.s_lastlinktimemax > nowDate){
+        Alert.to("最后跟进时间不能大于今天");
+        return false;
+    }
     return true;
   }
   upDatas(){

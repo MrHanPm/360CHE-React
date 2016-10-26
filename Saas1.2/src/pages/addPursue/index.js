@@ -25,7 +25,7 @@ import CX from '../sidebar/CX';//车型
 import JB from '../sidebar/JB';//客户级别
 import GJ from '../sidebar/GJ';//跟进方式
 import ZB from '../sidebar/ZB';//战败原因
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 
 class MsgDemo extends React.Component {
     constructor(props){
@@ -71,8 +71,14 @@ class MsgDemo extends React.Component {
         this.pursueTime = (e) => {this.state.followupdate = e.target.value;}
         this.msgInput = (e) => {this.state.msg = e.target.value;}
         this.dealInput = (e) => {this.state.dealTime = e.target.value;}
-        this.PayInput = (e) => {this.state.pay = e.target.value;}
-        this.yPayInput = (e) => {this.state.Ypay = e.target.value;}
+        this.PayInput = (e) => {
+            let pays = e.target.value;
+            this.state.pay = pays;
+        }
+        this.yPayInput = (e) => {
+            let pays = e.target.value;
+            this.state.Ypay = pays;
+        }
         this.failInput = (e) => {this.state.failTime = e.target.value;}
         this.onSaves = this.onSaves.bind(this);
         let self = this;
@@ -113,6 +119,18 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '添加跟进记录';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         document.getElementById('FailTime').valueAsDate = new Date();
         document.getElementById('DealTime').valueAsDate = new Date();
         this.getTimeLocal();
@@ -125,7 +143,7 @@ class MsgDemo extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }
@@ -255,7 +273,7 @@ class MsgDemo extends React.Component {
                 Alert.to("成交价格不能为空");
                 return false;
             }
-            if(this.state.pay > '9999999'){
+            if(this.state.pay > 9999999){
                 Alert.to("成交价格数值过大");
                 return false;
             }
@@ -277,7 +295,7 @@ class MsgDemo extends React.Component {
                 Alert.to("预期价格不能为空");
                 return false;
             }
-            if(this.state.Ypay > '9999999'){
+            if(this.state.Ypay > 9999999){
                 Alert.to("预期价格数值过大");
                 return false;
             }
@@ -337,9 +355,10 @@ class MsgDemo extends React.Component {
             Tool.post('Clues/AddClueFollowUp.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        let urlTxt = '/robClue?id=' + persId;
+                        AllMsgToast.to("添加跟进成功");
+                        let urls = localStorage.getItem('clueURl');
                         this.context.router.push({
-                            pathname: urlTxt
+                            pathname: urls
                         });
                     }else if(res.status == 901){
                         alert(res.msg);
@@ -350,7 +369,7 @@ class MsgDemo extends React.Component {
                     }
                 },
                 (err) => {
-                    Alert.to('网络异常，稍后重试。。');
+                    Alert.to('请求超时，稍后重试。。');
                     Doms.removeAttribute("disabled");
                 }
             )
@@ -383,7 +402,8 @@ class MsgDemo extends React.Component {
             QCXLval = '';
         }
         if(this.state.QCCXv !== '' && typeof(this.state.QCCXv.productname) !== 'undefined'){
-             QCCXval = this.state.QCCXv.productname;
+             let txt = this.state.QCCXv.productname;
+             QCCXval = txt.substring(0,11)+'...';
         }else{
             QCCXval = '';
         }
@@ -467,7 +487,7 @@ class MsgDemo extends React.Component {
                     </Cell>
                     <Cell>
                         <CellHeader><Label>成交车型</Label></CellHeader>
-                        <CellBody onClick={this.QCCX}>
+                        <CellBody  className="CX" onClick={this.QCCX}>
                             <Input type="text" placeholder="请选择车型" value={QCCXval} disabled={true}/>
                         </CellBody>
                         <CellFooter />
@@ -475,7 +495,7 @@ class MsgDemo extends React.Component {
                     <Cell>
                         <CellHeader><Label>成交价格</Label></CellHeader>
                         <CellBody>
-                            <Input type="text" placeholder="请填写价格" onInput={this.PayInput}/>
+                            <Input type="number" placeholder="请填写价格" onInput={this.PayInput}/>
                         </CellBody>
                         <CellFooter className="cleAft">万元</CellFooter>
                     </Cell>
@@ -532,9 +552,12 @@ class MsgDemo extends React.Component {
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
+                    subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
                     onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
+                    subcategoryid={this.state.CPLBv.subcategoryid}
+                    brandid={this.state.QCPPv.brandid}
                     seriesid={this.state.QCXLv.seriesid}
                     onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
                 <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>

@@ -29,6 +29,7 @@ class Clues extends React.Component {
             Lis:[],
             reccount:0,
             isDatas:false,
+            toastTimer:'',
         }
         this.Liclick = this.Liclick.bind(this);
         this.CrmMesc = this.CrmMesc.bind(this);
@@ -77,7 +78,6 @@ class Clues extends React.Component {
                             'customname':res.listdata[i].customname,
                             'customphone':res.listdata[i].customphone,
                             'customid':res.listdata[i].customid,
-                            'followname':res.listdata[i].followname,
                             'lastlinktime':res.listdata[i].lastlinktime,
                           }
                           NewSeDa.push(jsons);
@@ -93,6 +93,7 @@ class Clues extends React.Component {
                                         'customname':res.listdata[i].customname,
                                         'customphone':res.listdata[i].customphone,
                                         'customid':res.listdata[i].customid,
+                                        'followname':res.listdata[i].followname,
                                         'lastlinktime':res.listdata[i].lastlinktime,
                                         'isfavorites':res.listdata[i].isfavorites
                                       };
@@ -135,7 +136,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+               
             }
         )
     }
@@ -143,16 +144,17 @@ class Clues extends React.Component {
       this.showScale(e.target.innerHTML);
     }
     showScale(val){
-        var toastTimer;
-        toastTimer && clearTimeout(toastTimer);
+        clearTimeout(this.state.toastTimer);
         this.UlScroll(val);
         var Scale = document.getElementById('index_selected');
             Scale.innerHTML = val;
+            Scale.style.display='block';
             setTimeout(function(){
-                Scale.setAttribute('class','scale show');
+                Scale.classList.add('show');
             },10);
-            toastTimer = setTimeout(function(){
-                Scale.setAttribute('class','scale');
+            this.state.toastTimer = setTimeout(function(){
+                Scale.classList.remove('show');
+                Scale.style.display='none';
             },500);
     }
     UlScroll(el){
@@ -177,23 +179,10 @@ class Clues extends React.Component {
                 let y = e.changedTouches[0].pageY - this.getBoundingClientRect().top;
                 let Nums = this.querySelectorAll('li').length;
                 let ContHeight = this.getBoundingClientRect().height;
-                let itemHt = ContHeight/Nums;
+                
                 let target;
                 if(y > 0 && y < ContHeight){
-                    for(let i=0; i < Nums; i++){
-                        let hts = itemHt * (i+1);
-                        let oldhts = hts - itemHt;
-                        if(i == 0 && y < itemHt){
-                           target = this.children[0];
-                        }else if(oldhts == itemHt && y < hts){
-                            target = this.children[1];
-                        }else if(y > oldhts && y < hts){
-                            target = this.children[i];
-                        }
-                    }
-                    //console.log(oldhts,y,target);
-                }else{
-                    target = this.children[Nums-1];
+                    target = this.children[Math.round(y/Nums)];
                 }
                 self.showScale(target.innerHTML);
           }, false);
@@ -204,6 +193,13 @@ class Clues extends React.Component {
             this.removeAttribute('class');
           }, false);
         });
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
     }
     render() {
         const {loadingS,DATA,Lis,isDatas,reccount} = this.state;
@@ -231,8 +227,8 @@ class Clues extends React.Component {
                                 <div className="Cfocus" title={ele.customid} onClick={self.CrmMesc}></div>
                                 <MediaBoxBody>
                                     <MediaBoxTitle>
-                                        <span>{ele.customname}</span>
-                                        <i>跟进人：{ele.followname}</i>
+                                        <span>{ele.customname.substring(0,4)}</span>
+                                        <i>跟进人：{ele.followname.substring(0,4)}</i>
                                     </MediaBoxTitle>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta>{ele.lastlinktime.substring(0,4) < '2000'?'近期无联系':ele.lastlinktime}</MediaBoxInfoMeta>

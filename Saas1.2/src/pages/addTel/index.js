@@ -20,7 +20,7 @@ import {Button,
 const { Confirm } = Dialog;
 import Page from '../../component/page';
 import SF from '../sidebar/SF';//省份
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
     constructor(props){
@@ -66,6 +66,18 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '新建客户信息';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
     }
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
@@ -82,7 +94,7 @@ class MsgDemo extends React.Component {
             return false;
         }
         if(this.state.name.length > 6){
-            Alert.to("姓名字符过长");
+            Alert.to("姓名过长");
             return false;
         }
         if(this.state.tel == ''){
@@ -138,12 +150,12 @@ class MsgDemo extends React.Component {
             }
             
             //console.log(JSON.stringify(this.state),json);
-            Tool.get('Customer/AddCustomer.aspx',json,
+            Tool.post('Customer/AddCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
-                        
-                        let urlTxt = '/detailTel?id=' + res.data.customid;
-                        this.context.router.push({pathname: urlTxt});
+                        AllMsgToast.to("已添加CRM");
+                        //let urlTxt = '/detailTel?id=' + res.data.customid;
+                        this.context.router.push({pathname: '/nav/c/w'});
                     }else if(res.status == 901){
                         alert(res.msg);
                         this.context.router.push({pathname: '/loading'});
@@ -153,7 +165,7 @@ class MsgDemo extends React.Component {
                     }
                 },
                 (err) => {
-                    Alert.to('网络异常，稍后重试。。');
+                    Alert.to('请求超时，稍后重试。。');
                     Doms.removeAttribute("disabled");
                 }
             )
@@ -162,7 +174,7 @@ class MsgDemo extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }

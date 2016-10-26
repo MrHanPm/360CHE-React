@@ -42,6 +42,18 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '修改密码';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
     }
 
     checkForm(){
@@ -97,7 +109,7 @@ class MsgDemo extends React.Component {
                     }
                 },
                 (err) => {
-                    Alert.to('网络异常，稍后重试。。');
+                    Alert.to('请求超时，稍后重试。。');
                 }
             )
         }

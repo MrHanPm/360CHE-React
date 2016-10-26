@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {Button,
-    Toast,
     TextArea,
     ButtonArea,
     Form,
@@ -10,7 +9,7 @@ import {Button,
     CellBody
 } from 'react-weui';
 import ShowAlert from '../../component/Alert.js'
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import './feedback.less';
 
 class MsgDemo extends React.Component {
@@ -18,7 +17,6 @@ class MsgDemo extends React.Component {
         super(props);
         this.state = {
             txt:'',
-            showToast: false,
             toastTimer: null
         };
         this.txtsInput = (e) => {
@@ -37,15 +35,20 @@ class MsgDemo extends React.Component {
         }
         return true;
     }
-    showToast() {
-        this.setState({showToast: true});
-        this.state.toastTimer = setTimeout(()=> {
-            this.setState({showToast: false});
-            window.history.back();
-        }, 2000);
-    }
     componentDidMount(){
         document.title='意见反馈';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         // let H = window.screen.height+'px';
         // let Dom = document.getElementById('FeedBox');
         // Dom.style.height = H;
@@ -58,10 +61,11 @@ class MsgDemo extends React.Component {
             }else{
                 sessionid = Tool.SessionId.get();
             }
-            Tool.get('User/Feedback.aspx',{sessionid:sessionid,content:this.state.txt},
+            Tool.post('User/Feedback.aspx',{sessionid:sessionid,content:this.state.txt},
                 (res) => {
                     if(res.status == 1){
-                        this.showToast();
+                        AllMsgToast.to("已反馈成功");
+                        window.history.back();
                     }else if(res.status == 901){
                         alert(res.msg);
                         this.context.router.push({pathname: '/loading'});
@@ -88,8 +92,7 @@ class MsgDemo extends React.Component {
                 <ButtonArea>
                     <Button onClick={this.goSubm}>确定</Button>
                 </ButtonArea>
-                <p style={{'paddingTop':'50px','textAlign':'center'}}>使用问题请拨打卡车之家服务热线<br/>400-613-6188</p>
-                <Toast show={this.state.showToast}>提交成功，谢谢</Toast>
+                <p style={{'paddingTop':'50px','textAlign':'center'}}>使用问题请拨打卡车之家服务热线<br/><a href="tel:4006136188">4006-136-188</a></p>
                 <ShowAlert />
             </div>
         );

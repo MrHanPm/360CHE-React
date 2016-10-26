@@ -47,12 +47,14 @@ class Sidebar extends React.Component{
   }
   componentWillReceiveProps(nextProps) {
     let productlist = JSON.parse(Tool.localItem('productlist'));
+    let subidLB = nextProps.subcategoryid;
+    let subidPP = nextProps.brandid;
     let subid = nextProps.seriesid;
     // let productlist =[
       // {"seriesextendid":333,"cateid":2,"subcategoryid":60,"brandid":155,"seriesid":1038,"seriesname":"财运300"}];
     let DAtas = [];
     for(let i=0;i<productlist.productlist.length;i++){
-        if(productlist.productlist[i].seriesid == subid){
+        if(productlist.productlist[i].seriesid == subid && productlist.productlist[i].subcategoryid == subidLB && productlist.productlist[i].brandid == subidPP){
           DAtas.push(productlist.productlist[i]);
         }
     }

@@ -19,6 +19,21 @@ import {NoMor,NoDataS} from '../../component/more.js';
 import './index.less';
 import ImgSRC from './find.png';
 class ImgBox extends React.Component {
+    componentDidMount(){
+        document.title = "店铺分享";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
+    }
     render(){
         return(
             <div className="crmBox">
@@ -118,7 +133,7 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -127,6 +142,18 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '选择店铺';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         let self = this;
         [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
           el.addEventListener('touchend', function(e) {
@@ -330,6 +357,13 @@ class MsgDemo extends React.Component {
             });
           };
         });
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
     }
     render() {
         const {loadingS,DATA,shows,isDatas} =this.state;

@@ -105,7 +105,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -118,16 +118,18 @@ class Clues extends React.Component {
             this.setState({pf:1});
         }
         this.state.FollV = val;
+        this.state.DATA=[];
+        this.state.nowpage=1;
         this.upDATA();
     }
     FilterS(e){
+        this.state.DATA=[];
+        this.state.nowpage=1;
         if(e.target.title == 'zh'){
             this.state.p=1;
-            this.state.nowpage=1;
             this.state.s_sortfield='zh';
         }else if(e.target.title == 'follownum'){
             this.state.p=2;
-            this.state.nowpage=1;
             this.state.s_sortfield='follownum';
             if(this.state.follownum == 2){
                 this.state.follownum=1;
@@ -138,7 +140,6 @@ class Clues extends React.Component {
             }
         }else if(e.target.title == 'buycarnum'){
             this.state.p=3;
-            this.state.nowpage=1;
             this.state.s_sortfield='buycarnum';
             if(this.state.buycarnum == 2){
                 this.state.buycarnum=1;
@@ -154,6 +155,9 @@ class Clues extends React.Component {
         document.getElementById('Folls').setAttribute('class','PubSidebar visible');
     }
     RobLine(e){
+        let clusUrl = window.location.hash.replace(/#/g,'');
+        let goUrlclus = clusUrl.split("?");
+        Tool.localItem('clueURl',goUrlclus[0]);
         let urlTxt = '/boss/robClue?id=' + e.target.title;
         this.context.router.push({
             pathname: urlTxt
@@ -183,7 +187,7 @@ class Clues extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }

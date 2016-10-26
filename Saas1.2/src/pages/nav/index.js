@@ -1,7 +1,5 @@
 "use strict";
-
 import React from 'react';
-
 
 import {
     Tab,
@@ -63,26 +61,9 @@ class TabBarDemo extends React.Component {
         }
     }
     componentDidMount(){
-        let sessionid;
-        //let SDK = JSON.parse(Toll.localItem('jsSDK'));
-        // wx.config({
-        //     debug: false,
-        //     appId: SDK.appId,
-        //     timestamp: SDK.timestamp,
-        //     nonceStr: SDK.noncestr,
-        //     signature: SDK.signature,
-        //     jsApiList: ['hideOptionMenu','showOptionMenu']
-        // });
-        // let oldData = JSON.parse(Tool.localItem('vipLodData'));
-        // sessionid = oldData.sessionid;
-        // if(oldData.alermsg !== '' && oldData.alermsg.length > 0){
-        //     this.setState({
-        //         HelloMes: oldData.alermsg,
-        //     });
+        // if(navigator.userAgent.toLowerCase().match(/iphone os/i) == "iphone os"){
+        //     document.getElementById('container').style.height=window.screen.height-64+'px';
         // }
-
-        //this.showConfirm();
-        
     }
     render() {
         let Pages;

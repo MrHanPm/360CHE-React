@@ -27,7 +27,7 @@ import JB from '../sidebar/JB';//客户级别
 import XS from '../sidebar/XS';//线索
 import YT from '../sidebar/YT';//用途
 import ZB from '../sidebar/ZB';//战败原因
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
@@ -114,7 +114,22 @@ class MsgDemo extends React.Component {
         }
         this.msgInput = (e) => {this.state.msg = e.target.value;}
         this.dealInput = (e) => {this.state.dealdate = e.target.value;}
-        this.payInput = (e) => {this.state.pay = e.target.value;}
+        this.payInput = (e) => {
+            let pays = e.target.value;
+            this.setState({
+                pay:pays,
+                QCPPrandoms:'',
+                CPLBrandoms:'',
+                QCXLrandoms:'',
+                QCCXrandoms:'',
+
+                SFCSrandoms:'',
+                KHJBrandoms:'',
+                XSLYrandoms:'',
+                CLYTrandoms:'',
+                ZBrandoms:'',
+            });
+        }
         this.failInput = (e) => {this.state.faildate = e.target.value;}
         this.Checkboxx = this.Checkboxx.bind(this);
         this.SFCS = this.SFCS.bind(this);
@@ -134,6 +149,18 @@ class MsgDemo extends React.Component {
     }
     componentDidMount() {
         document.title = '添加线索';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         document.getElementById('FailDate').valueAsDate = new Date();
         document.getElementById('DealDate').valueAsDate = new Date();
         this.setState({
@@ -329,7 +356,7 @@ class MsgDemo extends React.Component {
             return false;
         }
         if(this.state.name.length > 6){
-            Alert.to("姓名字符过长");
+            Alert.to("姓名过长");
             return false;
         }
         if(this.state.phone == ''){
@@ -348,7 +375,7 @@ class MsgDemo extends React.Component {
                 Alert.to("成交价格不能为空");
                 return false;
             }
-            if(this.state.pay > '9999999'){
+            if(this.state.pay > 9999999){
                 Alert.to("成交价格数值过大");
                 return false;
             }
@@ -374,7 +401,7 @@ class MsgDemo extends React.Component {
             Alert.to("线索来源不能为空");
             return false;
         }
-        if(this.state.numb > '999'){
+        if(this.state.numb > 999){
             Alert.to("购车数值过大");
             return false;
         }
@@ -445,9 +472,10 @@ class MsgDemo extends React.Component {
             json.expectedbycarnum = this.state.numb;
             //console.log(JSON.stringify(this.state));
             if(this.state.crmShow){
-                Tool.get('Clues/AddClues.aspx',json,
+                Tool.post('Clues/AddClues.aspx',json,
                     (res) => {
                         if(res.status == 1){
+                            AllMsgToast.to("已添加成功");
                             let urlTxt = '/detailTel?id=' + res.data.customerId;
                             this.context.router.push({pathname: urlTxt});
                         }else if(res.status == 901){
@@ -464,9 +492,10 @@ class MsgDemo extends React.Component {
                     }
                 )
             }else{
-                Tool.get('Clues/AddClues.aspx',json,
+                Tool.post('Clues/AddClues.aspx',json,
                     (res) => {
                         if(res.status == 1){
+                            AllMsgToast.to("已添加成功");
                             window.history.back();
                         }else if(res.status == 901){
                             alert(res.msg);
@@ -487,7 +516,7 @@ class MsgDemo extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }
@@ -551,7 +580,7 @@ class MsgDemo extends React.Component {
         }else{
             ZBval = '';
         }
-        const {name,phone,crmShow,numb}=this.state;
+        const {name,phone,crmShow,numb,pay}=this.state;
         return (
             <div style={{'height':'100%'}}>
                 <div className="Acot">
@@ -645,7 +674,7 @@ class MsgDemo extends React.Component {
                         <FormCell>
                             <CellHeader><Label>成交价格</Label></CellHeader>
                             <CellBody>
-                                <Input type="number" placeholder="请填写成交价格" onInput={this.payInput}/>
+                                <Input type="number" placeholder="请填写成交价格" onInput={this.payInput} value={pay}/>
                             </CellBody>
                             <CellFooter>万元</CellFooter>
                         </FormCell>
@@ -700,9 +729,12 @@ class MsgDemo extends React.Component {
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
+                    subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
                     onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
+                    subcategoryid={this.state.CPLBv.subcategoryid}
+                    brandid={this.state.QCPPv.brandid}
                     seriesid={this.state.QCXLv.seriesid}
                     onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
                 <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>

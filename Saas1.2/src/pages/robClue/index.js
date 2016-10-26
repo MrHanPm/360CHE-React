@@ -13,13 +13,12 @@ import {Button,
     Cell,
     CellFooter,
     Dialog,
-    Toast,
     Checkbox,
     CellBody
 } from 'react-weui';
 const { Confirm } = Dialog;
 import ShowAlert from '../../component/Alert.js'
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
     constructor(props){
@@ -28,7 +27,6 @@ class MsgDemo extends React.Component {
             DATArob:'',
             Messrob:[],
             reccount:0,
-            showToast: false,
             showConfirm: false,
             showAlertCfm:false,
             showDonwn:true,
@@ -69,19 +67,20 @@ class MsgDemo extends React.Component {
         this.addPursue = this.addPursue.bind(this);
         this.SDS = this.SDS.bind(this);
         this.addCRM = this.addCRM.bind(this);
-        this.CoLines = this.CoLines.bind(this);
+        //this.CoLines = this.CoLines.bind(this);
+        // window.addEventListener("popstate", function(e) {
+        //     self.BackSelf();
+        // }, false);
+    }
+    BackSelf(){
+        let urls = localStorage.getItem('clueURl');
+        this.context.router.push({pathname: urls});
     }
     ShoDonwn(){this.setState({showDonwn:true});}
     HidDonwn(){this.setState({showDonwn:false});}
     SDS(e){
         let st = parseInt(e.target.title);
         this.setState({SDSrandoms:st});
-    }
-    showToast() {
-        this.setState({showToast: true});
-        this.state.toastTimer = setTimeout(()=> {
-            this.setState({showToast: false});
-        }, 1200);
     }
     goBeac(){
         let persId = Tool.getQueryString('id');
@@ -105,35 +104,35 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
-    CoLines(e){
-        let json={};
-        if(typeof(Tool.SessionId) == 'string'){
-            json.sessionid = Tool.SessionId;
-        }else{
-            json.sessionid = Tool.SessionId.get();
-        }
-        json.cluesextendid = e.target.title;
-        Tool.get('Clues/AddCluesCallTel.aspx',json,
-            (res) => {
-                if(res.status == 1){
-                }else if(res.status == 901){
-                    alert(res.msg);
-                    this.context.router.push({pathname: '/loading'});
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('网络异常，稍后重试。。');
-            }
-        );
+    //CoLines(e){
+        // let json={};
+        // if(typeof(Tool.SessionId) == 'string'){
+        //     json.sessionid = Tool.SessionId;
+        // }else{
+        //     json.sessionid = Tool.SessionId.get();
+        // }
+        // json.cluesextendid = e.target.title;
+        // Tool.get('Clues/AddCluesCallTel.aspx',json,
+        //     (res) => {
+        //         if(res.status == 1){
+        //         }else if(res.status == 901){
+        //             alert(res.msg);
+        //             this.context.router.push({pathname: '/loading'});
+        //         }else{
+        //             Alert.to(res.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         Alert.to('请求超时，稍后重试。。');
+        //     }
+        // );
         // let comId = e.target.getAttribute('data-id');
         // console.log(comId);
-    }
+    //}
     componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
@@ -162,18 +161,18 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         );
         Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
             (res) => {
                 if(res.status == 1){
                     //console.log(JSON.stringify(res.listdata[0]));
-                    if(res.listdata.length >0){this.setState({clilinkCrm:true});}
+                    if(this.state.DATArob.clueslevel !== 0){this.setState({clilinkCrm:true});}
                     if(res.reccount > 0){
                         this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
                     }else{
-                        if(this.state.DATArob.clueresourcename == '卡车之家'){
+                        if(this.state.DATArob.clueresourcename == '卡车之家' && this.state.DATArob.clueslevel === 0){
                             this.setState({Messrob:res.listdata,showAlertCfm:true});
                         }else{
                             this.setState({Messrob:res.listdata});
@@ -187,12 +186,26 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         );
     }
     componentDidMount() {
         document.title = '线索详情';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
+        // let star = {title:"title",url: window.location.href};
+        // window.history.pushState(star,"title",window.location.href);
     }
 
     showConfirm(){this.setState({showConfirm: true});}
@@ -217,7 +230,7 @@ class MsgDemo extends React.Component {
         Tool.get('Customer/AddCustomerFromClues.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    this.showToast();
+                    AllMsgToast.to("已关联CRM");
                     doms.setAttribute('class','');
                 }else if(res.status == 901){
                     alert(res.msg);
@@ -227,7 +240,7 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -267,7 +280,7 @@ class MsgDemo extends React.Component {
                                 {tel}
                             </CellBody>
                             <CellFooter className="cleAft">
-                                <a href={`tel:${tel}`} title={cluesextendid} data-id={customid} onClick={this.CoLines}> </a>
+                                <a href={`tel:${tel}`} title={cluesextendid} data-id={customid}> </a>
                             </CellFooter>
                         </FormCell>
                     </Form>
@@ -377,7 +390,7 @@ class MsgDemo extends React.Component {
                         <FormCell>
                             <CellHeader><Label>备注</Label></CellHeader>
                             <CellBody>
-                                {remark}
+                                <pre>{remark}</pre>
                             </CellBody>
                         </FormCell>
                     </Form>
@@ -414,7 +427,6 @@ class MsgDemo extends React.Component {
                 <Confirm title={this.state.AlertCfm.title} buttons={this.state.AlertCfm.buttons} show={this.state.showAlertCfm}>
                 </Confirm>
                 <SideRob data={this.state.Messrob} showD={this.state.SDSrandoms} onChange={val => this.setState({SDSrandoms: val})}/>
-                <Toast show={this.state.showToast}>关联成功</Toast>
                 <div className="jump-cover" id="jump_cover" style={{'display':loadShow?'block':'none'}}>
                     <div className="loading visible">
                         <span className="loading-ring"> </span>
@@ -543,10 +555,10 @@ class SideRob extends React.Component {
                             </CellBody>
                         </FormCell>
                     </Form>
-                    <FormCell>
+                    <FormCell style={{'box-shadow':'0 5px 6px #f6f6f6'}}>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
-                            {remark}
+                            <pre>{remark}</pre>
                         </CellBody>
                     </FormCell>
                 </Form>

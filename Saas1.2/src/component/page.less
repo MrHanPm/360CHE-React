@@ -1,7 +1,10 @@
 body,select,textarea,input{ font:16px/1.6 'Helvetica Neue','Helvetica','Arial','sans-serif'; }
-html, body, .container {
-    min-height: 100%;
+html,body,.container{
+    padding:0;margin:0;border:0;
+    min-height: 90%;
     height: 100%;
+    width: 100%;
+    overflow: hidden;
     -webkit-touch-action:none;
     touch-action:none;
 }
@@ -27,7 +30,6 @@ body {
     transform: translateZ(0);
     -webkit-backface-visibility:hidden;
     -webkit-perspective:1000;
-    overflow: hidden;
     -webkit-overflow-scrolling:auto;
 }
 
@@ -266,6 +268,33 @@ input[type="datetime-local"]{
   word-wrap:break-word;
   word-break:break-all;
 }
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+}
 .weui_tab,.weui_tab_bd{-webkit-overflow-scrolling:auto;}
 
 .CrmScoll .bd{height: auto; overflow: visible;}
+#AllMsg{
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    background: rgba(0, 0, 0, .6);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100px;
+    margin-left: -50px;
+    text-align: center;
+    line-height: 25px;
+    z-index: 9999;
+    display: none;
+    opacity: 0;
+    overflow: hidden;
+    -webkit-transition:all .4s;
+        transition:all .4s;
+}
+#AllMsg.active{
+  display: block;
+  opacity: 1;
+}

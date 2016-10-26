@@ -12,6 +12,7 @@ class Sidebar extends React.Component{
         visible:false,
         active:false,
         brandid:'',
+        toastTimer:'',
         L:[],
         R:[]
       }
@@ -71,23 +72,9 @@ class Sidebar extends React.Component{
                 let y = e.changedTouches[0].pageY - this.getBoundingClientRect().top;
                 let Nums = this.querySelectorAll('li').length;
                 let ContHeight = this.getBoundingClientRect().height;
-                let itemHt = ContHeight/Nums;
                 let target;
                 if(y > 0 && y < ContHeight){
-                    for(let i=0; i < Nums; i++){
-                        let hts = itemHt * (i+1);
-                        let oldhts = hts - itemHt;
-                        if(i == 0 && y < itemHt){
-                           target = this.children[0];
-                        }else if(oldhts == itemHt && y < hts){
-                            target = this.children[1];
-                        }else if(y > oldhts && y < hts){
-                            target = this.children[i];
-                        }
-                    }
-                    //console.log(oldhts,y,target);
-                }else{
-                    target = this.children[Nums-1];
+                    target = this.children[Math.round(y/Nums)];
                 }
                 self.showScale(target.innerHTML);
           }, false);
@@ -103,16 +90,17 @@ class Sidebar extends React.Component{
       this.showScale(e.target.innerHTML);
     }
     showScale(val){
-        var toastTimer;
-        toastTimer && clearTimeout(toastTimer);
+        clearTimeout(this.state.toastTimer);
         this.UlScroll(val);
         var Scale = document.getElementById('index_selected');
             Scale.innerHTML = val;
+            Scale.style.display='block';
             setTimeout(function(){
-                Scale.setAttribute('class','scale show');
+                Scale.classList.add('show');
             },10);
-            toastTimer = setTimeout(function(){
-                Scale.setAttribute('class','scale');
+            this.state.toastTimer = setTimeout(function(){
+                Scale.classList.remove('show');
+                Scale.style.display='none';
             },500);
     }
     UlScroll(el){

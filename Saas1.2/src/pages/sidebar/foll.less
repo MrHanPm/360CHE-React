@@ -66,7 +66,12 @@
         .Ftimes{width: 45%; float: left;}
         .right{float: right;}
         .FtimeT{border: 0;text-align: center; height: 30px; line-height: 30px;}
-        input[type="date"]{width: 100%;}
+        input[type="date"]{
+            display: block;
+            margin-top: .5em;
+            width: 100%; 
+            white-space: nowrap;text-overflow:ellipsis; overflow:hidden;
+        }
         .activ{
             border-color: #00b800;
             color: #00b800;

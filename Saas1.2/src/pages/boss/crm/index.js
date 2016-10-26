@@ -19,7 +19,31 @@ import OkTel from '../okTel/index.js';
 import NoTel from '../noTel/index.js';
 import Collect from '../collectTel/index.js';
 import Recent from '../crmRecent/index.js';
-
+import ImgSRC from '../../crm/crm.png';
+class ImgBox extends React.Component {
+    componentDidMount(){
+        document.title = "客户联系人";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
+    }
+    render(){
+        return(
+            <div className="crmBox">
+                <img src={ImgSRC}/>
+            </div>
+        )
+    }
+}
 class Clues extends React.Component {
     constructor(props){
         super(props);
@@ -46,6 +70,18 @@ class Clues extends React.Component {
     }
     componentDidMount(){
         document.title = "客户联系人";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
     }
     render() {
         let Pages;
@@ -82,5 +118,46 @@ Clues.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
-export default Clues
+
+class CluesImgBox extends React.Component {
+    state={
+        perm:false
+    }
+    componentWillMount(){
+        let oldData = JSON.parse(localStorage.getItem('vipLodData'));
+        if(oldData !== null){
+            if(oldData.permission.length > 0){
+                for(let i=0;i<oldData.permission.length;i++){
+                    if(oldData.permission[i].key == 'crm' && oldData.permission[i].value == '1'){
+                        this.setState({perm:true});
+                        break;
+                    }
+                }
+            }else{
+                this.setState({perm:false});
+            }
+        }else{
+            this.setState({perm:false});
+        }
+        //let permission=[{key: "crm", value: "1", remark: ""}, {key: "find_share", value: "1", remark: ""}];
+        //let permission=[];
+    }
+    render(){
+        let domBox;
+        if(this.state.perm){
+            domBox = <Clues/>;
+        }else{
+            domBox = <ImgBox/>;
+        }
+        return(
+            <div style={{'height':'100%'}}>
+                {domBox}
+            </div>
+        )
+    }
+}
+
+export default CluesImgBox
+//export default Clues
+
 

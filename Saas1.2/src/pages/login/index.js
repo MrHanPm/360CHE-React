@@ -42,7 +42,19 @@ class CellDemo extends React.Component {
         this.goNext = this.goNext.bind(this);
     }
     componentDidMount() {
-        document.title="账号登录"
+        document.title="账号登录";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
     }
 
     checkForm(){
@@ -63,17 +75,19 @@ class CellDemo extends React.Component {
                     if(res.status === 1){
                         let Vd = JSON.stringify(res.data);
                         Tool.localItem('vipLodData',Vd);
-                        Tool.localItem('okTel',null);
-                        Tool.localItem('okAZ',null);
-                        Tool.localItem('okTelFingerprint',null);
-                        Tool.localItem('noTel',null);
-                        Tool.localItem('noAZ',null);
-                        Tool.localItem('noTelFingerprint',null);
-                        Tool.localItem('coTel',null);
-                        Tool.localItem('coAZ',null);
-                        Tool.localItem('coTelFingerprint',null);
-                        Tool.localItem('reTel',null);
-                        Tool.localItem('reTelFingerprint',null);
+                        Tool.removeLocalItem('okTel');
+                        Tool.removeLocalItem('okAZ');
+                        Tool.removeLocalItem('okTelFingerprint');
+                        Tool.removeLocalItem('noTel');
+                        Tool.removeLocalItem('noAZ');
+                        Tool.removeLocalItem('noTelFingerprint');
+                        Tool.removeLocalItem('coTel');
+                        Tool.removeLocalItem('coAZ');
+                        Tool.removeLocalItem('coTelFingerprint');
+                        Tool.removeLocalItem('reTel');
+                        Tool.removeLocalItem('reTelFingerprint');
+                        Tool.removeLocalItem('BrandKey');
+                        Tool.removeLocalItem('SearchData');
                         this.context.router.push({pathname: '/name'});
                     }else if(res.status == 901){
                         alert(res.msg);

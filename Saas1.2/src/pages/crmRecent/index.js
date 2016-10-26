@@ -16,11 +16,10 @@ import {
     ActionSheet,
     SearchBar,
     Dialog,
-    Toast,
     Button,
 } from 'react-weui';
 //import ImgseCrm from './crm.png';
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import {LoadAd,Reccount,NoDataS} from '../../component/more.js';
 import './index.less';
 const {Confirm} = Dialog;
@@ -29,7 +28,6 @@ class Clues extends React.Component {
         super();
         this.state = {
             loadingS:true,
-            showToast: false,
             toastTimer: null,
             DelId:'',
             DelInO:'',
@@ -62,12 +60,6 @@ class Clues extends React.Component {
     }
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
-    showToast() {
-        this.setState({showToast: true});
-        this.state.toastTimer = setTimeout(()=> {
-            this.setState({showToast: false});
-        }, 1200);
-    }
     goSearchPage(){
         this.context.router.push({pathname: '/search'});
     }
@@ -85,13 +77,14 @@ class Clues extends React.Component {
         Tool.get('Customer/ChangeCustomerStatus.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    this.showToast();
                     if(doms.getAttribute('data') == '1'){
                         doms.setAttribute('data','0');
                         doms.setAttribute('class','crmStar');
+                        AllMsgToast.to("已取消收藏");
                     }else{
                         doms.setAttribute('data','1');
                         doms.setAttribute('class','crmStar active');
+                        AllMsgToast.to("已收藏");
                     }
                 }else if(res.status == 901){
                     alert(res.msg);
@@ -101,7 +94,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -112,6 +105,9 @@ class Clues extends React.Component {
         this.showConfirm();
     }
     CrmMesc(e){
+        let clusUrl = window.location.hash.replace(/#/g,'');
+        let goUrlclus = clusUrl.split("?");
+        Tool.localItem('clueURl',goUrlclus[0]);
         let urlTxt = '/detailTel?id=' + e.target.title;
         this.context.router.push({pathname: urlTxt});
     }
@@ -130,8 +126,11 @@ class Clues extends React.Component {
                     this.setState({showConfirm: false});
                     let newDa = this.state.DATA;
                     newDa.splice(k,1);
+                    let Pcot = this.state.reccount;
+                    Pcot--;
                     this.setState({
-                        DATA:newDa
+                        DATA:newDa,
+                        reccount:Pcot
                     });
                 }else if(res.status == 901){
                     alert(res.msg);
@@ -141,7 +140,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -196,7 +195,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+               
             }
         )
     }
@@ -220,7 +219,7 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -245,6 +244,13 @@ class Clues extends React.Component {
     componentDidMount() {
         this.upDATA();
     }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
+    }
     render() {
         const {loadingS, DATA,isDatas,reccount} = this.state;
         let self = this;
@@ -268,7 +274,7 @@ class Clues extends React.Component {
                             <div className="Cfocus" title={e.customid} onClick={self.CrmMesc}></div>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
-                                    <span>{e.customname}</span>
+                                    <span>{e.customname.substring(0,4)}</span>
                                     <i className={e.isfavorites?"crmStar active" :"crmStar" } title={e.customid} data={e.isfavorites} onClick={self.CrmStar}></i>
                                     <i className="crmDels" title={e.customid} data={index} onClick={self.CrmDels}></i>
                                 </MediaBoxTitle>
@@ -284,7 +290,6 @@ class Clues extends React.Component {
             {footerS}
             <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
             </Confirm>
-            <Toast show={this.state.showToast}>操作成功</Toast>
         </div>
         );
     }

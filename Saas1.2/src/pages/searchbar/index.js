@@ -56,6 +56,18 @@ export default class SearchBarDemo extends React.Component {
     }
     componentDidMount() {
         document.title="搜索联系人";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         let SearchData = JSON.parse(Tool.localItem('SearchData'));
         if(SearchData == null){
             SearchData = [];
@@ -90,7 +102,7 @@ export default class SearchBarDemo extends React.Component {
                     </PanelBody>
                 </Panel>
                 <dl className="SearWell" style={{display: this.state.searchText ? 'none': null}}>
-                    <dt>这里可以搜索</dt>
+                    <dt>可搜索(需加载过未购车和已购车)</dt>
                     <dd>联系人</dd>
                     <dd className="pon">手机号</dd>
                 </dl>

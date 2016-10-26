@@ -39,9 +39,11 @@ class TabBarDemo extends React.Component {
                 break;
         }
     }
-    // componentDidMount(){
-
-    // }
+    componentDidMount(){
+        // if(navigator.userAgent.toLowerCase().match(/iphone os/i) == "iphone os"){
+        //     document.getElementById('container').style.height=window.screen.height-64+'px';
+        // }
+    }
     render() {
         let Pages;
         const {tab} = this.state;

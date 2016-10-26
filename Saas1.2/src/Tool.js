@@ -1,4 +1,5 @@
 //import * as config from './config.js';
+//import PreventOverScroll from 'preventoverscrolljs';
 import {target,SessionId,getWxConfig,shareURL} from './config.js';
 
 const Tool = {};
@@ -14,7 +15,19 @@ window.AlertTimeOut = '';
 window.XHRLIST = [];
 // window.addEventListener("touchstart", function(e){e.preventDefault();});
 // window.addEventListener("click", function(e){});
-
+// window._IsAndroid =function(){
+//     var ua = navigator.userAgent.toLowerCase();
+//     if (ua.match(/Android/i)) {
+//         return 'bodywrapper';
+//     } else {
+//         return 'container';
+//     }
+// }
+// var Bouter = _IsAndroid();
+// var Bouterlist = [Bouter];
+// var Bprevent = new PreventOverScroll({
+//     list: Bouterlist
+// });
 /**
  * 发送ajax请求和服务器交互
  * @param {object} mySetting 配置ajax的配置
@@ -225,6 +238,16 @@ Alert.out = function(){
     AlertCont.setAttribute('class','notification');
 }
 
+var AllMsgToast = {};
+AllMsgToast.to = function(val) {
+        let AlertTxt = document.getElementById("AllMsg");
+        AlertTxt.innerHTML = val;
+        AlertTxt.setAttribute('class','active');
+        let AllMsgToastOut = setTimeout(() => AllMsgToast.out(),2000);
+}
+AllMsgToast.out = function(){
+    let AlertCont = document.getElementById("AllMsg");
+    AlertCont.removeAttribute('class');
+}
 
-
-export {Tool , Alert}
+export {Tool , Alert, AllMsgToast}

@@ -64,7 +64,7 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         );
         Tool.get('Clues/GetClueFollowUpList.aspx',{sessionid:sessionid,cluesextendid:persId},
@@ -84,14 +84,32 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。');
             }
         );
     }
     componentDidMount() {
         document.title = '线索详情';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
     }
-
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
+    }
     render() {
         let loadShow=true;
         let self = this;
@@ -208,6 +226,7 @@ class MsgDemo extends React.Component {
                             <CellBody>
                                 {transactionprice}
                             </CellBody>
+                            <CellFooter className="cleAft">万元</CellFooter>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>成交时间</Label></CellHeader>
@@ -254,7 +273,10 @@ class MsgDemo extends React.Component {
                                 <div title={e.id} onClick={self.SDS}></div>
                                 <p>{e.createdate}</p>
                                 <h4>设置级别为{e.clueslevelname}</h4>
-                                <h4 style={{'display':e.remark == ''?'none':'block'}}>备注：{e.remark}</h4>
+                                <h4 style={{'display':e.remark == ''?'none':'block'}}>
+                                    <span>备注：</span>
+                                    <span className="Bkc">{e.remark}</span>
+                                </h4>
                             </dd>
                         )})}
                     </dl>
@@ -307,7 +329,7 @@ class SideRob extends React.Component {
                   <span>跟进记录</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>
                 </header>
-                <Form>
+                <Form className="SRCform">
                     <FormCell>
                         <CellHeader><Label>跟进时间</Label></CellHeader>
                         <CellBody>
@@ -323,7 +345,7 @@ class SideRob extends React.Component {
                     <FormCell style={{'display':clueslevelid !== 5 && clueslevelid !== 6?'':'none'}}>
                         <CellHeader><Label>预期价格</Label></CellHeader>
                         <CellBody>
-                            {price}
+                            {price=='0'?'无':price}
                         </CellBody>
                         <CellFooter>万元</CellFooter>
                     </FormCell>
@@ -361,7 +383,7 @@ class SideRob extends React.Component {
                         <FormCell>
                             <CellHeader><Label>成交价格</Label></CellHeader>
                             <CellBody>
-                                {expectedprice}
+                                {price=='0'?'无':price}
                             </CellBody>
                             <CellFooter>万元</CellFooter>
                         </FormCell>

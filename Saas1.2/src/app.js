@@ -30,6 +30,7 @@ import AlterTel from './pages/alterTel/index';
 import DetailTel from './pages/detailTel/index';
 import CrmClue from './pages/crmClue/index';
 import Share from './pages/share/index';
+import CountMsg from './pages/count/msg';
 import Search from './pages/searchbar/index';
 
 import BosNav from './pages/boss/nav/index';
@@ -71,6 +72,7 @@ ReactDOM.render((
             <Route path="alterTel" component={AlterTel}/>
             <Route path="share" component={Share}/>
             <Route path="search" component={Search}/>
+            <Route path="countMsg" component={CountMsg}/>
 
             <Route path="addClue" component={AddClue}/>
             <Route path="robClue" component={RobClue}/>

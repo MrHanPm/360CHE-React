@@ -94,12 +94,19 @@ class Clues extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('网络异常，稍后重试。。');
+                
             }
         )
     }
     componentDidMount() {
         this.upDATA();
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
     }
     render() {
         const {loadingS, DATA,isDatas,reccount} = this.state;
@@ -124,8 +131,8 @@ class Clues extends React.Component {
                             <div className="Cfocus" title={e.customid} onClick={self.CrmMesc}></div>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
-                                    <span>{e.customname}</span>
-                                    <i>跟进人：{e.followname}</i>
+                                    <span>{e.customname.substring(0,4)}</span>
+                                    <i>跟进人：{e.followname.substring(0,4)}</i>
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
                                     <MediaBoxInfoMeta>{e.lastlinktime.substring(0,4) < '2000'?'近期无联系':e.lastlinktime}</MediaBoxInfoMeta>

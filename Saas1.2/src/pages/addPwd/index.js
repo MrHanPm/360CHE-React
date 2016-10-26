@@ -24,7 +24,7 @@ import { ButtonArea,
     Uploader
 } from 'react-weui';
 import Page from '../../component/page';
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 
 import vcodeSrc from '../../vcode.jpg';
 
@@ -66,6 +66,18 @@ class CellDemo extends React.Component {
     }
     componentDidMount() {
         document.title="设置密码";
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         this.getVcode();
     }
 
@@ -191,6 +203,7 @@ class CellDemo extends React.Component {
                             oldData.ishavingpwd=1;
                             let newOldD = JSON.stringify(oldData);
                             Tool.localItem('vipLodData',newOldD);
+                            AllMsgToast.to("设置成功");
                             this.context.router.push({pathname: '/nav/f'});
                             return;
                         case 901 :

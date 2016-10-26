@@ -32,7 +32,7 @@ import JB from '../sidebar/JB';//客户级别
 import XS from '../sidebar/XS';//线索
 import YT from '../sidebar/YT';//用途
 import ZB from '../sidebar/ZB';//战败原因
-import {Tool,Alert} from '../../tool.js';
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
     constructor(props){
@@ -211,8 +211,9 @@ class MsgDemo extends React.Component {
         this.onSaves = this.onSaves.bind(this);
     }
     payInput(e){
+        let pays = e.target.value;
         this.setState({
-            pay:e.target.value,
+            pay:pays,
             CPLBrandoms:'',
             QCPPrandoms:'',
             QCXLrandoms:'',
@@ -312,12 +313,24 @@ class MsgDemo extends React.Component {
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
         for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].end();
+            XHRLIST[i].abort();
         }
         XHRLIST = [];
     }
     componentDidMount() {
         document.title = '修改线索';
+        var body = document.getElementsByTagName('body')[0];
+        var iframe = document.createElement("iframe");
+        iframe.style.display="none";
+        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        var d = function() {
+          setTimeout(function() {
+            iframe.removeEventListener('load', d);
+            document.body.removeChild(iframe);
+          }, 0);
+        };
+        iframe.addEventListener('load', d);
+        document.body.appendChild(iframe);
         let RobClueVal = JSON.parse(Tool.localItem('RobClues'));
         if(RobClueVal.dealtdate == ''){
             document.getElementById('DealDate').valueAsDate = new Date();
@@ -628,7 +641,7 @@ class MsgDemo extends React.Component {
             return false;
         }
         if(this.state.name.length > 6){
-            Alert.to("姓名字符过长");
+            Alert.to("姓名过长");
             return false;
         }
         if(this.state.phone == ''){
@@ -668,7 +681,7 @@ class MsgDemo extends React.Component {
                 Alert.to("成交价格不能为空");
                 return false;
             }
-            if(this.state.pay > '9999999'){
+            if(this.state.pay > 9999999){
                 Alert.to("成交价格数值过大");
                 return false;
             }
@@ -764,9 +777,10 @@ class MsgDemo extends React.Component {
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
             //console.log(this.state,json);
-            Tool.get('Clues/EditClues.aspx',json,
+            Tool.post('Clues/EditClues.aspx',json,
                 (res) => {
                     if(res.status == 1){
+                        AllMsgToast.to("修改成功");
                         let urls = localStorage.getItem('clueURl');
                         this.context.router.push({
                             pathname: urls
@@ -780,7 +794,7 @@ class MsgDemo extends React.Component {
                     }
                 },
                 (err) => {
-                    Alert.to('网络异常，稍后重试。。');
+                    Alert.to('请求超时，稍后重试。。');
                     Doms.removeAttribute("disabled");
                 }
             )
@@ -1070,9 +1084,12 @@ class MsgDemo extends React.Component {
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
+                    subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
                     onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
+                    subcategoryid={this.state.CPLBv.subcategoryid}
+                    brandid={this.state.QCPPv.brandid}
                     seriesid={this.state.QCXLv.seriesid}
                     onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
                 <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>
@@ -1085,9 +1102,12 @@ class MsgDemo extends React.Component {
                     subcategoryid={this.state.DcPLBv.subcategoryid}
                     onChange={val => this.setState({DqCPPv: val,DqCPPrandoms:'',DqCXLv:'',DqCCXv:''})}/>
                 <DXL Drandoms={this.state.DqCXLrandoms}
+                    subcategoryid={this.state.DcPLBv.subcategoryid}
                     brandid={this.state.DqCPPv.brandid}
                     onChange={val => this.setState({DqCXLv: val,DqCXLrandoms:'',DqCCXv:''})}/>
                 <DCX Drandoms={this.state.DqCCXrandoms}
+                    subcategoryid={this.state.DcPLBv.subcategoryid}
+                    brandid={this.state.DqCPPv.brandid}
                     seriesid={this.state.DqCXLv.seriesid}
                     onChange={val => this.setState({DqCCXv: val,DqCCXrandoms:''})}/>
                 <ShowAlert />

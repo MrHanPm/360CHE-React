@@ -36,14 +36,14 @@ export const shareURL = 'http://dealersaas.m.360che.com/';
 
 export const SessionId = devBug ? sessionid : sessidS;
 
-export const target = devBug ? 'http://192.168.0.247:804/' : 'http://didi.360che.com/saas/';
+export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
 
 
 
 /*本地存储数据名称表(Tool.localItem)
 jsSDK
 //Uphone               客户注册电话
-
+//CountMsg     统计日期明细
 //vipLodData           vip登陆获取的数据
 
 //BrandKey             初入客户选择的品牌
