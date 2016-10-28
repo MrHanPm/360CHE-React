@@ -65,19 +65,19 @@ class CellDemo extends React.Component {
        this.setState({phone:tels});
     }
     componentDidMount() {
-        document.title="设置密码";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title="设置密码";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
         this.getVcode();
     }
 

@@ -84,7 +84,7 @@ class MsgDemo extends React.Component {
         }
     }
     componentDidMount() {
-        document.title="初始化";
+        //document.title="初始化";
         let sessionid;
         if(typeof(Tool.SessionId) == 'string'){
             sessionid= Tool.SessionId;

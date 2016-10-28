@@ -10,11 +10,26 @@ Tool.ShareURL = shareURL;
 window.routerChange = function(){
     wx.config(getWxConfig.get());
     wx.ready(function(){wx.hideOptionMenu();});
+    // document.body.addEventListener('touchmove', function (event) {
+    //     event.preventDefault();
+    // }, false);
+    // let lastY;
+    // document.getElementById('container').addEventListener('touchstart', function (event) {
+    //     lastY = event.changedTouches[0].pageY;
+    // }, false);
+    //document.getElementById('container').addEventListener('touchmove', function (event) {
+        //let st = this.scrollTop;
+        //console.log(st);
+    //     if ( st < 0 || st > 0) {
+    //         event.preventDefault();
+    //     }
+    // }, false);
 }
 window.AlertTimeOut = '';
 window.XHRLIST = [];
-// window.addEventListener("touchstart", function(e){e.preventDefault();});
+
 // window.addEventListener("click", function(e){});
+
 // window._IsAndroid =function(){
 //     var ua = navigator.userAgent.toLowerCase();
 //     if (ua.match(/Android/i)) {
@@ -154,6 +169,16 @@ Tool.get = function (pathname, data, success, error) {
     return Tool.ajax(setting);
 };
 
+// Tool.getWX = function (pathname, data, success, error) {
+//     var setting = {
+//         url: 'https://didi.360che.com/saas/' + pathname, //默认ajax请求地址
+//         type: 'GET', //请求的方式
+//         data: data, //发给服务器的数据
+//         success: success || function () { }, //请求成功执行方法
+//         error: error || function () { } //请求失败执行方法
+//     };
+//     return Tool.ajax(setting);
+// };
 /**
  * 格式化时间
  * 

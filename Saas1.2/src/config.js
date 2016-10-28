@@ -25,10 +25,10 @@ export const getWxConfig = {
         }
     }
 }
-const sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
+//const sessionid = '42018_422bdaf3ca2073292e335c8f507812bd5df94093';
 
 //boos
-//const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
+const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
 const devBug = false;
 
 //分享地址
@@ -36,9 +36,9 @@ export const shareURL = 'http://dealersaas.m.360che.com/';
 
 export const SessionId = devBug ? sessionid : sessidS;
 
-export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
-
-
+export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.360che.com/api/';
+//https://didi.360che.com/saas/
+//https://saasm.360che.com/api/
 
 /*本地存储数据名称表(Tool.localItem)
 jsSDK

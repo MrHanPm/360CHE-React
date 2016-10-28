@@ -24,19 +24,19 @@ import Recent from '../crmRecent/index.js';
 import ImgSRC from './crm.png';
 class ImgBox extends React.Component {
     componentDidMount(){
-        document.title = "客户联系人";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title = "客户联系人";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
     }
     render(){
         return(
@@ -74,19 +74,19 @@ class Clues extends React.Component {
         }
     }
     componentDidMount(){
-        document.title = "客户联系人";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title = "客户联系人";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
     }
     render() {
         let Pages;

@@ -26,11 +26,14 @@ class Clues extends React.Component {
            loadingS:true,
            nowpage:1,
            DATA:[],
+           loadPage:true,
+           loadTimes:'',
         }
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
     upDATA(){
+        this.state.loadPage = false;
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
@@ -63,6 +66,7 @@ class Clues extends React.Component {
                         this.setState({
                             nowpage:page,DATA:ConData
                         });
+                        this.state.loadPage = true;
                     }
                 }else if(res.status == 901){
                         alert(res.msg);
@@ -90,11 +94,12 @@ class Clues extends React.Component {
       if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
+            if(this.state.loadPage){
+                clearTimeout(this.state.loadTimes);
+                this.state.loadTimes = setTimeout(function(){
+                    this.upDATA();
+                }.bind(this),600);
+            }
         }
       }
     }
@@ -109,13 +114,13 @@ class Clues extends React.Component {
         XHRLIST = [];
     }
     render() {
-        const {loadingS, DATA,isDatas} = this.state;
+        const {loadingS,DATA,isDatas} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
         }
         return (
             <div className="clueBody clueAlre BossTitle"  onScroll={this.handleScroll}>

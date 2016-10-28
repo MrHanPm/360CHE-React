@@ -1,6 +1,5 @@
 "use strict";
 import React from 'react';
-
 import {
     Tab,
     TabBody,
@@ -60,7 +59,9 @@ class TabBarDemo extends React.Component {
                 break;
         }
     }
+
     componentDidMount(){
+
         // if(navigator.userAgent.toLowerCase().match(/iphone os/i) == "iphone os"){
         //     document.getElementById('container').style.height=window.screen.height-64+'px';
         // }

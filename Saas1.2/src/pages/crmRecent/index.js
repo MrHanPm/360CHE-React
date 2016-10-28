@@ -258,11 +258,12 @@ class Clues extends React.Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <Reccount DATA={reccount} />;
         }
         return (
-            <div className="clueBody cluePending cluePend crmRecent goSe">
+            <div className="clueBody cluePend">
                 <div className="goSear" onClick={this.goSearchPage}>搜索</div>
+            <div className="clueBody cluePending cluePend crmRecent goSe" style={{'paddingTop':'48px'}}>
             {DATA.map(function(e,index){
                 return(
                 <Panel key={index}>
@@ -288,6 +289,7 @@ class Clues extends React.Component {
                 )})
             }
             {footerS}
+            </div>
             <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
             </Confirm>
         </div>

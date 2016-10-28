@@ -30,12 +30,15 @@ export default class Clues extends React.Component {
            nowpage:1,
            DATA:[],
            isDatas:false,
+           loadPage:true,
+           loadTimes:'',
         }
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
 
     upDATA(){
+        this.state.loadPage = false;
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
@@ -66,8 +69,10 @@ export default class Clues extends React.Component {
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page,DATA:ConData
+                            nowpage:page,
+                            DATA:ConData
                         });
+                        this.state.loadPage = true;
                     }
                 }else if(res.status == 901){
                     alert(res.msg);
@@ -102,28 +107,29 @@ export default class Clues extends React.Component {
       if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA(undefined,'handleScroll');
-            }.bind(this),800);
+            if(this.state.loadPage){
+                clearTimeout(this.state.loadTimes);
+                this.state.loadTimes = setTimeout(function(){
+                    this.upDATA();
+                }.bind(this),600);
+            }
         }
       }
     }
     componentDidMount() {
-        document.title="联系人线索列表";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title="联系人线索列表";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
         this.upDATA();
     }
     render() {

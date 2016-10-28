@@ -42,7 +42,10 @@ class CellDemo extends React.Component {
             iscode: false
         };
         this.phoneInput = (e) => {
-            this.state.phone = e.target.value;
+            let phs = e.target.value;
+            let phos = phs.replace(/(^\s+)|(\s+$)/g, "");
+            let phones = phos.substring(0,11);
+            this.setState({phone:phones});
         }
         this.vcodeInput = (e) => {
             this.state.vcode = e.target.value;
@@ -56,19 +59,19 @@ class CellDemo extends React.Component {
         this.goNext = this.goNext.bind(this);
     }
     componentDidMount() {
-        document.title="手机认证";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title="手机认证";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
         this.getVcode();
     }
 
@@ -220,7 +223,7 @@ class CellDemo extends React.Component {
                             <Label>手机号</Label>
                         </CellHeader>
                         <CellBody>
-                            <Input type="number" placeholder="输入手机号" onInput={this.phoneInput}/>
+                            <Input type="number" placeholder="输入手机号" onInput={this.phoneInput} value={this.state.phone}/>
                         </CellBody>
                     </FormCell>
 

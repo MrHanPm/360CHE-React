@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Tool,Alert} from '../../tool.js';
-
+import {LoadAd} from '../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -43,22 +43,26 @@ class Clues extends React.Component {
         this.upDATA(json.startdate,json.enddate,json.id);
     }
     componentDidMount(){
-        document.title="线索详细数据";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title="线索详细数据";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
     }
     render() {
         const {DATA} = this.state;
+        let footerS = null;
+        if(DATA.length===0){
+            footerS = <LoadAd DATA={DATA.length>0?false:true}/>
+        }
         return (
             <div className="contMesBox">
                 <div className="tables">
@@ -80,6 +84,7 @@ class Clues extends React.Component {
                         </ul>
                         )
                     })}
+                    {footerS}
                 </div>
             </div>
         );

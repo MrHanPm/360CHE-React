@@ -4,7 +4,7 @@ import React,{Component} from 'react';
 class LoadAd extends Component{
   render(){
     return(
-        <div className="loading visible">
+        <div className="loading visible" style={{'marginTop':this.props.DATA?'50%':'0'}}>
             <span className="loading-ring"> </span>
         </div>
     )

@@ -37,6 +37,8 @@ class Clues extends React.Component {
            s_sortfield:'zh',
            FollV:'',
            DATA:[],
+           loadPage:true,
+           loadTimes:'',
         }
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
@@ -45,6 +47,7 @@ class Clues extends React.Component {
         this.FollSidebar = this.FollSidebar.bind(this);
     }
     upDATA(){
+        this.state.loadPage = false;
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
@@ -96,6 +99,7 @@ class Clues extends React.Component {
                             nowpage:page,
                             DATA:ConData
                         });
+                        this.state.loadPage = true;
                     }
                 }else if(res.status == 901){
                     alert(res.msg);
@@ -167,16 +171,17 @@ class Clues extends React.Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-100;
+      Hit  = window.screen.height-85;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
       if(goNumb <= 0){
         if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA();
-            }.bind(this),800);
+            if(this.state.loadPage){
+                clearTimeout(this.state.loadTimes);
+                this.state.loadTimes = setTimeout(function(){
+                    this.upDATA();
+                }.bind(this),600);
+            }
         }
       }
     }
@@ -198,7 +203,7 @@ class Clues extends React.Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
         }
         return (
         <div className="clueBody cluePend">

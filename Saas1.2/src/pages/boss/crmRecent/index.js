@@ -115,7 +115,7 @@ class Clues extends React.Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <Reccount DATA={reccount} />;
         }
         return (
             <div className="clueBody cluePending cluePend crmRecent goSe CRMtitle">

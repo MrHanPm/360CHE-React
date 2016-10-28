@@ -20,19 +20,19 @@ import './index.less';
 import ImgSRC from './find.png';
 class ImgBox extends React.Component {
     componentDidMount(){
-        document.title = "店铺分享";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title = "店铺分享";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
     }
     render(){
         return(
@@ -53,35 +53,35 @@ class MsgDemo extends React.Component {
             isDatas:false,
             shows:false,
         }
-        this.hidFx = this.hidFx.bind(this);
-        this.ShowFx = this.ShowFx.bind(this);
-        this.CopyURL = this.CopyURL.bind(this);
+        //this.hidFx = this.hidFx.bind(this);
+        //this.ShowFx = this.ShowFx.bind(this);
+        //this.CopyURL = this.CopyURL.bind(this);
     }
-    hidFx(){
-        this.setState({shows:false,});
-    }
-    ShowFx(e){
-        this.state.id = e.target.title;
-        this.setState({shows:true,});
-    }
-    CopyURL(){
-        let Doms = document.getElementById('copyURL');
-        let ids = this.state.id;
-        let DATAlist = this.state.DATA;
-        let urls='';
-        for(let i=0;i<DATAlist.length;i++){
-            if(DATAlist[i].id == ids){
-                urls = DATAlist[i].shareurl;
-                break;
-            }
-        }
+    // hidFx(){
+    //     this.setState({shows:false,});
+    // }
+    // ShowFx(e){
+    //     this.state.id = e.target.title;
+    //     this.setState({shows:true,});
+    // }
+    // CopyURL(){
+    //     let Doms = document.getElementById('copyURL');
+    //     let ids = this.state.id;
+    //     let DATAlist = this.state.DATA;
+    //     let urls='';
+    //     for(let i=0;i<DATAlist.length;i++){
+    //         if(DATAlist[i].id == ids){
+    //             urls = DATAlist[i].shareurl;
+    //             break;
+    //         }
+    //     }
         // let httPs = Tool.ShareURL;
         // let links = httPs + urls;
-        Doms.innerHTML = urls;
+        //Doms.innerHTML = urls;
         // if(window.clipboardData){
         //     window.clipboardData.setData('Text',links);
         // }else{
-        document.execCommand('Copy','false',urls);
+        //document.execCommand('Copy','false',urls);
         // }
         // if (document.body.createTextRange) {
         //     var range = document.body.createTextRange();
@@ -103,9 +103,9 @@ class MsgDemo extends React.Component {
         // } else {
         //     alert('暂不支持');
         // }
-        alert('暂不支持,请通过点击右上角进行复制分享～');
-        window.location.href = urls;
-    }
+    //     alert('暂不支持,请通过点击右上角进行复制分享～');
+    //     window.location.href = urls;
+    // }
     upDATA(){
         let json = {};
         if(typeof(Tool.SessionId) == 'string'){
@@ -141,221 +141,36 @@ class MsgDemo extends React.Component {
         this.upDATA();
     }
     componentDidMount() {
-        document.title = '选择店铺';
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
-        let self = this;
-        [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
-          el.addEventListener('touchend', function(e) {
-            let y = e.changedTouches[0].pageY;
-            let Hl = document.getElementById('FenXDL').scrollHeight;
-            let Hit  = window.screen.height;
-            //console.log(Hit,Hl,y);
-            if( y < Hit-Hl){
-                self.hidFx();
-                e.preventDefault();
-            }
-          }, false);
-        });
+        // document.title = '选择店铺';
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
+        // let self = this;
+        // [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
+        //   el.addEventListener('touchend', function(e) {
+        //     let y = e.changedTouches[0].pageY;
+        //     let Hl = document.getElementById('FenXDL').scrollHeight;
+        //     let Hit  = window.screen.height;
+        //     //console.log(Hit,Hl,y);
+        //     if( y < Hit-Hl){
+        //         self.hidFx();
+        //         e.preventDefault();
+        //     }
+        //   }, false);
+        // });
         
         wx.ready(function(){
             wx.hideOptionMenu();
-          // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
-          document.querySelector('#onMenuShareAppMessage').onclick = function () {
-            let ids = self.state.id;
-            let DATAlist = self.state.DATA;
-            let Obj={};
-            for(let i=0;i<DATAlist.length;i++){
-                if(DATAlist[i].id == ids){
-                    Obj = DATAlist[i];
-                    break;
-                }
-            }
-            //let httPs = Tool.ShareURL;
-            let links = Obj.shareurl;
-            let sharetitle = Obj.sharetitle;
-            let sharesummary= Obj.sharesummary;
-            let shareimgurl= Obj.shareimgurl;
-            wx.onMenuShareAppMessage({
-              title: sharetitle,
-              desc: sharesummary,
-              link: links,
-              imgUrl: shareimgurl,
-              trigger: function (res) {
-                alert('暂不支持,请通过点击右上角进行复制分享～');
-                window.location.href = links;
-              },
-              success: function (res) {
-                alert('已分享');
-              },
-              cancel: function (res) {
-                alert('已取消');
-              },
-              fail: function (res) {
-                alert(JSON.stringify(res));
-              }
-            });
-          };
-
-          // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
-          document.querySelector('#onMenuShareTimeline').onclick = function () {
-            let ids = self.state.id;
-            let DATAlist = self.state.DATA;
-            let Obj={};
-            for(let i=0;i<DATAlist.length;i++){
-                if(DATAlist[i].id == ids){
-                    Obj = DATAlist[i];
-                    break;
-                }
-            }
-            let links = Obj.shareurl;
-            let sharetitle = Obj.sharetitle;
-            let sharesummary= Obj.sharesummary;
-            let shareimgurl= Obj.shareimgurl;
-            wx.onMenuShareTimeline({
-              title: sharetitle,
-              desc: sharesummary,
-              link: links,
-              imgUrl: shareimgurl,
-              trigger: function (res) {
-                alert('暂不支持,请通过点击右上角进行复制分享～');
-                window.location.href = links;
-              },
-              success: function (res) {
-                alert('已分享');
-              },
-              cancel: function (res) {
-                alert('已取消');
-              },
-              fail: function (res) {
-                alert(JSON.stringify(res));
-              }
-            });
-          };
-
-          // 2.3 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
-          document.querySelector('#onMenuShareQQ').onclick = function () {
-            let ids = self.state.id;
-            let DATAlist = self.state.DATA;
-            let Obj={};
-            for(let i=0;i<DATAlist.length;i++){
-                if(DATAlist[i].id == ids){
-                    Obj = DATAlist[i];
-                    break;
-                }
-            }
-            let links = Obj.shareurl;
-            let sharetitle = Obj.sharetitle;
-            let sharesummary= Obj.sharesummary;
-            let shareimgurl= Obj.shareimgurl;
-            wx.onMenuShareQQ({
-              title: sharetitle,
-              desc: sharesummary,
-              link: links,
-              imgUrl: shareimgurl,
-              trigger: function (res) {
-                alert('暂不支持,请通过点击右上角进行复制分享～');
-                window.location.href = links;
-              },
-              complete: function (res) {
-                alert(JSON.stringify(res));
-              },
-              success: function (res) {
-                alert('已分享');
-              },
-              cancel: function (res) {
-                alert('已取消');
-              },
-              fail: function (res) {
-                alert(JSON.stringify(res));
-              }
-            });
-          };
           
-          // 2.4 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
-          document.querySelector('#onMenuShareWeibo').onclick = function () {
-            let ids = self.state.id;
-            let DATAlist = self.state.DATA;
-            let Obj={};
-            for(let i=0;i<DATAlist.length;i++){
-                if(DATAlist[i].id == ids){
-                    Obj = DATAlist[i];
-                    break;
-                }
-            }
-            let links = Obj.shareurl;
-            let sharetitle = Obj.sharetitle;
-            let sharesummary= Obj.sharesummary;
-            let shareimgurl= Obj.shareimgurl;
-            wx.onMenuShareWeibo({
-              title: sharetitle,
-              desc: sharesummary,
-              link: links,
-              imgUrl: shareimgurl,
-              trigger: function (res) {
-                alert('暂不支持,请通过点击右上角进行复制分享～');
-                window.location.href = links;
-              },
-              complete: function (res) {
-                alert(JSON.stringify(res));
-              },
-              success: function (res) {
-                alert('已分享');
-              },
-              cancel: function (res) {
-                alert('已取消');
-              },
-              fail: function (res) {
-                alert(JSON.stringify(res));
-              }
-            });
-          };
-
-          // 2.5 监听“分享到QZone”按钮点击、自定义分享内容及分享接口
-          document.querySelector('#onMenuShareQZone').onclick = function () {
-            let ids = self.state.id;
-            let DATAlist = self.state.DATA;
-            let Obj={};
-            for(let i=0;i<DATAlist.length;i++){
-                if(DATAlist[i].id == ids){
-                    Obj = DATAlist[i];
-                    break;
-                }
-            }
-            let links = Obj.shareurl;
-            let sharetitle = Obj.sharetitle;
-            let sharesummary= Obj.sharesummary;
-            let shareimgurl= Obj.shareimgurl;
-            wx.onMenuShareQZone({
-              title: sharetitle,
-              desc: sharesummary,
-              link: links,
-              imgUrl: shareimgurl,
-              trigger: function (res) {},
-              complete: function (res) {
-                alert(JSON.stringify(res));
-              },
-              success: function (res) {
-                alert('已分享');
-              },
-              cancel: function (res) {
-                alert('已取消');
-              },
-              fail: function (res) {
-                alert(JSON.stringify(res));
-              }
-            });
-          };
         });
     }
     componentWillUnmount(){
@@ -379,7 +194,7 @@ class MsgDemo extends React.Component {
             <Cells access>
             {DATA.map(function(e,index){
                 return(  
-                <Cell key={index} title={e.id} onClick={self.ShowFx}>
+                <Cell key={index} href={e.shareurl}>
                     <CellHeader title={e.id}>
                         <img src={e.shareimgurl} title={e.id} />
                     </CellHeader>
@@ -391,17 +206,6 @@ class MsgDemo extends React.Component {
             )})}
             {footerS}
             </Cells>
-            <div className="FXBox" style={{'display':shows?'':'none'}}>
-                <dl id="FenXDL">
-                    <dt className="pit">分享这个店铺</dt>
-                    
-                    <dd>
-                        <div className="url" onClick={this.CopyURL}></div>
-                        <p>复制链接</p>
-                    </dd>
-                </dl>
-            </div>
-            <div id="copyURL" style={{'display':'none'}}></div>
         </div>
         );
     }
@@ -458,8 +262,17 @@ class CluesImgBox extends React.Component {
 export default CluesImgBox
 //export default MsgDemo
 
-
-
+//<div id="copyURL" style={{'display':'none'}}></div>
+            // <div className="FXBox" style={{'display':shows?'':'none'}}>
+            //     <dl id="FenXDL">
+            //         <dt className="pit">分享这个店铺</dt>
+                    
+            //         <dd>
+            //             <div className="url" onClick={this.CopyURL}></div>
+            //             <p>复制链接</p>
+            //         </dd>
+            //     </dl>
+            // </div>
 
                     // <dd>
                     //     <div id="onMenuShareAppMessage"></div>
@@ -481,3 +294,189 @@ export default CluesImgBox
                     //     <div className="sina" id="onMenuShareWeibo"></div>
                     //     <p>新浪微博</p>
                     // </dd>
+// 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+          // document.querySelector('#onMenuShareAppMessage').onclick = function () {
+          //   let ids = self.state.id;
+          //   let DATAlist = self.state.DATA;
+          //   let Obj={};
+          //   for(let i=0;i<DATAlist.length;i++){
+          //       if(DATAlist[i].id == ids){
+          //           Obj = DATAlist[i];
+          //           break;
+          //       }
+          //   }
+          //   //let httPs = Tool.ShareURL;
+          //   let links = Obj.shareurl;
+          //   let sharetitle = Obj.sharetitle;
+          //   let sharesummary= Obj.sharesummary;
+          //   let shareimgurl= Obj.shareimgurl;
+          //   wx.onMenuShareAppMessage({
+          //     title: sharetitle,
+          //     desc: sharesummary,
+          //     link: links,
+          //     imgUrl: shareimgurl,
+          //     trigger: function (res) {
+          //       alert('暂不支持,请通过点击右上角进行复制分享～');
+          //       window.location.href = links;
+          //     },
+          //     success: function (res) {
+          //       alert('已分享');
+          //     },
+          //     cancel: function (res) {
+          //       alert('已取消');
+          //     },
+          //     fail: function (res) {
+          //       alert(JSON.stringify(res));
+          //     }
+          //   });
+          // };
+
+          // // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+          // document.querySelector('#onMenuShareTimeline').onclick = function () {
+          //   let ids = self.state.id;
+          //   let DATAlist = self.state.DATA;
+          //   let Obj={};
+          //   for(let i=0;i<DATAlist.length;i++){
+          //       if(DATAlist[i].id == ids){
+          //           Obj = DATAlist[i];
+          //           break;
+          //       }
+          //   }
+          //   let links = Obj.shareurl;
+          //   let sharetitle = Obj.sharetitle;
+          //   let sharesummary= Obj.sharesummary;
+          //   let shareimgurl= Obj.shareimgurl;
+          //   wx.onMenuShareTimeline({
+          //     title: sharetitle,
+          //     desc: sharesummary,
+          //     link: links,
+          //     imgUrl: shareimgurl,
+          //     trigger: function (res) {
+          //       alert('暂不支持,请通过点击右上角进行复制分享～');
+          //       window.location.href = links;
+          //     },
+          //     success: function (res) {
+          //       alert('已分享');
+          //     },
+          //     cancel: function (res) {
+          //       alert('已取消');
+          //     },
+          //     fail: function (res) {
+          //       alert(JSON.stringify(res));
+          //     }
+          //   });
+          // };
+
+          // // 2.3 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+          // document.querySelector('#onMenuShareQQ').onclick = function () {
+          //   let ids = self.state.id;
+          //   let DATAlist = self.state.DATA;
+          //   let Obj={};
+          //   for(let i=0;i<DATAlist.length;i++){
+          //       if(DATAlist[i].id == ids){
+          //           Obj = DATAlist[i];
+          //           break;
+          //       }
+          //   }
+          //   let links = Obj.shareurl;
+          //   let sharetitle = Obj.sharetitle;
+          //   let sharesummary= Obj.sharesummary;
+          //   let shareimgurl= Obj.shareimgurl;
+          //   wx.onMenuShareQQ({
+          //     title: sharetitle,
+          //     desc: sharesummary,
+          //     link: links,
+          //     imgUrl: shareimgurl,
+          //     trigger: function (res) {
+          //       alert('暂不支持,请通过点击右上角进行复制分享～');
+          //       window.location.href = links;
+          //     },
+          //     complete: function (res) {
+          //       alert(JSON.stringify(res));
+          //     },
+          //     success: function (res) {
+          //       alert('已分享');
+          //     },
+          //     cancel: function (res) {
+          //       alert('已取消');
+          //     },
+          //     fail: function (res) {
+          //       alert(JSON.stringify(res));
+          //     }
+          //   });
+          // };
+          
+          // // 2.4 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
+          // document.querySelector('#onMenuShareWeibo').onclick = function () {
+          //   let ids = self.state.id;
+          //   let DATAlist = self.state.DATA;
+          //   let Obj={};
+          //   for(let i=0;i<DATAlist.length;i++){
+          //       if(DATAlist[i].id == ids){
+          //           Obj = DATAlist[i];
+          //           break;
+          //       }
+          //   }
+          //   let links = Obj.shareurl;
+          //   let sharetitle = Obj.sharetitle;
+          //   let sharesummary= Obj.sharesummary;
+          //   let shareimgurl= Obj.shareimgurl;
+          //   wx.onMenuShareWeibo({
+          //     title: sharetitle,
+          //     desc: sharesummary,
+          //     link: links,
+          //     imgUrl: shareimgurl,
+          //     trigger: function (res) {
+          //       alert('暂不支持,请通过点击右上角进行复制分享～');
+          //       window.location.href = links;
+          //     },
+          //     complete: function (res) {
+          //       alert(JSON.stringify(res));
+          //     },
+          //     success: function (res) {
+          //       alert('已分享');
+          //     },
+          //     cancel: function (res) {
+          //       alert('已取消');
+          //     },
+          //     fail: function (res) {
+          //       alert(JSON.stringify(res));
+          //     }
+          //   });
+          //};
+
+          // 2.5 监听“分享到QZone”按钮点击、自定义分享内容及分享接口
+        //   document.querySelector('#onMenuShareQZone').onclick = function () {
+        //     let ids = self.state.id;
+        //     let DATAlist = self.state.DATA;
+        //     let Obj={};
+        //     for(let i=0;i<DATAlist.length;i++){
+        //         if(DATAlist[i].id == ids){
+        //             Obj = DATAlist[i];
+        //             break;
+        //         }
+        //     }
+        //     let links = Obj.shareurl;
+        //     let sharetitle = Obj.sharetitle;
+        //     let sharesummary= Obj.sharesummary;
+        //     let shareimgurl= Obj.shareimgurl;
+        //     wx.onMenuShareQZone({
+        //       title: sharetitle,
+        //       desc: sharesummary,
+        //       link: links,
+        //       imgUrl: shareimgurl,
+        //       trigger: function (res) {},
+        //       complete: function (res) {
+        //         alert(JSON.stringify(res));
+        //       },
+        //       success: function (res) {
+        //         alert('已分享');
+        //       },
+        //       cancel: function (res) {
+        //         alert('已取消');
+        //       },
+        //       fail: function (res) {
+        //         alert(JSON.stringify(res));
+        //       }
+        //     });
+        //   };

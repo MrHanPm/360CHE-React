@@ -191,19 +191,19 @@ class MsgDemo extends React.Component {
         );
     }
     componentDidMount() {
-        document.title = '线索详情';
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title = '线索详情';
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
         // let star = {title:"title",url: window.location.href};
         // window.history.pushState(star,"title",window.location.href);
     }
@@ -403,7 +403,7 @@ class MsgDemo extends React.Component {
                             return(
                                 <dd key={index}>
                                     <div title={e.id} onClick={self.SDS}></div>
-                                    <p>{e.createdate}</p>
+                                    <p>{e.followupdate}</p>
                                     <h4>设置级别为{e.clueslevelname}</h4>
                                     <h4 style={{'display':e.remark == ''?'none':'block'}}>
                                         <span>备注：</span>
@@ -469,7 +469,7 @@ class SideRob extends React.Component {
     closeSold(){this.setState({showSid:false},()=> this.props.onChange('SDSrandoms'));}
     render() {
         const {showSid}=this.state;
-        const {createdate,followuptypename,price,dealtsubcategoryname,clueslevelname,dealtbrandname,dealtseriesname,expectedprice,dealtdate,faildate,dealttruckname,clueslevelid,failname,remark}=this.state.DATA;
+        const {followupdate,followuptypename,price,dealtsubcategoryname,clueslevelname,dealtbrandname,dealtseriesname,expectedprice,dealtdate,faildate,dealttruckname,clueslevelid,failname,remark}=this.state.DATA;
         return(
             <div className={showSid?"SideRobClue visible":"SideRobClue"}>
                 <header>
@@ -480,7 +480,7 @@ class SideRob extends React.Component {
                     <FormCell>
                         <CellHeader><Label>跟进时间</Label></CellHeader>
                         <CellBody>
-                            {createdate}
+                            {followupdate}
                         </CellBody>
                     </FormCell>
                     <FormCell>

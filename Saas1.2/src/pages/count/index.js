@@ -154,11 +154,18 @@ class Clues extends React.Component {
                         tryRankData:res.data.tryRankData,
                         addRankData:res.data.addRankData,
                     });
-                    for(let i=0;i<10;i++){
-                        Sue.push(res.data.successRankData[i]);
-                        Tue.push(res.data.tryRankData[i]);
-                        Aue.push(res.data.addRankData[i]);
+                    if(res.data.successRankData.length >10){
+                        for(let i=0;i<10;i++){
+                            Sue.push(res.data.successRankData[i]);
+                            Tue.push(res.data.tryRankData[i]);
+                            Aue.push(res.data.addRankData[i]);
+                        }
+                    }else{
+                        Sue = res.data.successRankData;
+                        Tue = res.data.tryRankData;
+                        Aue = res.data.addRankData;
                     }
+                    
                     // 销售简报图形 
                     [].forEach.call(document.querySelector('#pie_charts').children,function(chart,index){
                         var data = res.data.briefingData[index];
@@ -216,19 +223,19 @@ class Clues extends React.Component {
         e.target.style.display = 'none';
     }
     componentDidMount(){
-        document.title="数据统计";
-        var body = document.getElementsByTagName('body')[0];
-        var iframe = document.createElement("iframe");
-        iframe.style.display="none";
-        iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        var d = function() {
-          setTimeout(function() {
-            iframe.removeEventListener('load', d);
-            document.body.removeChild(iframe);
-          }, 0);
-        };
-        iframe.addEventListener('load', d);
-        document.body.appendChild(iframe);
+        // document.title="数据统计";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
         let Stdat = this.GetDateYes();
         let Endat = this.GetDateEes();
         this.setState({

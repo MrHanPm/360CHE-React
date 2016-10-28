@@ -37,8 +37,10 @@ class Clues extends Component {
             DATA:[],
             isDatas:false,
             topnotice:'',
-            maxrobnum:'',//最大能抢线索数量
-            todayrobnum:''//今天已经抢的线索数量pagecount
+            maxrobnum:'',
+            todayrobnum:'',
+            loadPage:true,
+            loadTimes:'',
         }
         this.showBrand = this.showBrand.bind(this);
         this.Alts = this.Alts.bind(this);
@@ -87,6 +89,7 @@ class Clues extends Component {
         this.upDATA();
     }
     upDATA(){
+        this.state.loadPage = false;
         this.state.SFCSrandoms = '';
         this.state.showBrands = '';
         let json={};
@@ -135,6 +138,7 @@ class Clues extends Component {
                             nowpage:page,
                             DATA:ConData,
                         });
+                        this.state.loadPage = true;
                     }
                     //console.log(this.state);
                 }else if(res.status == 901){
@@ -184,11 +188,12 @@ class Clues extends Component {
       if(goNumb <= 0){
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
-            let t
-            t && clearTimeout(t);
-            t = setTimeout(function(){
-                this.upDATA();
-            }.bind(this),800);
+            if(this.state.loadPage){
+                clearTimeout(this.state.loadTimes);
+                this.state.loadTimes = setTimeout(function(){
+                    this.upDATA();
+                }.bind(this),600);
+            }
         }
       }
     }
@@ -203,7 +208,7 @@ class Clues extends Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <NoMor />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
         }
         return (
             <div className="robBody">

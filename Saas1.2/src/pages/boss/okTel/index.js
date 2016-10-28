@@ -208,8 +208,9 @@ class Clues extends React.Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd /> : <Reccount DATA={reccount} />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <Reccount DATA={reccount} />;
         }
+        let showAZs = reccount < 30 ? false : true
         return (
             <div className="clueBody cluePending crmPend CRMtitle">
                 <div className="CrmScoll">
@@ -244,7 +245,7 @@ class Clues extends React.Component {
                 {footerS}
             </div>
             <aside className="scale" id="index_selected">A</aside>
-            <ul id="index_nav">
+            <ul id="index_nav" style={{'display':showAZs?'':'none'}}>
               {DATA.map(function(e,index){
                   return(
                    <li key={index} onClick={self.Liclick}>{e}</li>
