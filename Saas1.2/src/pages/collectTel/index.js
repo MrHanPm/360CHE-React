@@ -35,6 +35,7 @@ class Clues extends React.Component {
             DelId:'',
             DelInO:'',
             DelInd:'',
+            isOsAd:false,
         }
         //this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
@@ -244,6 +245,9 @@ class Clues extends React.Component {
     componentDidMount() {
         for(let j=0; j< 30;j++){this.state.Lis[j] = [];}
         this.upDATA();
+        if (navigator.userAgent.toLowerCase().indexOf('iphone') !== -1){
+            this.state.isOsAd = true;
+        }
         let self = this;
         [].forEach.call(document.querySelectorAll('#index_nav'), function (el) {  
           el.addEventListener('touchstart', function(e) {
@@ -279,7 +283,7 @@ class Clues extends React.Component {
         XHRLIST = [];
     }
     render() {
-        const {loadingS,DATA,Lis,isDatas,reccount} = this.state;
+        const {loadingS,DATA,Lis,isDatas,reccount,isOsAd} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
@@ -287,7 +291,12 @@ class Clues extends React.Component {
         }else{
             footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <Reccount DATA={reccount} />;
         }
-        let showAZs = reccount < 30 ? false : true
+        let showAZs;
+        if(isOsAd){
+            showAZs = false
+        }else{
+            showAZs= reccount < 30 ? false : true
+        }
         return (
             <div className="clueBody cluePending crmPend">
                 <div className="CrmScoll">
