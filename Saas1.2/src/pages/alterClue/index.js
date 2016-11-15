@@ -657,7 +657,7 @@ class MsgDemo extends React.Component {
             return false;
         }
 
-        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
+        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined' || this.state.KHJBv.values === 0){
             Alert.to("客户级别不能为空");
             return false;
         }else if(this.state.KHJBv.values == 5){
@@ -731,27 +731,25 @@ class MsgDemo extends React.Component {
             json.tel = this.state.phone;
             json.clueresourceid = this.state.XSLYv.values;
             json.cluesextendid = this.state.id;
-            if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
-                json.clueslevel = '';
-            }else{
-                json.clueslevel = this.state.KHJBv.values;
-                if(this.state.KHJBv.values == 5){
-                    json.dealtsubcategoryid = this.state.DcPLBv.subcategoryid;
-                    json.dealtbrandid = this.state.DqCPPv.brandid;
-                    json.dealtseriesid = this.state.DqCXLv.seriesid;
-                    json.dealttruckid = this.state.DqCCXv.productid;
-                    json.dealtprice = this.state.pay;
-                    json.dealtdate = this.state.dealdate.replace(/-/g,'/');
-                }
-                if(this.state.KHJBv.values == 6){
-                    if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
-                        json.fail = '';
-                    }else{
-                        json.fail = this.state.ZBv.values;
-                    }
-                    json.faildate = this.state.faildate.replace(/-/g,'/');
-                }
+
+            json.clueslevel = this.state.KHJBv.values;
+            if(this.state.KHJBv.values == 5){
+                json.dealtsubcategoryid = this.state.DcPLBv.subcategoryid;
+                json.dealtbrandid = this.state.DqCPPv.brandid;
+                json.dealtseriesid = this.state.DqCXLv.seriesid;
+                json.dealttruckid = this.state.DqCCXv.productid;
+                json.dealtprice = this.state.pay;
+                json.dealtdate = this.state.dealdate.replace(/-/g,'/');
             }
+            if(this.state.KHJBv.values == 6){
+                if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
+                    json.fail = '';
+                }else{
+                    json.fail = this.state.ZBv.values;
+                }
+                json.faildate = this.state.faildate.replace(/-/g,'/');
+            }
+
             if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
                 json.provincesn = '';
             }else{
@@ -936,14 +934,14 @@ class MsgDemo extends React.Component {
                         </CellBody>
                         <CellFooter/>
                     </FormCell>
-                    <FormCell style={{'display':XSLYv.key == '卡车之家'?'none':''}}>
+                    <FormCell style={{'display':XSLYv.key == '卡车之家' || XSLYv.key == '店铺分享'?'none':''}}>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
                             <Input type="number" placeholder="请填写客户电话" onInput={this.phoneInput} value={phone}/>
                         </CellBody>
                         <CellFooter />
                     </FormCell>
-                    <FormCell style={{'display':XSLYv.key == '卡车之家'?'':'none'}}>
+                    <FormCell style={{'display':XSLYv.key == '卡车之家' || XSLYv.key == '店铺分享'?'':'none'}}>
                         <CellHeader><Label>客户电话</Label></CellHeader>
                         <CellBody>
                             <Input type="number" placeholder="请填写客户电话"  value={phone} disabled={true}/>
@@ -966,14 +964,14 @@ class MsgDemo extends React.Component {
                         </CellBody>
                         <CellFooter />
                     </Cell>
-                    <Cell style={{'display':XSLYv.key == '卡车之家'?'none':''}}>
+                    <Cell style={{'display':XSLYv.key == '卡车之家' || XSLYv.key == '店铺分享'?'none':''}}>
                         <CellHeader><Label>线索来源</Label></CellHeader>
                         <CellBody onClick={this.XSLY}>
                             <Input type="text" placeholder="请选择线索来源" value={XSLYval} disabled={true}/>
                         </CellBody>
                         <CellFooter />
                     </Cell>
-                    <Cell style={{'display':XSLYv.key == '卡车之家'?'':'none'}}>
+                    <Cell style={{'display':XSLYv.key == '卡车之家' || XSLYv.key == '店铺分享' ? '':'none'}}>
                         <CellHeader><Label>线索来源</Label></CellHeader>
                         <CellBody>
                             <Input type="text" placeholder="请选择线索来源" value={XSLYval} disabled={true}/>

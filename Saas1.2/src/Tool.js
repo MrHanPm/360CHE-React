@@ -28,6 +28,25 @@ window.routerChange = function(){
 window.AlertTimeOut = '';
 window.XHRLIST = [];
 
+Tool.ga = function () {
+        let nac = JSON.parse(Tool.localItem('vipLodData'));
+        let users = '员工'
+        if(nac.usercategory == '2'){
+            users = '老板'
+        }
+        let delname = nac.dealersalesallbrandsname.replace(/\,/g, "|");
+        try{
+            ga('send','event','首页加载','首页加载',{
+                dimension2:users,
+                dimension3:nac.dealername,
+                dimension4:delname,
+                dimension5: nac.userid
+            })
+        } catch (err){
+            console.log(err)
+        }
+};
+        
 // window.addEventListener("click", function(e){});
 
 // window._IsAndroid =function(){

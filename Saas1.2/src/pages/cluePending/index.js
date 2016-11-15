@@ -170,6 +170,7 @@ class Clues extends React.Component {
                                     <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta>{e.cityname}</MediaBoxInfoMeta>
+                                    <MediaBoxInfoMeta>{e.realname}</MediaBoxInfoMeta>
                                 </MediaBoxInfo>
                             </MediaBoxBody>
                         </MediaBox>

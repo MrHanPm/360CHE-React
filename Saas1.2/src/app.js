@@ -11,6 +11,7 @@ import 'weui';
 import Name from './pages/name/index';
 import Login from './pages/login/index';
 import Phone from './pages/testPhone/index';
+import Phones from './pages/testPhone/phone';
 import Brand from './pages/brand/index';
 import Nav from './pages/nav/index';
 import LoadMsg from './pages/msg/loading';
@@ -31,6 +32,7 @@ import DetailTel from './pages/detailTel/index';
 import CrmClue from './pages/crmClue/index';
 import Share from './pages/share/index';
 import CountMsg from './pages/count/msg';
+import RobMsg from './pages/rob/msg';
 import Search from './pages/searchbar/index';
 
 import BosNav from './pages/boss/nav/index';
@@ -59,6 +61,7 @@ ReactDOM.render((
             <Route path="loading" component={LoadMsg}/>
             <Route path="loaddata" component={LoadData}/>
             <Route path="phone" component={Phone}/>
+            <Route path="phones" component={Phones}/>
             <Route path="login" component={Login}/>
             <Route path="name" component={Name}/>
             <Route path="brand" component={Brand}/>
@@ -73,6 +76,7 @@ ReactDOM.render((
             <Route path="share" component={Share}/>
             <Route path="search" component={Search}/>
             <Route path="countMsg" component={CountMsg}/>
+            <Route path="robMsg" component={RobMsg}/>
 
             <Route path="addClue" component={AddClue}/>
             <Route path="robClue" component={RobClue}/>

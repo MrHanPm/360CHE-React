@@ -27,6 +27,7 @@ class MsgDemo extends React.Component {
             DATArob:'',
             Messrob:[],
             reccount:0,
+            showBtns: true,
             showConfirm: false,
             showAlertCfm:false,
             showDonwn:true,
@@ -48,7 +49,7 @@ class MsgDemo extends React.Component {
                 ],
             },
             AlertCfm: {
-                title: '24小时内未跟进,将返回到公共线索池',
+                title: '抢线索成功，请跟进，24小时内未设置客户级别的线索将返回到公共线索池',
                 buttons: [
                     {
                         type: 'primary',
@@ -172,8 +173,15 @@ class MsgDemo extends React.Component {
                     if(res.reccount > 0){
                         this.setState({showDonwn: false,Messrob:res.listdata,reccount:res.reccount});
                     }else{
-                        if(this.state.DATArob.clueresourcename == '卡车之家' && this.state.DATArob.clueslevel === 0){
-                            this.setState({Messrob:res.listdata,showAlertCfm:true});
+                        if(this.state.DATArob.clueresourcename == '卡车之家' &&
+                            this.state.DATArob.clueslevel === 0 &&
+                            this.state.DATArob.cluecreatedatetime >= '2016/11/01 00:00:00'
+                        ){
+                            this.setState({
+                                Messrob:res.listdata,
+                                showAlertCfm:true,
+                                showBtns: false
+                            });
                         }else{
                             this.setState({Messrob:res.listdata});
                         }
@@ -245,7 +253,6 @@ class MsgDemo extends React.Component {
         )
     }
     render() {
-        let showBtns = false;
         let loadShow=true;
         let self = this;
         if(this.state.DATArob !== '' && typeof(this.state.DATArob.realname) !== 'undefined'){
@@ -253,9 +260,8 @@ class MsgDemo extends React.Component {
         }else{
             
         }
-        const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm} = this.state;
+        const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm,showBtns} = this.state;
         const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,customid} = this.state.DATArob;
-        if(clueslevelname !== '' && typeof(clueslevelname) !== 'undefined'){showBtns = true;}
         if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
         return (
             <div className="account robClues">
@@ -555,7 +561,7 @@ class SideRob extends React.Component {
                             </CellBody>
                         </FormCell>
                     </Form>
-                    <FormCell style={{'box-shadow':'0 5px 6px #f6f6f6'}}>
+                    <FormCell style={{boxShadow:'0 5px 6px #f6f6f6'}}>
                         <CellHeader><Label>备注</Label></CellHeader>
                         <CellBody>
                             <pre>{remark}</pre>

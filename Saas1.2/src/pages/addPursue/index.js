@@ -249,7 +249,7 @@ class MsgDemo extends React.Component {
             Alert.to("跟进方式不能为空");
             return false;
         }
-        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
+        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined' || this.state.KHJBv.values === 0){
             Alert.to("客户级别不能为空");
             return false;
         }else if(this.state.KHJBv.values == 5){

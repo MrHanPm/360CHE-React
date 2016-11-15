@@ -30,6 +30,7 @@ class MsgDemo extends React.Component {
         );
     }
     goNavs(){
+        Tool.ga();
         let nac = JSON.parse(Tool.localItem('vipLodData'));
         if(nac.usercategory == '1'){
             this.context.router.push({pathname: '/nav/x'});

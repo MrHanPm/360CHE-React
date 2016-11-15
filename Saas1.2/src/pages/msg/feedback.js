@@ -55,6 +55,8 @@ class MsgDemo extends React.Component {
     }
     goSubm(){
         if(this.checkForm()){
+            let Doms = document.getElementById('goNextP');
+            Doms.setAttribute("disabled", true);
             let sessionid;
             if(typeof(Tool.SessionId) == 'string'){
                 sessionid= Tool.SessionId;
@@ -71,10 +73,12 @@ class MsgDemo extends React.Component {
                         this.context.router.push({pathname: '/loading'});
                     }else{
                         Alert.to(res.msg);
+                        Doms.removeAttribute("disabled");
                     }
                 },
                 (err) => {
                     Alert.to(err.msg);
+                    Doms.removeAttribute("disabled");
                 }
             )
         }
@@ -90,7 +94,7 @@ class MsgDemo extends React.Component {
                     </FormCell>
                 </Form>
                 <ButtonArea>
-                    <Button onClick={this.goSubm}>确定</Button>
+                    <Button id="goNextP" onClick={this.goSubm}>确定</Button>
                 </ButtonArea>
                 <p style={{'paddingTop':'50px','textAlign':'center'}}>使用问题请拨打卡车之家服务热线<br/><a href="tel:4006136188">4006-136-188</a></p>
                 <ShowAlert />

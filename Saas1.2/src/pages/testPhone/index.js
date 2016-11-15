@@ -252,10 +252,11 @@ class CellDemo extends React.Component {
                         </CellFooter>
                     </FormCell>
                 </Form>
-
+                <a className="logTests" href="#/phones">使用密码登录</a>
                 <ButtonArea>
                     <Button id="goNextP" onClick={this.goNext}>确定</Button>
                 </ButtonArea>
+
                 <Toast show={this.state.showToast}>验证码已发送</Toast>
                 <p className="FootTxt">验证手机号码，使用升级版营销助手<br/>手机号码仅用于登录和保护账号安全</p>
             </Page>

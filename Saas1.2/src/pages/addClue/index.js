@@ -367,7 +367,7 @@ class MsgDemo extends React.Component {
             Alert.to("手机号码格式有误");
             return false;
         }
-        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
+        if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined' || this.state.KHJBv.values === 0){
             Alert.to("客户级别不能为空");
             return false;
         }else if(this.state.KHJBv.values == 5){
@@ -429,23 +429,20 @@ class MsgDemo extends React.Component {
             json.tel = this.state.phone;
             json.clueresourceid = this.state.XSLYv.values;
 
-            if(this.state.KHJBv == '' || typeof(this.state.KHJBv.values) == 'undefined'){
-                json.clueslevel = '';
-            }else{
-                json.clueslevel = this.state.KHJBv.values;
-                if(this.state.KHJBv.values == 5){
-                    json.dealtprice = this.state.pay;
-                    json.dealtdate = this.state.dealdate.replace(/-/g,'/');
-                }
-                if(this.state.KHJBv.values == 6){
-                    if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
-                        json.fail = '';
-                    }else{
-                        json.fail = this.state.ZBv.values;
-                    }
-                    json.faildate = this.state.faildate.replace(/-/g,'/');
-                }
+            json.clueslevel = this.state.KHJBv.values;
+            if(this.state.KHJBv.values == 5){
+                json.dealtprice = this.state.pay;
+                json.dealtdate = this.state.dealdate.replace(/-/g,'/');
             }
+            if(this.state.KHJBv.values == 6){
+                if(this.state.ZBv == '' || typeof(this.state.ZBv.values) == 'undefined'){
+                    json.fail = '';
+                }else{
+                    json.fail = this.state.ZBv.values;
+                }
+                json.faildate = this.state.faildate.replace(/-/g,'/');
+            }
+
             if(this.state.SFCSv == '' || typeof(this.state.SFCSv.provincesn) == 'undefined'){
                 json.provincesn = '';
             }else{

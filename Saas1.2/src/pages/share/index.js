@@ -13,11 +13,11 @@ import {
     CellBody,
     CellFooter
 } from 'react-weui';
-import Page from '../../component/page';
 import {Tool,Alert} from '../../tool.js';
 import {NoMor,NoDataS} from '../../component/more.js';
 import './index.less';
 import ImgSRC from './find.png';
+import ShowAlert from '../../component/Alert.js';
 class ImgBox extends React.Component {
     componentDidMount(){
         // document.title = "店铺分享";
@@ -115,12 +115,12 @@ class MsgDemo extends React.Component {
         }
         Tool.get('User/Share.aspx',json,
             (res) => {
+                if(res.listdata.length === 0){
+                    this.setState({isDatas:true});
+                }else{
+                    this.setState({isDatas:false});
+                }
                 if(res.status == 1){
-                    if(res.listdata.length === 0){
-                        this.setState({isDatas:true});
-                    }else{
-                        this.setState({isDatas:false});
-                    }
                     this.setState({
                         DATA:res.listdata,
                         loadingS:false
@@ -206,6 +206,7 @@ class MsgDemo extends React.Component {
             )})}
             {footerS}
             </Cells>
+            <ShowAlert />
         </div>
         );
     }

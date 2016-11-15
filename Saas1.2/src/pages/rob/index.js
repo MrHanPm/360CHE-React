@@ -51,27 +51,7 @@ class Clues extends Component {
         this.RobLine = this.RobLine.bind(this);
     }
     Alts(){
-        let json={};
-        if(typeof(Tool.SessionId) == 'string'){
-            json.sessionid = Tool.SessionId;
-        }else{
-            json.sessionid = Tool.SessionId.get();
-        }
-        Tool.get('PublicClues/RobCLuesDescription.aspx',json,
-            (res) => {
-                if(res.status == 1){
-                    Alert.to(res.msg);
-                }else if(res.status == 901){
-                    alert(res.msg);
-                    this.context.router.push({pathname: '/loading'});
-                }else{
-                    Alert.to(res.msg);
-                }
-            },
-            (err) => {
-                Alert.to('请求超时，稍后重试。。');
-            }
-        )
+        this.context.router.push({pathname: '/robMsg'});
     }
     SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:''});}
     upBrand(val){
@@ -109,16 +89,16 @@ class Clues extends Component {
         }
         Tool.get('PublicClues/GetCluesList.aspx',json,
             (res) => {
+                if(res.listdata.length === 0){
+                    this.setState({isDatas:true});
+                }else{
+                    this.setState({isDatas:false});
+                }
                 if(res.status == 1){
                     this.setState({loadingS:true});
                     let page = this.state.nowpage;
                     // this.state.SFCSrandoms = '';
                     // this.state.showBrands = '';
-                    if(res.listdata.length === 0){
-                        this.setState({isDatas:true});
-                    }else{
-                        this.setState({isDatas:false});
-                    }
                     if(res.listdata.length < 10){
                         this.setState({loadingS:false});
                     }
@@ -237,6 +217,7 @@ class Clues extends Component {
                                             <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.cityname}</MediaBoxInfoMeta>
+                                            <MediaBoxInfoMeta>{e.realname}</MediaBoxInfoMeta>
                                         </MediaBoxInfo>
                                     </MediaBoxBody>
                                 </MediaBox>

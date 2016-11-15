@@ -315,6 +315,8 @@ class Sidebar extends React.Component{
                     <p>线索来源</p>
                     <i style={{'display':'none'}}>全部</i>
                   </dt>
+                  <dd title="1" onClick={self.XSsd}>卡车之家</dd>
+                  <dd title="12" onClick={self.XSsd}>店铺分享</dd>
                   {LY.map(function(e,index){return(
                     <dd key={index} title={e.value} onClick={self.XSsd}>{e.key}</dd>
                   )})}
