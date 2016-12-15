@@ -94,6 +94,7 @@ class Clues extends React.Component {
                     if(res.pagecount == page){
                         this.setState({loadingS:false,DATA:ConData});
                     }else{
+                        Tool.gaTo('加载下一页','加载下一页','跟进中');
                         page++;
                         this.setState({
                             nowpage:page,
@@ -159,6 +160,8 @@ class Clues extends React.Component {
         document.getElementById('Folls').setAttribute('class','PubSidebar visible');
     }
     RobLine(e){
+        let GAs = '无|' + e.target.title + '|无|无|';
+        Tool.gaTo('点击跟进中线索','红/未提醒',GAs);
         let clusUrl = window.location.hash.replace(/#/g,'');
         let goUrlclus = clusUrl.split("?");
         Tool.localItem('clueURl',goUrlclus[0]);

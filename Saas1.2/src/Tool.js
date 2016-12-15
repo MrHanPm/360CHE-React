@@ -35,17 +35,18 @@ Tool.ga = function () {
             users = '老板'
         }
         let delname = nac.dealersalesallbrandsname.replace(/\,/g, "|");
-        try{
-            ga('send','event','首页加载','首页加载',{
-                dimension2:users,
-                dimension3:nac.dealername,
-                dimension4:delname,
-                dimension5: nac.userid
-            })
-        } catch (err){
-            console.log(err)
-        }
+
+        ga('send','event','首页加载','首页加载',{
+            dimension2:users,
+            dimension3:nac.dealername,
+            dimension4:delname,
+            dimension5: nac.userid
+        });
 };
+
+Tool.gaTo = function (txt, name, lab) {
+    ga('send','event', txt, name, lab);
+}
         
 // window.addEventListener("click", function(e){});
 

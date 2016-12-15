@@ -351,10 +351,12 @@ class MsgDemo extends React.Component {
                 }
             }
             json.remark = this.state.msg;
+            let GAs = '无|' + persId + '|无|无|';
             //console.log(JSON.stringify(this.state),json);
             Tool.post('Clues/AddClueFollowUp.aspx',json,
                 (res) => {
                     if(res.status == 1){
+                        Tool.gaTo('保存跟进记录成功','',GAs);
                         AllMsgToast.to("添加跟进成功");
                         let urls = localStorage.getItem('clueURl');
                         this.context.router.push({

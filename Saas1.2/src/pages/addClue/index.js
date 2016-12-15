@@ -472,6 +472,7 @@ class MsgDemo extends React.Component {
                 Tool.post('Clues/AddClues.aspx',json,
                     (res) => {
                         if(res.status == 1){
+                            Tool.gaTo('添加线索','保存线索成功','');
                             AllMsgToast.to("已添加成功");
                             let urlTxt = '/detailTel?id=' + res.data.customerId;
                             this.context.router.push({pathname: urlTxt});
@@ -492,6 +493,7 @@ class MsgDemo extends React.Component {
                 Tool.post('Clues/AddClues.aspx',json,
                     (res) => {
                         if(res.status == 1){
+                            Tool.gaTo('添加线索','保存线索成功','');
                             AllMsgToast.to("已添加成功");
                             window.history.back();
                         }else if(res.status == 901){

@@ -84,6 +84,8 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
+        let GAs = '无|' + e.target.title + '|无|无|';
+        Tool.gaTo('点击已成交中线索','点击已成交中线索',GAs);
         let clusUrl = window.location.hash.replace(/#/g,'');
         let goUrlclus = clusUrl.split("?");
         Tool.localItem('clueURl',goUrlclus[0]);

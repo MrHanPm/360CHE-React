@@ -50,11 +50,25 @@ class Clues extends Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
+    componentWillMount () {
+        let robSearchSF = JSON.parse(Tool.localItem('robSearchSF')) || '';
+        let robSearchPP = Tool.localItem('robSearchPP');
+        // let robSearchPP = null
+        // console.log(robSearchSF, 'robSearchSF');
+        // console.log(robSearchPP, 'robSearchPP');
+        if (robSearchSF.provincesn !== '' && typeof(robSearchSF.provincesn) !== 'undefined') {
+            this.state.SFCSv = robSearchSF;
+        }
+        this.state.brandid = robSearchPP;
+    }
     Alts(){
         this.context.router.push({pathname: '/robMsg'});
     }
-    SFCS(){this.setState({SFCSrandoms: Math.random(),showBrands:''});}
+    SFCS(){
+        this.setState({SFCSrandoms: Math.random(),showBrands:''});
+    }
     upBrand(val){
+        Tool.localItem('robSearchPP', val);
         this.state.brandid = val;
         this.state.nowpage = 1;
         this.state.DATA = [];
@@ -62,6 +76,8 @@ class Clues extends Component {
         this.upDATA();
     }
     upSF(val){
+        let txt = JSON.stringify(val);
+        Tool.localItem('robSearchSF', txt);
         this.state.SFCSv = val;
         this.state.nowpage = 1;
         this.state.DATA = [];
@@ -112,6 +128,7 @@ class Clues extends Component {
                             DATA:ConData,
                         });
                     }else{
+                        Tool.gaTo('加载下一页','加载下一页','抢线索页');
                         page++;
                         this.setState({
                             topnotice:res.topnotice,
@@ -140,15 +157,18 @@ class Clues extends Component {
         }else{
             sessionid = Tool.SessionId.get();
         }
+        let GAs = '无|' + e.target.title + '|无|无|';
         Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
             (res) => {
                 if(res.status == 1){
+                    Tool.gaTo('抢线索成功','抢线索页的线索',GAs);
                     let urlTxt = '/robClue?id=' + res.data.cluesextendid;
                     this.context.router.push({pathname: urlTxt});
                 }else if(res.status == 901){
                     alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
+                    Tool.gaTo('抢线索失败','抢线索页',res.msg);
                     Alert.to(res.msg);
                 }
             },
@@ -228,7 +248,7 @@ class Clues extends Component {
                 {footerS}
                 </div>
                 <ShowAlert />
-                <Brand Datas={this.state.showBrands}  onChange={val =>this.upBrand(val)}/>
+                <Brand Datas={this.state.showBrands}  onChange={val => this.upBrand(val)}/>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)}/>
             </div>
         );

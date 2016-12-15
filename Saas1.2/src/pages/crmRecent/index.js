@@ -105,6 +105,7 @@ class Clues extends React.Component {
         this.showConfirm();
     }
     CrmMesc(e){
+        Tool.gaTo('点击联系人详情页查看线索','联系人详情页','');
         let clusUrl = window.location.hash.replace(/#/g,'');
         let goUrlclus = clusUrl.split("?");
         Tool.localItem('clueURl',goUrlclus[0]);
@@ -210,6 +211,7 @@ class Clues extends React.Component {
         Tool.get('Customer/UpdateCustomerLastLinkTime.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    Tool.gaTo('拨打联系人电话','CRM','');
                     this.upDATA();
                 }else if(res.status == 901){
                     alert(res.msg);

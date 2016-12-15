@@ -72,7 +72,7 @@ class CellDemo extends React.Component {
             json.tel = phe
             json.pwd = this.state.pw
             json.apptype = 'weixin'
-            Tool.get('User/LoginTelAndPwd.aspx',json,
+            Tool.get('weixin/BindTelPwd.aspx',json,
                 (res) => {
                     switch(res.status){
                         case 1:

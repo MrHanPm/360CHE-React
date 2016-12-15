@@ -153,6 +153,7 @@ class MsgDemo extends React.Component {
             Tool.post('Customer/AddCustomer.aspx',json,
                 (res) => {
                     if(res.status == 1){
+                        Tool.gaTo('添加联系人','添加成功','');
                         AllMsgToast.to("已添加CRM");
                         //let urlTxt = '/detailTel?id=' + res.data.customid;
                         this.context.router.push({pathname: '/nav/c/w'});

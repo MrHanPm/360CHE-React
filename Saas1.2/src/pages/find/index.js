@@ -36,6 +36,9 @@ export default class MsgDemo extends React.Component {
         // iframe.addEventListener('load', d);
         // document.body.appendChild(iframe);
     }
+    Ga(){
+       Tool.gaTo('点击进入抢线索页面','发现-速抢线索','');
+    }
     render() {
         return (
         <div className="findBodys findBoxs">
@@ -43,7 +46,7 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="#rob">
+                            <Cell href="#rob" onClick={this.Ga}>
                                 <CellHeader><i className='findIcos knock'></i></CellHeader>
                                 <CellBody>
                                     <p>速抢线索</p>

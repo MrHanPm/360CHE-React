@@ -91,9 +91,11 @@ class MsgDemo extends React.Component {
         }else{
             sessionid = Tool.SessionId.get();
         }
+        let GAs = '无|' + persId + '|无|无|';
         Tool.get('Clues/ChangeCluesStatus.aspx',{sessionid:sessionid,cluesextendid:persId},
             (res) => {
                 if(res.status == 1){
+                    Tool.gaTo('点击放弃线索','线索详情页',GAs);
                     this.context.router.push({
                         pathname: '/nav'
                     });
@@ -238,6 +240,7 @@ class MsgDemo extends React.Component {
         Tool.get('Customer/AddCustomerFromClues.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    Tool.gaTo('点击添加到CRM','线索详情页','');
                     AllMsgToast.to("已关联CRM");
                     doms.setAttribute('class','');
                 }else if(res.status == 901){

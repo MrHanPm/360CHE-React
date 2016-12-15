@@ -96,9 +96,11 @@ class Clues extends React.Component {
         }else{
             sessionid = Tool.SessionId.get();
         }
+        let GAs = '无|' + e.target.title + '|无|无|无|无';
         Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid:e.target.title},
             (res) => {
                 if(res.status == 1){
+                    Tool.gaTo('抢线索成功','待处理的线索',GAs);
                     let urlTxt = '/robClue?id=' + res.data.cluesextendid;
                     this.context.router.push({pathname: urlTxt});
                 }else if(res.status == 901){

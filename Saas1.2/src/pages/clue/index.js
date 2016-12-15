@@ -15,7 +15,7 @@ import {
     MediaBoxInfoMeta,
     Button,
 } from 'react-weui';
-
+import {Tool} from '../../tool.js';
 import './index.less';
 import Already from '../clueAlready/index.js';
 import Defeat from '../clueDefeat/index.js';
@@ -34,7 +34,7 @@ class Clues extends React.Component {
         this.show = this.show.bind(this);
     }
 
-    show(){this.setState({show: !this.state.show});}
+    show(){this.setState({show: !this.state.show}); Tool.gaTo('点击进入抢线索页面','点击首页右下角抢线索按钮','');}
 
     componentWillMount(){
         let Hashs = window.location.hash.substring(8,9);
@@ -129,7 +129,10 @@ class Clues extends React.Component {
                 {Pages}
                 <span className={Btns} onClick={this.show}></span>
                 <div className={show?'clueBtnX XbgActiv':'clueBtnX'}>
-                    <span onClick={()=> this.context.router.push({pathname: '/rob'})}> </span>
+                    <span 
+                    onClick={()=>{ 
+                        Tool.gaTo('点击进入抢线索页面','点击首页“去抢线索“文案','');
+                        this.context.router.push({pathname: '/rob'})}}> </span>
                     <span className="butX_add" onClick={()=> this.context.router.push({pathname: '/addClue'})}> </span>
                 </div>
                 <div className={show?'clueBtnXbg XbgActiv':'clueBtnXbg'}></div>

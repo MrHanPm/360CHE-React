@@ -53,6 +53,9 @@ jsSDK
 //
 // SearchData   储存所有联系人信息
 
+// robSearchSF    公共池搜索记忆
+// robSearchPP    公共池搜索记忆
+
 crm储存区
 clueURl//修改线索返回地址
 noTel 未购车列表

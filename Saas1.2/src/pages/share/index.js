@@ -20,19 +20,7 @@ import ImgSRC from './find.png';
 import ShowAlert from '../../component/Alert.js';
 class ImgBox extends React.Component {
     componentDidMount(){
-        // document.title = "店铺分享";
-        // var body = document.getElementsByTagName('body')[0];
-        // var iframe = document.createElement("iframe");
-        // iframe.style.display="none";
-        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        // var d = function() {
-        //   setTimeout(function() {
-        //     iframe.removeEventListener('load', d);
-        //     document.body.removeChild(iframe);
-        //   }, 0);
-        // };
-        // iframe.addEventListener('load', d);
-        // document.body.appendChild(iframe);
+
     }
     render(){
         return(
@@ -56,56 +44,9 @@ class MsgDemo extends React.Component {
         //this.hidFx = this.hidFx.bind(this);
         //this.ShowFx = this.ShowFx.bind(this);
         //this.CopyURL = this.CopyURL.bind(this);
+        this.Fenx = this.Fenx.bind(this);
     }
-    // hidFx(){
-    //     this.setState({shows:false,});
-    // }
-    // ShowFx(e){
-    //     this.state.id = e.target.title;
-    //     this.setState({shows:true,});
-    // }
-    // CopyURL(){
-    //     let Doms = document.getElementById('copyURL');
-    //     let ids = this.state.id;
-    //     let DATAlist = this.state.DATA;
-    //     let urls='';
-    //     for(let i=0;i<DATAlist.length;i++){
-    //         if(DATAlist[i].id == ids){
-    //             urls = DATAlist[i].shareurl;
-    //             break;
-    //         }
-    //     }
-        // let httPs = Tool.ShareURL;
-        // let links = httPs + urls;
-        //Doms.innerHTML = urls;
-        // if(window.clipboardData){
-        //     window.clipboardData.setData('Text',links);
-        // }else{
-        //document.execCommand('Copy','false',urls);
-        // }
-        // if (document.body.createTextRange) {
-        //     var range = document.body.createTextRange();
-        //     range.moveToElementText(Doms);
-        //     range.select();
-        //     document.execCommand('Copy','false',null);
-        //     alert('已复制到剪切版');
-        // } else if (window.getSelection) {
-        //     var selection = window.getSelection();
-        //     var range = document.createRange();
-        //     range.selectNodeContents(Doms);
-        //     selection.removeAllRanges();
-        //     selection.addRange(range);
-        //     /*if(selection.setBaseAndExtent){
-        //         selection.setBaseAndExtent(text, 0, text, 1);
-        //     }*/
-        //     document.execCommand('Copy','false',null);
-        //     alert('已复制到剪切版');
-        // } else {
-        //     alert('暂不支持');
-        // }
-    //     alert('暂不支持,请通过点击右上角进行复制分享～');
-    //     window.location.href = urls;
-    // }
+    
     upDATA(){
         let json = {};
         if(typeof(Tool.SessionId) == 'string'){
@@ -141,37 +82,13 @@ class MsgDemo extends React.Component {
         this.upDATA();
     }
     componentDidMount() {
-        // document.title = '选择店铺';
-        // var body = document.getElementsByTagName('body')[0];
-        // var iframe = document.createElement("iframe");
-        // iframe.style.display="none";
-        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
-        // var d = function() {
-        //   setTimeout(function() {
-        //     iframe.removeEventListener('load', d);
-        //     document.body.removeChild(iframe);
-        //   }, 0);
-        // };
-        // iframe.addEventListener('load', d);
-        // document.body.appendChild(iframe);
-        // let self = this;
-        // [].forEach.call(document.querySelectorAll('.FXBox'), function (el) {  
-        //   el.addEventListener('touchend', function(e) {
-        //     let y = e.changedTouches[0].pageY;
-        //     let Hl = document.getElementById('FenXDL').scrollHeight;
-        //     let Hit  = window.screen.height;
-        //     //console.log(Hit,Hl,y);
-        //     if( y < Hit-Hl){
-        //         self.hidFx();
-        //         e.preventDefault();
-        //     }
-        //   }, false);
-        // });
-        
         wx.ready(function(){
             wx.hideOptionMenu();
           
         });
+    }
+    Fenx() {
+      Tool.gaTo('分享店铺','分享成功？','');
     }
     componentWillUnmount(){
         clearTimeout(AlertTimeOut);
@@ -194,7 +111,7 @@ class MsgDemo extends React.Component {
             <Cells access>
             {DATA.map(function(e,index){
                 return(  
-                <Cell key={index} href={e.shareurl}>
+                <Cell key={index} href={e.shareurl} onClick={self.Fenx}>
                     <CellHeader title={e.id}>
                         <img src={e.shareimgurl} title={e.id} />
                     </CellHeader>
