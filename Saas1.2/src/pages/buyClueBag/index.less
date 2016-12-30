@@ -1,0 +1,130 @@
+.buy-clue{
+	color:#999;
+	height:100%;
+	overflow-y: auto;
+	-webkit-overflow-scrolling:touch;
+	.goods{
+		.weui_panel{
+			margin-top:10px;
+		}
+		.weui_cell{
+			padding:15px;
+		}
+		.goods-info{
+			float:left;
+			.name{
+				font-size:16px;
+				color:#333;
+				em{
+					margin-left:5px;
+					color:#999;
+					font-size:12px;
+				}
+			}
+			.price{
+				color:#F43530;
+				font-size:16px;
+				em{
+					font-size:24px;
+				}
+			}
+			.discount{
+				font-size:12px;
+			}
+		}
+
+		.number{
+			float:right;
+			span{
+				display: inline-block;
+				width:40px;
+				height:40px;
+				color:#09BB07;
+				font-size:18px;
+				line-height:40px;
+				text-align: center;
+				vertical-align: middle;
+				border:1px solid #09BB07;
+			}
+			span:first-of-type{
+				border-right:none;
+				border-radius: 6px 0 0 6px;
+			}
+			span:first-of-type:before{
+				content:"\e622";
+				font-family: 'saas_ico';
+			}
+			span:last-of-type{
+				border-left: none;
+				border-radius: 0 6px 6px 0;
+			}
+			span:last-of-type:before{
+				content:'\e60d';
+				font-size:20px;
+				font-family: 'saas_ico';
+			}
+		}		
+	}
+
+
+	.info{
+		p{
+			font-size:14px;
+			line-height: 24px;
+		}
+		em{
+			color:#151515;
+		}
+		.weui_cell_ft{
+			text-align: left;
+		}
+		.weui_cell_ft:after{
+			display: none;
+		}
+	}
+
+	.rule{
+		p{
+			font-size:14px;
+			line-height: 24px;
+		}
+	}
+
+	.total-price{
+		margin:30px 0;
+		color:#000;
+		font-size:22px;
+		text-align: center;
+		.price-number{
+			color:#F43530;
+		}
+	}
+}
+// 小于340屏幕手机
+@media only screen and (max-device-width: 340px){
+	.buy-clue{
+		.goods {
+			.weui_cell{
+				padding:15px 10px;
+			}
+			.goods-info .name{
+				font-size:14px;
+			}
+			.number{
+				span{
+					width:30px;
+					height:30px;
+					line-height: 28px;
+					font-size:14px;
+				}
+				span:first-of-type{
+					border-radius: 4px 0 0 4px;
+				}
+				span:last-of-type{
+					border-radius: 0 4px 4px 0;
+				}
+			}
+
+		}
+	}
+}

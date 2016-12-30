@@ -1,0 +1,63 @@
+.buy-record{
+    height: 100%;
+	color: #999;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+	.weui_panel{
+		margin-top: 10px;
+	}
+	.weui_cell{
+		padding:20px 15px 15px;
+	}
+	.weui_cell_bd{
+		text-align: right;
+	}
+	.name{
+		height:33px;
+		line-height:33px;
+		color:#151515;
+		font-size:18px;
+	}
+	.date{
+		font-size:14px;
+	}
+	.price{
+		color:#F43530;
+		font-size:16px;
+		em{
+			font-size:24px;
+		}
+	}
+	.price-number{
+		font-size:14px;
+	}
+	.order-number{
+		padding:10px 15px;
+		font-size:14px;
+		em{
+			color:#151515;
+		}
+	}
+	.noDataBox{
+		width: 200px;
+	}
+	.noDataBox:after{
+		content:'\60a8\8fd8\6ca1\6709\8d2d\4e70\8fc7\7ebf\7d22\52a0\6cb9\5305\5feb\53bb\9009\8d2d\5427\FF5E'
+	}
+}
+// 小于340屏幕手机
+@media only screen and (max-device-width: 340px){
+	.buy-record{
+		.name{
+			height:28px;
+			line-height:28px;
+			font-size:16px;
+		}
+		.date{
+			font-size:12px;
+		}
+		.price em{
+			font-size:20px;
+		}
+	}
+}

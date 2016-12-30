@@ -26,6 +26,8 @@ class MsgDemo extends React.Component {
         super(props);
         this.state = {
             showConfirm: false,
+            accountsType:'',
+            comePackage:'',
             confirm: {
                 title: '亲爱的~确定要退出吗？',
                 buttons: [
@@ -44,6 +46,30 @@ class MsgDemo extends React.Component {
         };
 
         this.showConfirm = this.showConfirm.bind(this);
+    }
+    componentWillMount(){ 
+        // render之前执行的操作
+        let sessionid;
+        let _this = this;
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId;
+        }else{
+            sessionid = Tool.SessionId.get();
+        }
+        Tool.get('User/GetAccountDetail.aspx',{'sessionid':sessionid},
+            (res) => {
+                if(res.status){
+                    _this.setState({
+                        accountsType:res.data.saasusertypename,
+                        comePackage:res.data.canrobcluestotal                
+                    })
+                }
+            },
+            (err) => {
+                Alert.to('加油包信息加载失败');               
+            }
+        )
+
     }
     componentDidMount() {
         // document.title = '账号管理';
@@ -128,6 +154,25 @@ class MsgDemo extends React.Component {
                         </CellHeader>
                         <CellBody>
                             <Input type="tel" placeholder="登录账号" disabled={true} value={tel}/>
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader>
+                            <Label>帐号类别</Label>
+                        </CellHeader>
+                        <CellBody>
+                            <Input type="tel" placeholder="" disabled={true} value={this.state.accountsType}/>
+                        </CellBody>
+                        <CellFooter onClick={(e) => {this.context.router.push({pathname: '/accountType'})}}>
+                            <em className="findIcos account-type-icon"></em>
+                        </CellFooter>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader>
+                            <Label>加油包剩余</Label>
+                        </CellHeader>
+                        <CellBody>
+                            <Input type="tel" placeholder="" disabled={true} value={this.state.comePackage}/>
                         </CellBody>
                     </FormCell>
                 </Form>

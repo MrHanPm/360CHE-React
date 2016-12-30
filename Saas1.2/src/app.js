@@ -16,9 +16,9 @@ import Brand from './pages/brand/index';
 import Nav from './pages/nav/index';
 import LoadMsg from './pages/msg/loading';
 import LoadData from './pages/msg/data';
-
 import Feedback from './pages/msg/feedback';
 import Account from './pages/account/index';
+import AccountType from './pages/accountType/index';
 import MdfPwd from './pages/mdfPwd/index';
 import AddPwd from './pages/addPwd/index';
 import Rob from './pages/rob/index';
@@ -31,6 +31,12 @@ import AlterTel from './pages/alterTel/index';
 import DetailTel from './pages/detailTel/index';
 import CrmClue from './pages/crmClue/index';
 import Share from './pages/share/index';
+import ClueBag from './pages/clueBag/index';
+import BuyClueBag from './pages/buyClueBag/index';
+import BuyRecord from './pages/buyRecord/index';
+import Inquire from './pages/inquire/index';
+import InquireResult from './pages/inquireResult/index';
+import InquireResultInfo from './pages/inquireResultInfo/index';
 import CountMsg from './pages/count/msg';
 import RobMsg from './pages/rob/msg';
 import Search from './pages/searchbar/index';
@@ -67,6 +73,7 @@ ReactDOM.render((
             <Route path="brand" component={Brand}/>
             <Route path="feedback" component={Feedback}/>
             <Route path="account" component={Account}/>
+            <Route path="accountType" component={AccountType}/>
             <Route path="mdfPwd" component={MdfPwd}/>
             <Route path="addPwd" component={AddPwd}/>
             <Route path="rob" component={Rob}/>
@@ -74,6 +81,12 @@ ReactDOM.render((
             <Route path="addTel" component={AddTel}/>
             <Route path="alterTel" component={AlterTel}/>
             <Route path="share" component={Share}/>
+            <Route path="clueBag" component={ClueBag}/>
+            <Route path="buyClueBag" component={BuyClueBag}/>
+            <Route path="buyRecord" component={BuyRecord}/>
+            <Route path="inquire" component={Inquire}/>
+            <Route path="inquireResult" component={InquireResult}/>
+            <Route path="inquireResultInfo" component={InquireResultInfo}/>
             <Route path="search" component={Search}/>
             <Route path="countMsg" component={CountMsg}/>
             <Route path="robMsg" component={RobMsg}/>

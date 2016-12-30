@@ -55,6 +55,13 @@ export default class MsgDemo extends React.Component {
                                     
                                 </CellFooter>
                             </Cell>
+                            <Cell href="#share">
+                                <CellHeader><i className='findIcos fenx'></i></CellHeader>
+                                <CellBody>
+                                    <p>分享店铺</p>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
                         </Cells>
                     </MediaBox>
                 </PanelBody>
@@ -63,10 +70,17 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="#share">
-                                <CellHeader><i className='findIcos fenx'></i></CellHeader>
+                            <Cell href="#clueBag">
+                                <CellHeader><i className='findIcos clue-bag'></i></CellHeader>
                                 <CellBody>
-                                    <p>分享店铺</p>
+                                    <p>线索加油包</p>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
+                            <Cell href="#inquire">
+                                <CellHeader><i className='findIcos affiche-icon'></i></CellHeader>
+                                <CellBody>
+                                    <p>公告号查询</p>
                                 </CellBody>
                                 <CellFooter />
                             </Cell>

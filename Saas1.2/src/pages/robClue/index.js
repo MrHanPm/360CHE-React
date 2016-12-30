@@ -266,6 +266,13 @@ class MsgDemo extends React.Component {
         const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm,showBtns} = this.state;
         const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,customid} = this.state.DATArob;
         if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
+        //如果电话号码不为纯数字，隐藏拨打电话icon
+        let telHidden = true;
+        if(/^\d+$/.test(tel)){
+            telHidden = true;
+        }else{
+            telHidden = false;
+        }
         return (
             <div className="account robClues">
                 <div className="bd">
@@ -288,7 +295,7 @@ class MsgDemo extends React.Component {
                             <CellBody>
                                 {tel}
                             </CellBody>
-                            <CellFooter className="cleAft">
+                            <CellFooter className="cleAft" style={{'display': telHidden ? 'block' : 'none'}}>
                                 <a href={`tel:${tel}`} title={cluesextendid} data-id={customid}> </a>
                             </CellFooter>
                         </FormCell>

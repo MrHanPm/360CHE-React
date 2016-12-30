@@ -1,0 +1,77 @@
+.inquire-result{
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    .total{
+        display: none;
+        text-align: center;
+    }
+    .weui_panel{
+        margin:0;
+    }
+    .weui_panel:after{
+        display: none;
+    }
+    .weui_cells:after, .weui_cells:before{
+        display: none;
+    }
+    .weui_media_box.weui_media_text{
+        padding:10px;
+    }
+    .weui_media_bd{
+        h4.weui_media_title{
+            margin-bottom: 0;
+        }
+        .weui_cell{
+            padding:0;
+        }
+        .weui_cell_hd{
+            position:relative;
+            margin-right:10px;
+            img{
+                position:relative;
+                width:90px;
+                height:65px;
+                vertical-align: middle;
+            }
+            img[src=""]{
+                opacity: 0;
+            }
+        }
+        .weui_cell_hd:before{
+            content:'\5bb6';
+            position:absolute;
+            width:90px;
+            height:65px;
+            color:#999;            
+            font-size:24px;
+            line-height: 65px;
+            text-align: center;
+            font-family: 'saas_ico';
+            background-color: #fafafa;
+            z-index:0;
+        }
+
+        p{
+            color:#999;
+            font-size:14px;
+            line-height:24px;
+            white-space:nowrap;
+            overflow:hidden; 
+            text-overflow:ellipsis;
+            em{
+                color:#333;
+            }
+        }
+    }
+    .weui_cells{
+        margin-top:0;
+    }
+    .loading {
+        display: none;
+    }
+    .visible{
+        display: block;
+    }
+}
+
