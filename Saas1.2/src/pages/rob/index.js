@@ -15,7 +15,9 @@ import {
     MediaBoxInfoMeta,
     ActionSheet,
     Button,
+    Dialog,
 } from 'react-weui';
+const {Confirm } = Dialog
 import Brand from '../sidebar/brand';//品牌
 import {Tool,Alert} from '../../tool.js';
 import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
@@ -41,14 +43,63 @@ class Clues extends Component {
             todayrobnum:'',
             loadPage:true,
             loadTimes:'',
+
+
+            showAcom: false, // 显示线索处理规则
+
+            isshowclickmsg:0,  // 是否可购买限制
+
+            payShow: false,
+            payId: 0,
+            payTitle: '确认花费购买这条线索吗？',
+            payMsg:'',
+            payBtn: [
+                {
+                    type: 'default',
+                    label: '不,我再想想',
+                    onClick: this.hidePayConfm.bind(this)
+                },
+                {
+                    type: 'primary',
+                    label: '是,确认购买',
+                    onClick: this.RobLine.bind(this)
+                }
+            ],
+
+
+            valShow: false,
+            valMsg:'',
+            valBtn:[
+                {
+                    type: 'default',
+                    label: '暂不充值',
+                    onClick: this.hideValConfm.bind(this)
+                },
+                {
+                    type: 'primary',
+                    label: '前去充值',
+                    onClick: this.goVal.bind(this)
+                }
+            ],
+
+
+            alertShow: false,
+            alertTitle:'',
+            alertBtn:[{
+                label: '知道了',
+                onClick: this.hideAlert.bind(this)
+            }]
         }
-        this.showBrand = this.showBrand.bind(this);
-        this.Alts = this.Alts.bind(this);
-        this.SFCS = this.SFCS.bind(this);
-        this.upBrand = this.upBrand.bind(this);
-        this.upSF = this.upSF.bind(this);
-        this.handleScroll = this.handleScroll.bind(this);
-        this.RobLine = this.RobLine.bind(this);
+        this.showBrand = this.showBrand.bind(this)
+        this.Alts = this.Alts.bind(this)
+        this.SFCS = this.SFCS.bind(this)
+        this.upBrand = this.upBrand.bind(this)
+        this.upSF = this.upSF.bind(this)
+        this.handleScroll = this.handleScroll.bind(this)
+
+        this.payConfirm = this.payConfirm.bind(this)
+        this.showAcom = this.showAcom.bind(this)
+        this.hideAcom = this.hideAcom.bind(this)
     }
     componentWillMount () {
         let robSearchSF = JSON.parse(Tool.localItem('robSearchSF')) || '';
@@ -62,32 +113,32 @@ class Clues extends Component {
         this.state.brandid = robSearchPP;
     }
     Alts(){
-        this.context.router.push({pathname: '/robMsg'});
+        this.context.router.push({pathname: '/robMsg'})
     }
     SFCS(){
-        this.setState({SFCSrandoms: Math.random(),showBrands:''});
+        this.setState({SFCSrandoms: Math.random()})
     }
     upBrand(val){
-        Tool.localItem('robSearchPP', val);
+        Tool.localItem('robSearchPP', val)
         this.state.brandid = val;
-        this.state.nowpage = 1;
-        this.state.DATA = [];
-        this.state.showBrands = '';
+        this.state.nowpage = 1
+        this.state.DATA = []
+        this.state.showBrands = ''
         this.upDATA();
     }
     upSF(val){
         let txt = JSON.stringify(val);
-        Tool.localItem('robSearchSF', txt);
+        Tool.localItem('robSearchSF', txt)
         this.state.SFCSv = val;
         this.state.nowpage = 1;
         this.state.DATA = [];
-        this.state.SFCSrandoms = '';
+        this.state.SFCSrandoms = ''
         this.upDATA();
     }
     upDATA(){
-        this.state.loadPage = false;
-        this.state.SFCSrandoms = '';
-        this.state.showBrands = '';
+        this.state.loadPage = false
+        this.state.SFCSrandoms = ''
+        this.state.showBrands = ''
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
             json.sessionid = Tool.SessionId;
@@ -126,39 +177,65 @@ class Clues extends Component {
                     if(res.pagecount === page){
                         this.setState({loadingS:false,
                             DATA:ConData,
+                            isshowclickmsg:res.isshowclickmsg
                         });
                     }else{
-                        Tool.gaTo('加载下一页','加载下一页','抢线索页');
+                        Tool.gaTo('加载下一页','加载下一页','抢线索页')
                         page++;
                         this.setState({
                             topnotice:res.topnotice,
                             nowpage:page,
                             DATA:ConData,
+                            isshowclickmsg:res.isshowclickmsg
                         });
-                        this.state.loadPage = true;
+                        this.state.loadPage = true
                     }
                     //console.log(this.state);
                 }else if(res.status == 901){
                     alert(res.msg);
-                    this.context.router.push({pathname: '/loading'});
+                    this.context.router.push({pathname: '/loading'})
                 }else{
-                    Alert.to(res.msg);
+                    Alert.to(res.msg)
                 }
             },
             (err) => {
-                Alert.to('请求超时，稍后重试。。');
+                Alert.to('请求超时，稍后重试。。')
             }
         )
     }
-    RobLine(e){
-        let sessionid;
-        if(typeof(Tool.SessionId) == 'string'){
-            sessionid= Tool.SessionId;
-        }else{
-            sessionid = Tool.SessionId.get();
+    hidePayConfm (){this.setState({payShow: false})}
+    hideValConfm (){this.setState({valShow: false})}
+    payConfirm (e) {
+        if (this.state.isshowclickmsg == '1') {
+            this.setState({
+                payShow: true,
+                payTitle: `确认花费¥ ${e.target.dataset.pay}购买这条线索吗？`,
+                payMsg: e.target.dataset.name,
+                payId: e.target.title,
+                payPay: e.target.dataset.pay
+            })
+        } else {
+            this.state.payId = e.target.title
+            this.state.payPay = e.target.dataset.pay
+            this.RobLine()
         }
-        let GAs = '无|' + e.target.title + '|无|无|';
-        Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:e.target.title},
+    }
+    showAcom () {this.setState({showAcom: true})}
+    hideAcom () {this.setState({showAcom: false})}
+    hideAlert () {this.setState({alertShow: false})}
+    goVal(){
+        this.context.router.push({pathname: '/myacut'})
+    }
+    RobLine(){
+        this.setState({payShow: false})
+        let sessionid
+        if(typeof(Tool.SessionId) == 'string'){
+            sessionid= Tool.SessionId
+        }else{
+            sessionid = Tool.SessionId.get()
+        }
+        let GAs = '无|' + this.state.payId + '|无|无|'
+        Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:this.state.payId,saleprice:this.state.payPay},
             (res) => {
                 if(res.status == 1){
                     Tool.gaTo('抢线索成功','抢线索页的线索',GAs);
@@ -169,7 +246,22 @@ class Clues extends Component {
                     this.context.router.push({pathname: '/loading'});
                 }else{
                     Tool.gaTo('抢线索失败','抢线索页',res.msg);
-                    Alert.to(res.msg);
+                    
+                    if (res.errcode == '2000') {
+                        this.setState({
+                            alertTitle: res.msg,
+                            alertShow: true
+                        })
+                        return false
+                    } 
+                    if (res.errcode == '1000') {
+                        this.setState({
+                            valMsg: res.msg,
+                            valShow: true
+                        })
+                        return false
+                    }
+                    Alert.to(res.msg)
                 }
             },
             (err) => {
@@ -189,26 +281,26 @@ class Clues extends Component {
         // BodyMin.scrollTop = DataMin;
         if(this.state.loadingS){
             if(this.state.loadPage){
-                clearTimeout(this.state.loadTimes);
+                clearTimeout(this.state.loadTimes)
                 this.state.loadTimes = setTimeout(function(){
-                    this.upDATA();
-                }.bind(this),600);
+                    this.upDATA()
+                }.bind(this),600)
             }
         }
       }
     }
     componentDidMount() {
-        this.upDATA();
+        this.upDATA()
     }
-    showBrand(){ this.setState({showBrands:Math.random(),SFCSrandoms:''});}
+    showBrand(){ this.setState({showBrands:Math.random()})}
     render() {
-        const {loadingS, DATA, topnotice,isDatas} = this.state;
-        let self = this;
-        let footerS;
+        const {loadingS, DATA, topnotice,isDatas,payShow, payMsg, payTitle, payBtn,showAcom,alertShow,alertTitle,alertBtn, valShow, valBtn, valMsg} = this.state
+        let self = this
+        let footerS
         if(isDatas){
-            footerS = <NoDataS />;
+            footerS = <NoDataS />
         }else{
-            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />
         }
         return (
             <div className="robBody">
@@ -227,7 +319,8 @@ class Clues extends Component {
                             <PanelBody>
                                 <MediaBox type="text">
                                     <MediaBoxHeader>
-                                        <Button type="primary" title={e.maincluesid} onClick={self.RobLine} plain>立即抢</Button>
+                                        <Button type="primary" title={e.maincluesid} data-pay={e.saleprice} data-name={e.truckname}
+                                        onClick={self.payConfirm} plain>{e.btnname}</Button>
                                     </MediaBoxHeader>
                                     <MediaBoxBody>
                                         <MediaBoxTitle>
@@ -248,8 +341,26 @@ class Clues extends Component {
                 {footerS}
                 </div>
                 <ShowAlert />
-                <Brand Datas={this.state.showBrands}  onChange={val => this.upBrand(val)}/>
-                <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)}/>
+                <Confirm title={payTitle} buttons={payBtn} show={payShow}>
+                    {payMsg}
+                    <div onClick={this.showAcom} className="showAcom">查看线索处理规则</div>
+                </Confirm>
+                <div className="acomBoxs" style={{display: showAcom ? '':'none'}} onClick={this.hideAcom}>
+                    <h4>付费线索处理规则</h4>
+                    <p>1、从“待处理”列表或速抢线索列表中购买的线索，若您在购买后24小时之内没有设置客户级别或添加跟进记录，该线索将返回公共线索池，您将无法继续跟进</p>
+                    <p>2、从速抢线索列表中购买的线索，若您在跟进记录中设置的回访日期后48小时之内，仍没有添加新的跟进记录，该线索将返回公共线索池，您将无法继续跟进</p>
+                </div>
+                <Confirm title={null} buttons={alertBtn} show={alertShow}>
+                {alertTitle}
+                </Confirm>
+                <Confirm title="您的经销商帐户余额不足，是否充值？" buttons={valBtn} show={valShow}>
+                    {valMsg}
+                </Confirm>
+
+                <Brand Datas={this.state.showBrands}  onChange={val => this.upBrand(val)} 
+                    onClose={() => this.setState({showBrands:''})}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)} 
+                    onClose={() => this.setState({SFCSrandoms:''})}/>
             </div>
         );
     }

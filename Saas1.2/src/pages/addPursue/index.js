@@ -148,26 +148,12 @@ class MsgDemo extends React.Component {
         XHRLIST = [];
     }
     CPLB(){this.setState({
-        CPLBrandoms: Math.random(),
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        KHJBrandoms:'',
-        ZBrandoms:'',
-        GJrandoms:'',
+        CPLBrandoms: Math.random()
     });}
     QCPP(){
         if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryid) !== 'undefined'){
              this.setState({
-                QCPPrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCXLrandoms:'',
-                QCCXrandoms:'',
-
-                KHJBrandoms:'',
-                ZBrandoms:'',
-                GJrandoms:'',
+                QCPPrandoms: Math.random()
             });
         }else{
             Alert.to('请选择类别');
@@ -176,14 +162,7 @@ class MsgDemo extends React.Component {
     QCXL(){
         if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandid) !== 'undefined'){
              this.setState({
-                QCXLrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCCXrandoms:'',
-
-                KHJBrandoms:'',
-                ZBrandoms:'',
-                GJrandoms:'',
+                QCXLrandoms: Math.random()
             });
         }else{
             Alert.to('请选择品牌');
@@ -192,48 +171,20 @@ class MsgDemo extends React.Component {
     QCCX(){
         if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesid) !== 'undefined'){
              this.setState({
-                QCCXrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCXLrandoms:'',
-
-                KHJBrandoms:'',
-                ZBrandoms:'',
-                GJrandoms:'',
+                QCCXrandoms: Math.random()
             });
         }else{
             Alert.to('请选择系列');
         }
     }
     KHJB(){this.setState({
-        KHJBrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        ZBrandoms:'',
-        GJrandoms:'',
+        KHJBrandoms: Math.random()
     });}
     GJ(){this.setState({
-        GJrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        KHJBrandoms:'',
-        ZBrandoms:'',
+        GJrandoms: Math.random()
     });}
     ZB(){this.setState({
-        ZBrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        KHJBrandoms:'',
-        GJrandoms:'',
+        ZBrandoms: Math.random()
     });}
 
     showConfirm(){this.setState({showConfirm: true});}
@@ -549,22 +500,29 @@ class MsgDemo extends React.Component {
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})}/>
+                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})} 
+                    onClose={() => this.setState({CPLBrandoms:''})}/>
                 <PP Datas={this.state.QCPPrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
-                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})} 
+                    onClose={() => this.setState({QCPPrandoms:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
-                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})} 
+                    onClose={() => this.setState({QCXLrandoms:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
                     seriesid={this.state.QCXLv.seriesid}
-                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
-                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>
-                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})}/>
-                <GJ Datas={this.state.GJrandoms} onChange={val => this.setState({GJv: val,GJrandoms:''})}/>
+                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})} 
+                    onClose={() => this.setState({QCCXrandoms:''})}/>
+                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})} 
+                    onClose={() => this.setState({KHJBrandoms:''})}/>
+                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})} 
+                    onClose={() => this.setState({ZBrandoms:''})}/>
+                <GJ Datas={this.state.GJrandoms} onChange={val => this.setState({GJv: val,GJrandoms:''})} 
+                    onClose={() => this.setState({GJrandoms:''})}/>
             </Page>
         );
     }

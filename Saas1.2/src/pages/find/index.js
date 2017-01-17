@@ -1,5 +1,3 @@
-"use strict";
-
 import React from 'react';
 import {
     Panel,
@@ -21,6 +19,28 @@ import {
 } from 'react-weui';
 import './index.less';
 export default class MsgDemo extends React.Component {
+    constructor(){
+        super()
+        this.state = {
+            showR: false,
+            showC: false
+        }
+    }
+    componentWillMount(){
+        let oldData = JSON.parse(localStorage.getItem('vipLodData')) || null
+        if(oldData !== null){
+            if(oldData.permission.length > 0){
+                for(let i=0;i<oldData.permission.length;i++){
+                    if(oldData.permission[i].key == 'recharge' && oldData.permission[i].value == '1'){
+                        this.setState({showR: true})
+                    }
+                    if(oldData.permission[i].key == 'cluespage' && oldData.permission[i].value == '1'){
+                        this.setState({showC: true})
+                    }
+                }
+            }
+        }
+    }
     componentDidMount(){
         // document.title = '发现';
         // var body = document.getElementsByTagName('body')[0];
@@ -40,6 +60,7 @@ export default class MsgDemo extends React.Component {
        Tool.gaTo('点击进入抢线索页面','发现-速抢线索','');
     }
     render() {
+        let {showR, showC} = this.state
         return (
         <div className="findBodys findBoxs">
             <Panel>
@@ -70,19 +91,19 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="#clueBag">
+                            <Cell href="#clueBag" style={{display: showC?'':'none'}}>
                                 <CellHeader><i className='findIcos clue-bag'></i></CellHeader>
                                 <CellBody>
                                     <p>线索加油包</p>
                                 </CellBody>
                                 <CellFooter />
                             </Cell>
-                            <Cell href="#inquire">
-                                <CellHeader><i className='findIcos affiche-icon'></i></CellHeader>
+                            <Cell href="#myacut" style={{display: showR?'':'none'}}>
+                                <CellHeader><i className='findIcos star-icon'></i></CellHeader>
                                 <CellBody>
-                                    <p>公告号查询</p>
+                                    <p>我的账户</p>
                                 </CellBody>
-                                <CellFooter />
+                                <CellFooter/>
                             </Cell>
                         </Cells>
                     </MediaBox>

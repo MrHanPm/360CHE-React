@@ -43,6 +43,21 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
+                            <Cell href="#clueBag">
+                                <CellHeader><i className='findIcos clue-bag'></i></CellHeader>
+                                <CellBody>
+                                    <p>线索加油包</p>
+                                </CellBody>
+                                <CellFooter />
+                            </Cell>
+                        </Cells>
+                    </MediaBox>
+                </PanelBody>
+            </Panel>
+            <Panel>
+                <PanelBody>
+                    <MediaBox type="small_appmsg">
+                        <Cells access>
                             <Cell href="#account">
                                 <CellHeader><i className='findIcos manage'></i></CellHeader>
                                 <CellBody>

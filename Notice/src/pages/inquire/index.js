@@ -143,6 +143,7 @@ class Inquire extends React.Component {
 
                             //重新筛选时，清空保存的滚动高度
                             Tool.localItem('scrollTop',0)
+                            Tool.localItem('scrollToping',0)
                             _this.context.router.push({pathname: '/inquireResult'})
                         }else{
                             _this.setState({
@@ -287,7 +288,7 @@ class Inquire extends React.Component {
                                     <Label htmlFor="dptpe">底盘类别</Label>
                                 </CellHeader>
                                 <CellBody>
-                                    <Input id="dptpe" type="text" placeholder="例：二类"  onChange={this.handleInput}/>
+                                    <Input id="dptype" type="text" placeholder="例：二类"  onChange={this.handleInput}/>
                                 </CellBody>
                             </FormCell>
                             <FormCell>

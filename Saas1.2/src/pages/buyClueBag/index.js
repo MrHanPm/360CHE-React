@@ -97,58 +97,7 @@ class BuyClueBag extends React.Component {
                 buying:false,
             })
             let _this = this;
-            Tool.get('Pay/wx/JsApiPay.aspx',{sessionid:this.state.sessionid,goodsid:this.state.productid,goodsnum:this.state.number},
-                (data) => {
-                    console.log(data)
-                    if(data.status == 1){
-                        let wxjsapiparam = JSON.parse(data.data.wxjsapiparam);
-                        function onBridgeReady(){
-                           WeixinJSBridge.invoke(
-                               'getBrandWCPayRequest', {
-                                   "appId": wxjsapiparam.appId,      
-                                   "timeStamp":wxjsapiparam.timeStamp,    
-                                   "nonceStr": wxjsapiparam.nonceStr,      
-                                   "package": wxjsapiparam.package,     
-                                   "signType": wxjsapiparam.signType,      
-                                   "paySign": wxjsapiparam.paySign
-                               },
-                               function(res){     
-                                   if(res.err_msg == "get_brand_wcpay_request：ok" ) {
-                                        _this.setState({
-                                            buying:true,
-                                        })
-                                   }else{
-                                        _this.setState({
-                                            buying:true,
-                                        })
-                                   }
-                               }
-                           ) 
-                        }
-                        if (typeof WeixinJSBridge == "undefined"){
-                            if(document.addEventListener ){
-                                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                            }else if (document.attachEvent){
-                                document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
-                                 document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-                            }
-                        }else{
-                           onBridgeReady();
-                        }           
-                    }else{
-                      Alert.to(res.msg);  
-                        _this.setState({
-                            buying:true,
-                        })
-                    }
-                },
-                (err) => {
-                    Alert.to('请求超时，稍后重试。。');
-                    _this.setState({
-                        buying:true,
-                    })
-                }
-            )
+            window.location.href='wxpay.aspx?sessionid=' + this.state.sessionid + '&goodsid=' + this.state.productid + '&goodsnum=' + this.state.number;
         }
     }
 

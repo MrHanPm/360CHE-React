@@ -51,18 +51,18 @@ class MsgDemo extends React.Component {
                 ],
             },
         };
-        this.msgInput = (e) => {this.setState({SFCSrandoms:'',msg:e.target.value});}
-        this.nameInput = (e) => {this.setState({SFCSrandoms:'',name:e.target.value});}
+        this.msgInput = (e) => {this.setState({msg:e.target.value});}
+        this.nameInput = (e) => {this.setState({name:e.target.value});}
         this.telInput = (e) => {
             let phs = e.target.value;
             let phos = phs.replace(/(^\s+)|(\s+$)/g, "");
             let phones = phos.substring(0,11);
-            this.setState({SFCSrandoms:'',tel:phones});
+            this.setState({tel:phones});
         }
-        this.addressInput = (e) => {this.setState({SFCSrandoms:'',address:e.target.value});}
-        this.companyInput = (e) => {this.setState({SFCSrandoms:'',company:e.target.value});}
+        this.addressInput = (e) => {this.setState({address:e.target.value});}
+        this.companyInput = (e) => {this.setState({company:e.target.value});}
         this.onSaves = this.onSaves.bind(this);
-        this.isBuys = (e) => {this.setState({SFCSrandoms:'',isbuy:e.target.value});}
+        this.isBuys = (e) => {this.setState({isbuy:e.target.value});}
         this.SFCS = this.SFCS.bind(this);
     }
 
@@ -288,7 +288,8 @@ class MsgDemo extends React.Component {
                 </ButtonArea>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})} 
+                    onClose={() => this.setState({SFCSrandoms:''})}/>
             </Page>
         );
     }

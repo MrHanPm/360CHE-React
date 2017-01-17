@@ -25,6 +25,7 @@ class MsgDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            isGyoubao: false,
             showConfirm: false,
             accountsType:'',
             comePackage:'',
@@ -56,6 +57,18 @@ class MsgDemo extends React.Component {
         }else{
             sessionid = Tool.SessionId.get();
         }
+
+        let oldData = JSON.parse(localStorage.getItem('vipLodData')) || null
+        if(oldData !== null){
+            if(oldData.permission.length > 0){
+                for(let i=0;i<oldData.permission.length;i++){
+                    if(oldData.permission[i].key == 'cluespage' && oldData.permission[i].value == '1'){
+                        this.setState({isGyoubao: true})
+                    }
+                }
+            }
+        }
+
         Tool.get('User/GetAccountDetail.aspx',{'sessionid':sessionid},
             (res) => {
                 if(res.status){
@@ -167,7 +180,7 @@ class MsgDemo extends React.Component {
                             <em className="findIcos account-type-icon"></em>
                         </CellFooter>
                     </FormCell>
-                    <FormCell>
+                    <FormCell style={{display: this.state.isGyoubao?'':'none'}}>
                         <CellHeader>
                             <Label>加油包剩余</Label>
                         </CellHeader>

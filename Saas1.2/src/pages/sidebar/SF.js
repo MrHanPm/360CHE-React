@@ -1,5 +1,3 @@
-"use strict";
-
 import React from 'react';
 import {Icon} from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
@@ -19,9 +17,10 @@ class Sidebar extends React.Component{
             L:[],
             R:[]
           }
-      this.closeSold = this.closeSold.bind(this);
-      this.upDatas = this.upDatas.bind(this);
-      this.goDatas = this.goDatas.bind(this);
+      this.closeSold = this.closeSold.bind(this)
+      this.upDatas = this.upDatas.bind(this)
+      this.goDatas = this.goDatas.bind(this)
+      this.CLXB = this.CLXB.bind(this)
   }
 
   upDatas(e){
@@ -63,17 +62,13 @@ class Sidebar extends React.Component{
     }, ()=> this.props.onChange(Ad));
   }
   componentDidMount(){
-    let self = this;
-    [].forEach.call(document.querySelectorAll('.PubSidebar'), function (el){  
-      el.addEventListener('touchend', function(e) {
-        var x = e.changedTouches[0].pageX;
-        if( x < 68 ){
-            self.closeSold();
-        }
-      }, false);
-    });
-    this.setState({
-    });
+
+  }
+  CLXB (e) {
+    let x = e.pageX
+    if( x < 68 ){
+      this.closeSold()
+    }
   }
   componentWillReceiveProps(nextProps) {
     let provincelist = JSON.parse(Tool.localItem('provincelist'));
@@ -86,17 +81,13 @@ class Sidebar extends React.Component{
       });
     }
   }
-  closeSold(){
-    this.setState({
-      visible:false
-    });
-  }
+  closeSold(){this.setState({visible:false}, () => this.props.onClose())}
   render(){
     let self = this;
     let Fes = this.state.provincename;
     let Ges = self.state.cityname;
       return(
-          <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"}>
+          <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"} onClick={this.CLXB}>
               <header>
                   <span>省份城市</span>
                   <span className="closeBtn" onClick={this.closeSold}></span>

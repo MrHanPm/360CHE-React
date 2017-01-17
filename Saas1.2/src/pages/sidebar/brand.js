@@ -74,7 +74,7 @@ class Sidebar extends React.Component{
                 let ContHeight = this.getBoundingClientRect().height;
                 let target;
                 if(y > 0 && y < ContHeight){
-                    target = this.children[Math.round(y/Nums)];
+                    target = this.children[Math.round(y/19)];
                 }
                 self.showScale(target.innerHTML);
           }, false);
@@ -117,7 +117,7 @@ class Sidebar extends React.Component{
           visible:false
         }, ()=> this.props.onChange(tit));
     }
-    closeSold(){this.setState({visible:false});}
+    closeSold(){this.setState({visible:false}, () => this.props.onClose())}
     componentWillReceiveProps(nextProps) {
       if(typeof(nextProps.Datas) == 'number'){
         this.setState({

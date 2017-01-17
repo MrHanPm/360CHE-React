@@ -1,0 +1,57 @@
+/*侧边栏样式*/
+.sidebar{position: absolute;right:-100%;top:0;width:100%;height:100%;overflow:hidden;padding-left:75px;-webkit-box-sizing: border-box;box-sizing: border-box;z-index: 9999;-webkit-transition: all .1s ease-in-out;transition: all .1s ease-in-out;background: rgba(0,0,0,0);}
+.sidebar.visible{-webkit-transform: translate3d(-100%,0,0);transform: translate3d(-100%,0,0);background: rgba(0,0,0,.5);}
+.sidebar-container{height: 100%;background: #fff;box-sizing: border-box; padding-bottom: 45px;overflow-x: hidden;overflow-y:scroll;-webkit-overflow-scrolling: touch;}
+.sidebar> header{position: relative;top:0;right:0;height: 44px; line-height: 44px; text-align: center; font-size: 18px; border-bottom: 1px solid #eee;background-color:#fff;width: 100%; z-index: 9999;}
+.sidebar> header span:first-child{display: inline-block;}
+.sidebar> header a{color:#333;}
+.sidebar > header .close{width:44px;height: 44px;color:#1571e5;position: absolute;left: 0;color: #666;
+&:before{content:"\e620"; font-family:'saas_ico';font-size: 22px;}
+}
+
+.sidebar-module{background: #f5f5f5;overflow: hidden;}
+.sidebar-module > header{padding:0 10px;height: 24px;line-height: 24px;font-size: 14px;color:#666;}
+.sidebar-module ul{padding:0 10px;background: #fff}
+.sidebar-module li,.history .rank-list li{padding:10px 0;min-height: 50px; overflow: hidden;word-wrap: break-word;word-break: break-all;}
+.sidebar-module ul li:nth-of-type(n+2){border-top:1px solid #eee;}
+.sidebar-module a,.history .rank-list a{position: relative;display: block;padding-left: 10px;color:#333;min-height:50px;overflow: hidden;}
+.sidebar-module a > figure,.history .rank-list a > figure{position:absolute;left:0;top:0;width: 75px; height: 50px; text-align: center; overflow: hidden; z-index: 1}
+.sidebar-module a > figure img,.history .rank-list a > figure img{max-width: 100%; vertical-align: middle;}
+.sidebar-module a > figure img[src=""],.history .rank-list a > figure img[src=""]{width: 75px; height: 50px;line-height: 50px; display: block;font-family: "detail";content: "\5361";text-align: center; font-size: 14px;color: #d1d1d1;background: #efefef;}
+.sidebar-module a > figure img[src=""]:after{position:absolute;left:0;top:0;display:block;width: 75px;height: 50px;line-height: 50px;display: block;font-family: "detail";content: "\5361";text-align: center;font-size: 14px;color: #d1d1d1;background: #efefef;}
+.sidebar-module h4,.sidebar-module .price,.history .rank-list p{margin-top:9px;overflow: hidden; white-space: nowrap; text-overflow: ellipsis }
+.sidebar-module h4,.history .rank-list p{height:16px; line-height: 16px;}
+.sidebar-module .price,.history .rank-list span{font-size:12px;line-height: 12px;color:#f60;}
+.alpha-cover{position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0,0,0,0); z-index:10}
+
+/*筛选页面侧边栏样式*/
+.sidebar .sidebar-container .sidebar-module li{padding:0;min-height: 44px;}
+.sidebar .sidebar-container a{display:block;min-height:44px;line-height:44px;}
+.sidebar.sidebar-container a.active{color:#1571e5;}
+.sidebar .sidebar-container figure{width:50px;height:44px;line-height: 44px}
+.sidebar .sidebar-container,.sidebar-brands .sidebar-container{background-color:#f5f5f5;}
+.sidebar .load-content,.sidebar-brands #sidebar_fold{margin:20px;}
+
+/*侧边索引*/
+.brands-model{position: relative;}
+.scale{position: absolute;left:50%;top:50%;margin:-40px 0 0 -40px;width: 80px; height: 80px; line-height: 80px; text-align: center; font-size: 50px; color:#fff; border-radius: 8px; z-index: 111; background: rgba(0,0,0,.6);display:block;opacity: 0; -webkit-transition:all .1s ease-out;transition:all .1s ease-out;display: none;}
+.scale.show{opacity: 1;}
+
+#index_nav{position:absolute;top: 50px;right:0; z-index: 888;-webkit-transform: translate3d(0,0,0);transform: translate3d(0,0,0);}
+#index_nav li{padding:0 10px;font-size: 13px;line-height: 19px;color:#666; text-align: center; font-weight: 500}
+#index_nav li.active{color:#1571e5;}
+#index_nav .selected{color:#1571e5;}
+#index_nav.nav{background: rgba(0,0,0,.5); }
+#index_nav.nav li{color: #fff;}
+
+
+@media screen and (max-width: 320px) {
+    html{max-height: 568px;}
+    #index_nav li{
+        font-size: 10px;
+        line-height: 16px;
+        font-weight:400;
+    }
+}
+
+

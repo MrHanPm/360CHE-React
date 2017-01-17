@@ -29,7 +29,6 @@ class MsgDemo extends React.Component {
             reccount:0,
             showBtns: true,
             showConfirm: false,
-            showAlertCfm:false,
             showDonwn:true,
             linkCrm:true,
             clilinkCrm:false,
@@ -48,16 +47,16 @@ class MsgDemo extends React.Component {
                     }
                 ],
             },
-            AlertCfm: {
-                title: '抢线索成功，请跟进，24小时内未设置客户级别的线索将返回到公共线索池',
-                buttons: [
-                    {
-                        type: 'primary',
-                        label: '知道了',
-                        onClick: this.hideAlertCfm.bind(this)
-                    }
-                ],
-            },
+
+            showAlertCfm:false,
+            AlertCfmTitle: '',
+            AlertCfmButtons: [
+                {
+                    type: 'primary',
+                    label: '知道了',
+                    onClick: this.hideAlertCfm.bind(this)
+                }
+            ],
         };
         
         let self = this;
@@ -150,17 +149,25 @@ class MsgDemo extends React.Component {
         Tool.get('Clues/GetCluesDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    let dataRobClues = JSON.stringify(res.data);
-                    Tool.localItem('RobClues',dataRobClues);
-                    this.setState({DATArob:res.data});
+                    let dataRobClues = JSON.stringify(res.data)
+                    Tool.localItem('RobClues',dataRobClues)
                     if(res.data.customid > 0){
-                        this.setState({linkCrm:false});
+                        this.setState({linkCrm:false})
+                    }
+                    if (res.infomsg.length > 5) {
+                        this.setState({
+                            DATArob:res.data,
+                            showAlertCfm:true,
+                            AlertCfmTitle: res.infomsg,
+                        })
+                    } else {
+                        this.setState({DATArob:res.data})
                     }
                 }else if(res.status == 901){
-                    alert(res.msg);
-                    this.context.router.push({pathname: '/loading'});
+                    alert(res.msg)
+                    this.context.router.push({pathname: '/loading'})
                 }else{
-                    Alert.to(res.msg);
+                    Alert.to(res.msg)
                 }
             },
             (err) => {
@@ -181,7 +188,6 @@ class MsgDemo extends React.Component {
                         ){
                             this.setState({
                                 Messrob:res.listdata,
-                                showAlertCfm:true,
                                 showBtns: false
                             });
                         }else{
@@ -440,7 +446,7 @@ class MsgDemo extends React.Component {
                 <span className="ChengClues" title={cluesextendid} onClick={this.goChengs}></span>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
-                <Confirm title={this.state.AlertCfm.title} buttons={this.state.AlertCfm.buttons} show={this.state.showAlertCfm}>
+                <Confirm title={this.state.AlertCfmTitle} buttons={this.state.AlertCfmButtons} show={this.state.showAlertCfm}>
                 </Confirm>
                 <SideRob data={this.state.Messrob} showD={this.state.SDSrandoms} onChange={val => this.setState({SDSrandoms: val})}/>
                 <div className="jump-cover" id="jump_cover" style={{'display':loadShow?'block':'none'}}>

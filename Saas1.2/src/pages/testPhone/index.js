@@ -218,42 +218,40 @@ class CellDemo extends React.Component {
     render() {
         return (
             <Page className="cell CrmScoll" title="手机验证">
-                <div className="weui_cells weui_cells_form">
-                    <div className="weui_cell">
-                        <div className="weui_cell_hd">
-                            <Label>手机号</Label>
-                        </div>
-                        <div className="weui_cell_bd weui_cell_primary">
+               <Form>
+                    <FormCell>
+                        <CellHeader>
+                           <Label>手机号</Label>
+                        </CellHeader>
+                        <CellBody>
                             <Input type="number" placeholder="输入手机号" onInput={this.phoneInput} value={this.state.phone}/>
-                        </div>
-                    </div>
-
-                    <div className="weui_cell weui_vcode">
-                        <div className="weui_cell_hd">
-                            <Label>图形码</Label>
-                        </div>
-                        <div className="weui_cell_bd weui_cell_primary">
-                            <Input type="number" placeholder="输入图形码" onInput={this.vcodeInput}/>
-                        </div>
-                        <div className="weui_cell_ft" onClick={this.getVcode}>
+                        </CellBody>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader>
+                           <Label>图形码</Label>
+                        </CellHeader>
+                        <CellBody>
+                             <Input type="number" placeholder="输入图形码" onInput={this.vcodeInput}/>
+                        </CellBody>
+                        <CellFooter>
                             <Icon value="warn" />
                             <img src={this.state.vcodeSrc} />
-                        </div>
-                    </div>
-
-                    <div className="weui_cell">
-                        <div class="weui_cell_hd">
+                        </CellFooter>
+                    </FormCell>
+                    <FormCell>
+                        <CellHeader>
                             <Label>验证码</Label>
-                        </div>
-                        <div className="weui_cell_bd weui_cell_primary">
-                            <Input type="number" placeholder="输入验证码" onInput={this.mcodeInput}/>
-                        </div>
-                        <div className="weui_cell_ft">
-                            <Button size="small" onClick={this.getMcode}>获取验证码</Button>
-                        </div>
-                    </div>
-                </div>
-                <span className="logTests" onClick={(e) => {this.context.router.push({pathname: '/phones'})}}>使用密码登录</span>
+                        </CellHeader>
+                        <CellBody>
+                             <Input type="number" placeholder="输入验证码" onInput={this.mcodeInput}/>
+                        </CellBody>
+                        <CellFooter>
+                             <Button size="small" onClick={this.getMcode}>获取验证码</Button>
+                        </CellFooter>
+                    </FormCell>
+                </Form>
+                <a className="logTests" href="#/phones">使用密码登录</a>
                 <ButtonArea>
                     <Button id="goNextP" onClick={this.goNext}>确定</Button>
                 </ButtonArea>

@@ -78,43 +78,13 @@ class MsgDemo extends React.Component {
             showConfirm: false,
             linkCRM:false,
         };
-        this.nameInput = (e) => {this.setState({name:e.target.value,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+        this.nameInput = (e) => {this.setState({name:e.target.value
         });}
         this.phoneInput = (e) => {
             let phs = e.target.value;
             let phos = phs.replace(/(^\s+)|(\s+$)/g, "");
             let phones = phos.substring(0,11);
-            this.setState({phone:phones,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+            this.setState({phone:phones
         });}
         this.numbInput = (e) => {
             let nu = e.target.value;
@@ -122,75 +92,15 @@ class MsgDemo extends React.Component {
             e.target.value = '';
             //e.target.value = num;
             //this.state.numb = num;
-            this.setState({numb:num,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+            this.setState({numb:num
         });
         }
-        this.msgInput = (e) => {this.setState({msg:e.target.value,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+        this.msgInput = (e) => {this.setState({msg:e.target.value
         });}
-        this.dealInput = (e) => {this.setState({dealdate:e.target.value,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+        this.dealInput = (e) => {this.setState({dealdate:e.target.value
         });}
         this.payInput = this.payInput.bind(this);
-        this.failInput = (e) => {this.setState({faildate:e.target.value,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+        this.failInput = (e) => {this.setState({faildate:e.target.value
         });}
         this.Checkbox = this.Checkbox.bind(this);
         this.SFCS = this.SFCS.bind(this);
@@ -213,22 +123,7 @@ class MsgDemo extends React.Component {
     payInput(e){
         let pays = e.target.value;
         this.setState({
-            pay:pays,
-            CPLBrandoms:'',
-            QCPPrandoms:'',
-            QCXLrandoms:'',
-            QCCXrandoms:'',
-
-            DcPLBrandoms:'',
-            DqCPPrandoms:'',
-            DqCXLrandoms:'',
-            DqCCXrandoms:'',
-
-            SFCSrandoms:'',
-            KHJBrandoms:'',
-            XSLYrandoms:'',
-            CLYTrandoms:'',
-            ZBrandoms:'',
+            pay:pays
         });
     }
     componentWillMount(){
@@ -353,40 +248,12 @@ class MsgDemo extends React.Component {
         }
     }
     CPLB(){this.setState({
-        CPLBrandoms: Math.random(),
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DcPLBrandoms:'',
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        SFCSrandoms:'',
-        KHJBrandoms:'',
-        XSLYrandoms:'',
-        CLYTrandoms:'',
-        ZBrandoms:'',
+        CPLBrandoms: Math.random()
     });}
     QCPP(){
         if(this.state.CPLBv !== '' && typeof(this.state.CPLBv.subcategoryid) !== 'undefined' && this.state.CPLBv.subcategoryid !== 0){
              this.setState({
-                QCPPrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCXLrandoms:'',
-                QCCXrandoms:'',
-
-                DcPLBrandoms:'',
-                DqCPPrandoms:'',
-                DqCXLrandoms:'',
-                DqCCXrandoms:'',
-
-                SFCSrandoms:'',
-                KHJBrandoms:'',
-                XSLYrandoms:'',
-                CLYTrandoms:'',
-                ZBrandoms:'',
+                QCPPrandoms: Math.random()
             });
         }else{
             Alert.to('请选择类别');
@@ -395,21 +262,7 @@ class MsgDemo extends React.Component {
     QCXL(){
         if(this.state.QCPPv !== '' && typeof(this.state.QCPPv.brandid) !== 'undefined' && this.state.QCPPv.brandid !== 0){
              this.setState({
-                QCXLrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCCXrandoms:'',
-
-                DcPLBrandoms:'',
-                DqCPPrandoms:'',
-                DqCXLrandoms:'',
-                DqCCXrandoms:'',
-
-                SFCSrandoms:'',
-                KHJBrandoms:'',
-                XSLYrandoms:'',
-                CLYTrandoms:'',
-                ZBrandoms:'',
+                QCXLrandoms: Math.random()
             });
         }else{
             Alert.to('请选择品牌');
@@ -418,61 +271,19 @@ class MsgDemo extends React.Component {
     QCCX(){
         if(this.state.QCXLv !== '' && typeof(this.state.QCXLv.seriesid) !== 'undefined' && this.state.QCXLv.seriesid !== 0){
              this.setState({
-                QCCXrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCXLrandoms:'',
-
-                DcPLBrandoms:'',
-                DqCPPrandoms:'',
-                DqCXLrandoms:'',
-                DqCCXrandoms:'',
-
-                SFCSrandoms:'',
-                KHJBrandoms:'',
-                XSLYrandoms:'',
-                CLYTrandoms:'',
-                ZBrandoms:'',
+                QCCXrandoms: Math.random()
             });
         }else{
             Alert.to('请选择系列');
         }
     }
     DCPLB(){this.setState({
-        DcPLBrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        SFCSrandoms:'',
-        KHJBrandoms:'',
-        XSLYrandoms:'',
-        CLYTrandoms:'',
-        ZBrandoms:'',
+        DcPLBrandoms: Math.random()
     });}
     DQCPP(){
         if(this.state.DcPLBv !== '' && typeof(this.state.DcPLBv.subcategoryid) !== 'undefined' && this.state.DcPLBv.subcategoryid !== 0){
              this.setState({
-                DqCPPrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCXLrandoms:'',
-                QCCXrandoms:'',
-
-                DcPLBrandoms:'',
-                DqCXLrandoms:'',
-                DqCCXrandoms:'',
-
-                SFCSrandoms:'',
-                KHJBrandoms:'',
-                XSLYrandoms:'',
-                CLYTrandoms:'',
-                ZBrandoms:'',
+                DqCPPrandoms: Math.random()
             });
         }else{
             Alert.to('请选择成交类别');
@@ -481,21 +292,7 @@ class MsgDemo extends React.Component {
     DQCXL(){
         if(this.state.DqCPPv !== '' && typeof(this.state.DqCPPv.brandid) !== 'undefined' && this.state.DqCPPv.brandid !==0){
              this.setState({
-                DqCXLrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCXLrandoms:'',
-                QCCXrandoms:'',
-
-                DcPLBrandoms:'',
-                DqCPPrandoms:'',
-                DqCCXrandoms:'',
-
-                SFCSrandoms:'',
-                KHJBrandoms:'',
-                XSLYrandoms:'',
-                CLYTrandoms:'',
-                ZBrandoms:'',
+                DqCXLrandoms: Math.random()
             });
         }else{
             Alert.to('请选择成交品牌');
@@ -504,110 +301,26 @@ class MsgDemo extends React.Component {
     DQCCX(){
         if(this.state.DqCXLv !== '' && typeof(this.state.DqCXLv.seriesid) !== 'undefined' && this.state.DqCXLv.seriesid !==0){
              this.setState({
-                DqCCXrandoms: Math.random(),
-                CPLBrandoms:'',
-                QCPPrandoms:'',
-                QCXLrandoms:'',
-                QCCXrandoms:'',
-
-                DcPLBrandoms:'',
-                DqCPPrandoms:'',
-                DqCXLrandoms:'',
-
-                SFCSrandoms:'',
-                KHJBrandoms:'',
-                XSLYrandoms:'',
-                CLYTrandoms:'',
-                ZBrandoms:'',
+                DqCCXrandoms: Math.random()
             });
         }else{
             Alert.to('请选择成交系列');
         }
     }
     SFCS(){this.setState({
-        SFCSrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DcPLBrandoms:'',
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        KHJBrandoms:'',
-        XSLYrandoms:'',
-        CLYTrandoms:'',
-        ZBrandoms:'',
+        SFCSrandoms: Math.random()
     });}
     KHJB(){this.setState({
-        KHJBrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DcPLBrandoms:'',
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        SFCSrandoms:'',
-        XSLYrandoms:'',
-        CLYTrandoms:'',
-        ZBrandoms:'',
+        KHJBrandoms: Math.random()
     });}
     XSLY(){this.setState({
-        XSLYrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DcPLBrandoms:'',
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        SFCSrandoms:'',
-        KHJBrandoms:'',
-        CLYTrandoms:'',
-        ZBrandoms:'',
+        XSLYrandoms: Math.random()
     });}
     CLYT(){this.setState({
-        CLYTrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DcPLBrandoms:'',
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        SFCSrandoms:'',
-        KHJBrandoms:'',
-        XSLYrandoms:'',
-        ZBrandoms:'',
+        CLYTrandoms: Math.random()
     });}
     ZB(){this.setState({
-        ZBrandoms: Math.random(),
-        CPLBrandoms:'',
-        QCPPrandoms:'',
-        QCXLrandoms:'',
-        QCCXrandoms:'',
-
-        DcPLBrandoms:'',
-        DqCPPrandoms:'',
-        DqCXLrandoms:'',
-        DqCCXrandoms:'',
-
-        SFCSrandoms:'',
-        KHJBrandoms:'',
-        XSLYrandoms:'',
-        CLYTrandoms:'',
+        ZBrandoms: Math.random()
     });}
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
@@ -1076,38 +789,51 @@ class MsgDemo extends React.Component {
                     <Button onClick={this.onSaves} id="goNextP" style={{'marginBottom':'100px'}}>保存</Button>
                 </ButtonArea>
                 </div>
-                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})}/>
-                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})}/>
+                <SF Datas={this.state.SFCSrandoms} onChange={val => this.setState({SFCSv: val,SFCSrandoms:''})} 
+                    onClose={() => this.setState({SFCSrandoms:''})}/>
+                <LB Datas={this.state.CPLBrandoms} onChange={val => this.setState({CPLBv: val,CPLBrandoms:'',QCPPv:'',QCXLv:'',QCCXv:''})} 
+                    onClose={() => this.setState({CPLBrandoms:''})}/>
                 <PP Datas={this.state.QCPPrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
-                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCPPv: val,QCPPrandoms:'',QCXLv:'',QCCXv:''})} 
+                    onClose={() => this.setState({QCPPrandoms:''})}/>
                 <XL Datas={this.state.QCXLrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
-                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})}/>
+                    onChange={val => this.setState({QCXLv: val,QCXLrandoms:'',QCCXv:''})} 
+                    onClose={() => this.setState({QCXLrandoms:''})}/>
                 <CX Datas={this.state.QCCXrandoms}
                     subcategoryid={this.state.CPLBv.subcategoryid}
                     brandid={this.state.QCPPv.brandid}
                     seriesid={this.state.QCXLv.seriesid}
-                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})}/>
-                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})}/>
-                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:''})}/>
-                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:''})}/>
-                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})}/>
+                    onChange={val => this.setState({QCCXv: val,QCCXrandoms:''})} 
+                    onClose={() => this.setState({QCCXrandoms:''})}/>
+                <JB Datas={this.state.KHJBrandoms} onChange={val => this.setState({KHJBv: val,KHJBrandoms:''})} 
+                    onClose={() => this.setState({KHJBrandoms:''})}/>
+                <XS Datas={this.state.XSLYrandoms} onChange={val => this.setState({XSLYv: val,XSLYrandoms:''})} 
+                    onClose={() => this.setState({XSLYrandoms:''})}/>
+                <YT Datas={this.state.CLYTrandoms} onChange={val => this.setState({CLYTv: val,CLYTrandoms:''})} 
+                    onClose={() => this.setState({CLYTrandoms:''})}/>
+                <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})} 
+                    onClose={() => this.setState({ZBrandoms:''})}/>
 
-                <DLB Drandoms={this.state.DcPLBrandoms} onChange={val => this.setState({DcPLBv: val,DcPLBrandoms:'',DqCPPv:'',DqCXLv:'',DqCCXv:''})}/>
+                <DLB Drandoms={this.state.DcPLBrandoms} onChange={val => this.setState({DcPLBv: val,DcPLBrandoms:'',DqCPPv:'',DqCXLv:'',DqCCXv:''})} 
+                    onClose={() => this.setState({DcPLBrandoms:''})}/>
                 <DPP Drandoms={this.state.DqCPPrandoms}
                     subcategoryid={this.state.DcPLBv.subcategoryid}
-                    onChange={val => this.setState({DqCPPv: val,DqCPPrandoms:'',DqCXLv:'',DqCCXv:''})}/>
+                    onChange={val => this.setState({DqCPPv: val,DqCPPrandoms:'',DqCXLv:'',DqCCXv:''})} 
+                    onClose={() => this.setState({DqCPPrandoms:''})}/>
                 <DXL Drandoms={this.state.DqCXLrandoms}
                     subcategoryid={this.state.DcPLBv.subcategoryid}
                     brandid={this.state.DqCPPv.brandid}
-                    onChange={val => this.setState({DqCXLv: val,DqCXLrandoms:'',DqCCXv:''})}/>
+                    onChange={val => this.setState({DqCXLv: val,DqCXLrandoms:'',DqCCXv:''})} 
+                    onClose={() => this.setState({DqCXLrandoms:''})}/>
                 <DCX Drandoms={this.state.DqCCXrandoms}
                     subcategoryid={this.state.DcPLBv.subcategoryid}
                     brandid={this.state.DqCPPv.brandid}
                     seriesid={this.state.DqCXLv.seriesid}
-                    onChange={val => this.setState({DqCCXv: val,DqCCXrandoms:''})}/>
+                    onChange={val => this.setState({DqCCXv: val,DqCCXrandoms:''})} 
+                    onClose={() => this.setState({DqCCXrandoms:''})}/>
                 <ShowAlert />
             </div>
         );

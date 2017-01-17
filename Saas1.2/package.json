@@ -1,7 +1,7 @@
 {
-  "name": "react-weui",
+  "name": "SAAS1.2",
   "version": "0.4.0",
-  "description": "weui for react",
+  "description": "SAAS for react",
   "main": "./lib",
   "scripts": {
     "start": "webpack-dev-server --hot --inline --progress --colors --port 8080",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/weui/react-weui.git"
+    "url": "git+https://github.com/MrHanPm/360CHE-React.git"
   },
   "keywords": [
     "mobile",
@@ -25,14 +25,18 @@
     "weui",
     "react"
   ],
-  "author": "wechat ui team",
+  "author": "360CHE team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/weui/react-weui/issues"
+    "url": "https://github.com/MrHanPm/360CHE-React.git"
   },
-  "homepage": "https://github.com/weui/react-weui",
+  "homepage": "https://github.com/MrHanPm",
   "dependencies": {
-    "preventoverscrolljs": "0.0.1"
+    "history": "^1.17.0",
+    "react": "^0.14.x || ^15.0.0-0",
+    "react-dom": "^0.14.x || ^15.0.0-0",
+    "react-weui": "^0.4.0",
+    "react-router": "^2.7.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.5",
@@ -47,7 +51,6 @@
     "eslint-plugin-react": "^3.11.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
-    "history": "^1.17.0",
     "html-webpack-plugin": "^2.14.0",
     "istanbul": "^0.4.1",
     "jsdom": "^8.4.0",
@@ -57,15 +60,8 @@
     "normalize.css": "^4.1.1",
     "open-browser-webpack-plugin": "0.0.1",
     "postcss-loader": "^0.8.2",
-    "react": "^0.14.2",
     "react-addons-css-transition-group": "^0.14.7",
     "react-addons-test-utils": "^0.14.3",
-    "react-dom": "^15.0.1",
-    "react-redux": "^4.4.5",
-    "react-router": "^2.3.0",
-    "react-weui": "^0.4.0",
-    "redux": "^3.5.2",
-    "redux-thunk": "^2.1.0",
     "rimraf": "^2.4.3",
     "sinon": "^1.17.2",
     "style-loader": "^0.13.0",

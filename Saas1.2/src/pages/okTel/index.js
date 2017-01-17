@@ -337,11 +337,11 @@ class Clues extends React.Component {
         [].forEach.call(document.querySelectorAll('#index_nav'), function (el) {  
           el.addEventListener('touchmove', function(e) {
                 let y = e.changedTouches[0].pageY - this.getBoundingClientRect().top;
-                let Nums = this.querySelectorAll('li').length;
+                //let Nums = this.querySelectorAll('li').length;
                 let ContHeight = this.getBoundingClientRect().height;
                 let target;
                 if(y > 0 && y < ContHeight){
-                    target = this.children[Math.round(y/Nums)];
+                    target = this.children[Math.round(y/19)];
                 }
                 self.showScale(target.innerHTML);
           }, false);

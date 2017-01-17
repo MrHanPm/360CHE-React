@@ -34,12 +34,11 @@ import Share from './pages/share/index';
 import ClueBag from './pages/clueBag/index';
 import BuyClueBag from './pages/buyClueBag/index';
 import BuyRecord from './pages/buyRecord/index';
-import Inquire from './pages/inquire/index';
-import InquireResult from './pages/inquireResult/index';
-import InquireResultInfo from './pages/inquireResultInfo/index';
 import CountMsg from './pages/count/msg';
 import RobMsg from './pages/rob/msg';
 import Search from './pages/searchbar/index';
+import MyAcut from './pages/myaccount/index';
+import MyAcutMsg from './pages/myaccount/msg';
 
 import BosNav from './pages/boss/nav/index';
 import BosRobClue from './pages/boss/robClue/index';
@@ -84,9 +83,6 @@ ReactDOM.render((
             <Route path="clueBag" component={ClueBag}/>
             <Route path="buyClueBag" component={BuyClueBag}/>
             <Route path="buyRecord" component={BuyRecord}/>
-            <Route path="inquire" component={Inquire}/>
-            <Route path="inquireResult" component={InquireResult}/>
-            <Route path="inquireResultInfo" component={InquireResultInfo}/>
             <Route path="search" component={Search}/>
             <Route path="countMsg" component={CountMsg}/>
             <Route path="robMsg" component={RobMsg}/>
@@ -96,6 +92,8 @@ ReactDOM.render((
             <Route path="crmClue" component={CrmClue}/>
             <Route path="detailTel" component={DetailTel}/>
             <Route path="addPursue" component={AddPursue}/>
+            <Route path="myacut" component={MyAcut}/>
+            <Route path="mamsg" component={MyAcutMsg}/>
 
             <Route path="boss/robClue(/:name)" component={BosRobClue}/>
             <Route path="boss/detailTel(/:name)" component={BosDetailTel}/>

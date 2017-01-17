@@ -52,7 +52,6 @@ class InquireResult extends React.Component {
                 total:resultDate.result.reccount,
                 resultData:resultDate.result.data.announcementlist || resultDate.result.data.chassislist || resultDate.result.data.fueloillist
             })
-            console.log(resultDate.result.data.announcementlist,'resultDate.result.data.announcementlist')
         }else{
             this.setState({
                error:true, 
@@ -78,8 +77,15 @@ class InquireResult extends React.Component {
                     wrapper.scrollTop = scrollToping;                
                 }
             }
-
         }
+
+        var imgs = document.querySelectorAll('img');
+        imgs.forEach(function(ele,index){
+           
+            ele.addEventListener('error',function(){
+                ele.src=''
+            })
+        })
     }
     scrollLoad(_this){
      
@@ -132,6 +138,14 @@ class InquireResult extends React.Component {
                         })
                         nowpage++;
                         loading.classList.remove('visible');
+
+                        var imgs = document.querySelectorAll('img');
+                        imgs.forEach(function(ele,index){
+                           
+                            ele.addEventListener('error',function(){
+                                ele.src='http://static.360che.com/gonggao/default90.jpg';
+                            })
+                        })
                     }else if(res.status == 901){
                         Alert.to(res.msg);
                         this.context.router.push({pathname: '/phone'});
@@ -173,7 +187,6 @@ class InquireResult extends React.Component {
         let _this = this;
         Tool.get(ajaxUrl,{'Id':id},
             (res) => {
-                console.log(res)
                 if(res.status == 1){
                     Tool.localItem('infoData',JSON.stringify(res))
                     _this.context.router.push({pathname: '/inquireResultInfo'})
@@ -197,74 +210,80 @@ class InquireResult extends React.Component {
 
     render() {
         let _this = this;
-        let ranyou = false;
-        if(this.state.type == 2){
-            ranyou = true
-        }
-        if(!this.state.loading){
-            return (
-                <div className="inquire-result" id="wrapper">
-                    <Panel className={this.state.resultData.length ? 'total visible' : 'total'} >
-                        <PanelBody>
-                            <MediaBox type="small_appmsg">
-                                <Cells>
-                                    <Cell>
-                                        <CellBody>
-                                            公获得{this.state.total}条结果
-                                        </CellBody>
-                                    </Cell>
-                                </Cells>
-                            </MediaBox>
-                        </PanelBody>
-                    </Panel>
-                    <div id="result_list">
-                        {
-                            this.state.resultData.map(function(ele,index){
-                                return(
-                                    <Panel key={index} onClick={_this.productInfo.bind(_this,ele.id)}>
-                                        <PanelBody>
-                                            <MediaBox type="text">
-                                                <MediaBoxBody>
+        if(this.state.resultData.length){
+            if(!this.state.loading){
+                return (
+                    <div className="inquire-result" id="wrapper">
+                        <Panel className={this.state.resultData.length ? 'total visible' : 'total'} >
+                            <PanelBody>
+                                <MediaBox type="small_appmsg">
+                                    <Cells>
+                                        <Cell>
+                                            <CellBody>
+                                                共获得{this.state.total}条结果
+                                            </CellBody>
+                                        </Cell>
+                                    </Cells>
+                                </MediaBox>
+                            </PanelBody>
+                        </Panel>
+                        <div id="result_list">
+                            {
+                                this.state.resultData.map(function(ele,index){
+                                    return(
+                                        <Panel key={index} onClick={_this.productInfo.bind(_this,ele.id)}>
+                                            <PanelBody>
+                                                <MediaBox type="text">
+                                                    <MediaBoxBody>
 
-                                                    <MediaBoxTitle>
-                                                        {ele.title}
-                                                    </MediaBoxTitle>
-                                                    <Cells>
-                                                        <Cell>
-                                                            <CellHeader>
-                                                                <img data-src="" src={ele.picture} onerror="javascript:this.src='http://static.360che.com/gonggao/default90.jpg'"/>
-                                                            </CellHeader>
-                                                            <CellBody>
-                                                                <p>{ranyou ? '发动机：' : '发动机型号：'}<em>{ranyou ? ele.enginemodel : ele.engine}</em></p>
-                                                                <p>{ranyou ? '变速箱：' : '染料类型：'}<em>{ranyou ? ele.bsqmodel : ele.fueltype}</em></p>
-                                                                <p>{ranyou ? '驱动形式：' : '排放标准：'}<em>{ranyou ? ele.drivermodel : ele.pfstd}</em></p>
-                                                            </CellBody>
-                                                            <CellFooter>
-                                                                
-                                                            </CellFooter>
-                                                        </Cell>
-                                                    </Cells>
-                                                </MediaBoxBody>
-                                            </MediaBox>
-                                        </PanelBody>
-                                    </Panel>
-                                )
-                            })
+                                                        <MediaBoxTitle>
+                                                            {ele.title}
+                                                        </MediaBoxTitle>
+                                                        <Cells>
+                                                            <Cell>
+                                                                <CellHeader>
+                                                                    <img src={ele.picture ? ele.picture : 'http://static.360che.com/gonggao/default90.jpg'} />
+                                                                </CellHeader>
+                                                                <CellBody>
+                                                                    <p>{_this.state.type == 0 ? '发动机型号：' : (_this.state.type == 1 ? '发动机型号：' : '发动机：')}<em>{_this.state.type == 0 ? ele.engine : (_this.state.type == 1 ? ele.engine : ele.enginemodel)}</em></p>
+                                                                    <p>{_this.state.type == 0 ? '燃料类型：' : (_this.state.type == 1 ? '排放标准：' : '变速箱：')}<em>{_this.state.type == 0 ? ele.fueltype : (_this.state.type == 1 ? ele.pfstd : ele.bsqmodel)}</em></p>
+                                                                    <p>{_this.state.type == 0 ? '排放标准：' : (_this.state.type == 1 ? '轴距：' : '驱动形式：')}<em>{_this.state.type == 0 ? ele.pfstd : (_this.state.type == 1 ? ele.zhouju : ele.drivermodel)}</em></p>
+                                                                </CellBody>
+                                                                <CellFooter>
+                                                                    
+                                                                </CellFooter>
+                                                            </Cell>
+                                                        </Cells>
+                                                    </MediaBoxBody>
+                                                </MediaBox>
+                                            </PanelBody>
+                                        </Panel>
+                                    )
+                                })
 
-                        }
+                            }
+                        </div>
+                        <div className="loading" id="loading">
+                            <span className="loading-ring"> 
+                            </span>
+                        </div>
+                        <ShowAlert />
                     </div>
-                    <div className="loading" id="loading">
-                        <span className="loading-ring"> 
-                        </span>
+                );
+            }else{
+                return(
+                    <div className="inquire load-state">
+                        <LoadAd/>
                     </div>
-                    <ShowAlert />
-                </div>
-            );
+                )
+            }
         }else{
-            return(
-                <div className="inquire load-state">
-                    <LoadAd/>
-                </div>
+            return (
+                <div> 
+                    <div className="clueBody clueAlre">
+                        <div className="noDataBox"></div>
+                    </div>
+                </div> 
             )
         }
     }
