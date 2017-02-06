@@ -27,6 +27,7 @@ class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
+            shearName: '',
            loadingS:true,
            nowpage:1,
            DATA:[],
@@ -69,7 +70,6 @@ class Clues extends React.Component {
                     onClick: this.goVal.bind(this)
                 }
             ],
-
 
             alertShow: false,
             alertTitle:'',
@@ -139,21 +139,33 @@ class Clues extends React.Component {
             }
         )
     }
-    hidePayConfm (){this.setState({payShow: false})}
-    hideValConfm (){this.setState({valShow: false})}
+    hidePayConfm (){
+        this.setState({payShow: false})
+        let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
+        Tool.gaTo('购买线索-点击放弃购买','待处理的线索',GAs)
+    }
+    hideValConfm (){
+        this.setState({valShow: false})
+        Tool.gaTo('充值流程','点击暂不充值','余额不足弹窗')
+    }
     payConfirm (e) {
+        let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
         if (this.state.isshowclickmsg == '1') {
             this.setState({
                 payShow: true,
                 payTitle: `确认花费¥ ${e.target.dataset.pay}购买这条线索吗？`,
-                payMsg: e.target.dataset.name,
+                payMsg: this.state.DATA[e.target.dataset.id].truckname,
                 payId: e.target.title,
-                payPay: e.target.dataset.pay
+                payPay: e.target.dataset.pay,
+                shearName: this.state.DATA[e.target.dataset.id].clueresourcename
             })
+            Tool.gaTo('购买线索-点击线索价格','待处理的线索',GAs)
         } else {
             this.state.payId = e.target.title
             this.state.payPay = e.target.dataset.pay
+            this.state.shearName = this.state.DATA[e.target.dataset.id].clueresourcename
             this.RobLine()
+            Tool.gaTo('普通抢线索','待处理的线索',GAs)
         }
     }
     showAcom () {this.setState({showAcom: true})}
@@ -161,6 +173,7 @@ class Clues extends React.Component {
     hideAlert () {this.setState({alertShow: false})}
     goVal(){
         this.context.router.push({pathname: '/myacut'})
+        Tool.gaTo('充值流程','点击前去充值','余额不足弹窗')
     }
     RobLine(){
         this.setState({payShow: false})
@@ -173,11 +186,12 @@ class Clues extends React.Component {
         }else{
             sessionid = Tool.SessionId.get()
         }
-        let GAs = '无|' + this.state.payId + '|无|无|无|无'
+        let GAs = this.state.shearName + '|' + this.state.payId + '|无|无'
+        Tool.gaTo('购买线索-点击确认购买','待处理的线索',GAs)
         Tool.get('Clues/GetCluesDetail.aspx',{sessionid:sessionid,cluesextendid: this.state.payId,saleprice:this.state.payPay},
             (res) => {
                 if(res.status == 1){
-                    Tool.gaTo('抢线索成功','待处理的线索',GAs);
+                    Tool.gaTo('购买线索-购买成功','待处理的线索',GAs)
                     let urlTxt = '/robClue?id=' + res.data.cluesextendid;
                     this.context.router.push({pathname: urlTxt});
                 } else if(res.status == 901){
@@ -200,6 +214,7 @@ class Clues extends React.Component {
                         return false
                     }
                     Alert.to(res.msg)
+                    Tool.gaTo('购买线索-购买失败','待处理的线索',res.msg)
                 }
             },
             (err) => {
@@ -231,11 +246,8 @@ class Clues extends React.Component {
         this.upDATA();
     }
     componentWillUnmount(){
-        clearTimeout(AlertTimeOut);
-        for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].abort();
-        }
-        XHRLIST = [];
+        clearTimeout(AlertTimeOut)
+        window.location.href = window.location.href
     }
     render() {
         const {loadingS, DATA,isDatas , payShow, payMsg, payTitle, payBtn,showAcom,alertShow,alertTitle,alertBtn, valShow, valBtn, valMsg} = this.state
@@ -255,14 +267,15 @@ class Clues extends React.Component {
                         <MediaBox type="text">
                             <MediaBoxHeader>
                                 <Button type="primary" title={e.cluesextendid}
-                                 data-pay={e.saleprice} data-name={e.truckname}
-                                 onClick={self.payConfirm} plain>{e.btnname}</Button>
+                                 data-pay={e.saleprice} data-id={index}
+                                 onClick={self.payConfirm} plain>{e.btnname}<i style={{display: e.btncoupontxt.length > 0 ? '':'none'}}>{e.btncoupontxt}</i></Button>
                             </MediaBoxHeader>
                             <MediaBoxBody>
                                 <MediaBoxTitle>
                                     {e.truckname}
                                 </MediaBoxTitle>
                                 <MediaBoxInfo>
+                                    <MediaBoxInfoMeta className="del-origs" style={{display: e.originalsaleprice.length > 2 ? '' : 'none'}}>{e.originalsaleprice}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
                                     <MediaBoxInfoMeta>{e.cityname}</MediaBoxInfoMeta>

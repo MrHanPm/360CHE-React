@@ -8,8 +8,10 @@ Tool.SessionId = SessionId;
 Tool.ShareURL = shareURL;
 
 window.routerChange = function(){
-    wx.config(getWxConfig.get());
-    wx.ready(function(){wx.hideOptionMenu();});
+    try{
+        wx.config(getWxConfig.get());
+        wx.ready(function(){wx.hideOptionMenu();});
+    }catch(err){}
     // document.body.addEventListener('touchmove', function (event) {
     //     event.preventDefault();
     // }, false);

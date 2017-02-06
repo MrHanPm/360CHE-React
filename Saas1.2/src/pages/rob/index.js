@@ -19,7 +19,7 @@ import {
 } from 'react-weui';
 const {Confirm } = Dialog
 import Brand from '../sidebar/brand';//品牌
-import {Tool,Alert} from '../../tool.js';
+import {Tool, Alert} from '../../tool.js';
 import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
 import SF from '../sidebar/SFA';//省份
 import './index.less';
@@ -29,6 +29,7 @@ class Clues extends Component {
     constructor(props){
         super(props);
         this.state = {
+            shearName: '',
             loadingS:true,
             showBrands:'',
             brandid:'',
@@ -177,13 +178,14 @@ class Clues extends Component {
                     if(res.pagecount === page){
                         this.setState({loadingS:false,
                             DATA:ConData,
+                            topnotice: res.topnotice,
                             isshowclickmsg:res.isshowclickmsg
                         });
                     }else{
                         Tool.gaTo('加载下一页','加载下一页','抢线索页')
-                        page++;
+                        page++
                         this.setState({
-                            topnotice:res.topnotice,
+                            topnotice: res.topnotice,
                             nowpage:page,
                             DATA:ConData,
                             isshowclickmsg:res.isshowclickmsg
@@ -203,21 +205,33 @@ class Clues extends Component {
             }
         )
     }
-    hidePayConfm (){this.setState({payShow: false})}
-    hideValConfm (){this.setState({valShow: false})}
+    hidePayConfm (){
+        this.setState({payShow: false})
+        let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
+        Tool.gaTo('购买线索-点击放弃购买','抢线索页的线索',GAs)
+    }
+    hideValConfm (){
+        this.setState({valShow: false})
+        Tool.gaTo('充值流程','点击暂不充值','余额不足弹窗')
+    }
     payConfirm (e) {
+        let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
         if (this.state.isshowclickmsg == '1') {
             this.setState({
                 payShow: true,
                 payTitle: `确认花费¥ ${e.target.dataset.pay}购买这条线索吗？`,
-                payMsg: e.target.dataset.name,
+                payMsg: this.state.DATA[e.target.dataset.id].truckname,
                 payId: e.target.title,
-                payPay: e.target.dataset.pay
+                payPay: e.target.dataset.pay,
+                shearName: this.state.DATA[e.target.dataset.id].clueresourcename
             })
+            Tool.gaTo('购买线索-点击线索价格','抢线索页的线索',GAs)
         } else {
             this.state.payId = e.target.title
             this.state.payPay = e.target.dataset.pay
+            this.state.shearName = this.state.DATA[e.target.dataset.id].clueresourcename
             this.RobLine()
+            Tool.gaTo('普通抢线索','抢线索页的线索',GAs)
         }
     }
     showAcom () {this.setState({showAcom: true})}
@@ -225,6 +239,7 @@ class Clues extends Component {
     hideAlert () {this.setState({alertShow: false})}
     goVal(){
         this.context.router.push({pathname: '/myacut'})
+        Tool.gaTo('充值流程','点击前去充值','余额不足弹窗')
     }
     RobLine(){
         this.setState({payShow: false})
@@ -234,19 +249,18 @@ class Clues extends Component {
         }else{
             sessionid = Tool.SessionId.get()
         }
-        let GAs = '无|' + this.state.payId + '|无|无|'
+        let GAs = this.state.shearName + '|' + this.state.payId + '|无|无'
+        Tool.gaTo('购买线索-点击确认购买','抢线索页的线索',GAs)
         Tool.get('PublicClues/RobCustomer.aspx',{sessionid:sessionid,cluesid:this.state.payId,saleprice:this.state.payPay},
             (res) => {
                 if(res.status == 1){
-                    Tool.gaTo('抢线索成功','抢线索页的线索',GAs);
+                    Tool.gaTo('购买线索-购买成功','抢线索页的线索',GAs);
                     let urlTxt = '/robClue?id=' + res.data.cluesextendid;
                     this.context.router.push({pathname: urlTxt});
                 }else if(res.status == 901){
                     alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
-                    Tool.gaTo('抢线索失败','抢线索页',res.msg);
-                    
                     if (res.errcode == '2000') {
                         this.setState({
                             alertTitle: res.msg,
@@ -262,6 +276,7 @@ class Clues extends Component {
                         return false
                     }
                     Alert.to(res.msg)
+                    Tool.gaTo('购买线索-购买失败','抢线索页的线索',res.msg)
                 }
             },
             (err) => {
@@ -302,6 +317,7 @@ class Clues extends Component {
         }else{
             footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />
         }
+        let isShi = DATA.length > 0 ? DATA[0]['btncoupontxt'] : '' 
         return (
             <div className="robBody">
                 <ul className="robNav">
@@ -310,7 +326,7 @@ class Clues extends Component {
                 </ul>
                 <div className="robMsg">
                     <p>{topnotice}</p>
-                    <i onClick={this.Alts}></i>
+                    <i style={{display: isShi.length > 0 ? 'none':''}} onClick={this.Alts}></i>
                 </div>
                 <div className="clueBody cluePending" id="clueBody" style={{'paddingTop':'85px'}} onScroll={this.handleScroll}>
                     {DATA.map(function(e,index){
@@ -319,14 +335,15 @@ class Clues extends Component {
                             <PanelBody>
                                 <MediaBox type="text">
                                     <MediaBoxHeader>
-                                        <Button type="primary" title={e.maincluesid} data-pay={e.saleprice} data-name={e.truckname}
-                                        onClick={self.payConfirm} plain>{e.btnname}</Button>
+                                        <Button type="primary" title={e.maincluesid} data-pay={e.saleprice} data-id={index}
+                                        onClick={self.payConfirm} plain>{e.btnname}<i style={{display: e.btncoupontxt.length > 0 ? '':'none'}}>{e.btncoupontxt}</i></Button>
                                     </MediaBoxHeader>
                                     <MediaBoxBody>
                                         <MediaBoxTitle>
                                             {e.truckname}
                                         </MediaBoxTitle>
                                         <MediaBoxInfo>
+                                            <MediaBoxInfoMeta className="del-origs" style={{display: e.originalsaleprice.length > 2 ? '' : 'none'}}>{e.originalsaleprice}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.cluecreatedatetime}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.provincename}</MediaBoxInfoMeta>
                                             <MediaBoxInfoMeta>{e.cityname}</MediaBoxInfoMeta>

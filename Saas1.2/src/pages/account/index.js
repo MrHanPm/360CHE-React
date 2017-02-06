@@ -169,7 +169,7 @@ class MsgDemo extends React.Component {
                             <Input type="tel" placeholder="登录账号" disabled={true} value={tel}/>
                         </CellBody>
                     </FormCell>
-                    <FormCell>
+                    <FormCell style={{display: 'none'}}>
                         <CellHeader>
                             <Label>帐号类别</Label>
                         </CellHeader>

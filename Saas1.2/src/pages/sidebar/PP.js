@@ -6,30 +6,29 @@ import './sidebar.less';
 class Sidebar extends React.Component{
   constructor(props) {
       super(props);
-          
-          this.state ={
-            visible:false,
-            active:false,
-            brandid:'',
-            brandname:'',
-            L:[]
-          }
+      this.state ={
+        visible:false,
+        active:false,
+        brandid:'',
+        brandname:'',
+        L:[]
+      }
       this.closeSold = this.closeSold.bind(this)
       this.upDatas = this.upDatas.bind(this)
       this.CLXB = this.CLXB.bind(this)
   }
 
-  upDatas(e){
+  upDatas(e) {
     let citylistData = [];
       let Ad = {
         'brandid':e.target.title,
         'brandname':e.target.innerHTML
-      };
+      }
       this.setState({
-        brandid:e.target.title,
-        brandname:e.target.innerHTML,
-        visible:false
-      }, ()=> this.props.onChange(Ad));
+        brandid: e.target.title,
+        brandname: e.target.innerHTML,
+        visible: false
+      }, () => this.props.onChange(Ad))
   }
   componentDidMount(){
 
@@ -67,8 +66,8 @@ class Sidebar extends React.Component{
   }
   closeSold(){this.setState({visible:false}, () => this.props.onClose())}
   render(){
-    let self = this;
-    let Fes = this.state.brandname;
+    let self = this
+    let Fes = this.state.brandname
       return(
           <aside className={this.state.visible ? "PubSidebar visible":"PubSidebar"} onClick={this.CLXB}>
               <header>

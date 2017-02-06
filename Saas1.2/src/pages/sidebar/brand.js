@@ -12,6 +12,7 @@ class Sidebar extends React.Component{
         visible:false,
         active:false,
         brandid:'',
+        brandname:'',
         toastTimer:'',
         L:[],
         R:[]
@@ -114,6 +115,7 @@ class Sidebar extends React.Component{
       let tit = e.target.title;
         this.setState({
           brandid:e.target.title,
+          brandname: e.target.innerHTML,
           visible:false
         }, ()=> this.props.onChange(tit));
     }
@@ -126,8 +128,8 @@ class Sidebar extends React.Component{
       }
     }
     render(){
-       const {visible,active,L,R} = this.state;
-       let self = this;
+       const {visible, brandname, L, R} = this.state
+       let self = this
        return(
           <div>
            <aside className={visible?"sidebar visible":"sidebar"} id="sidebar">
@@ -147,7 +149,7 @@ class Sidebar extends React.Component{
                          <ul>
                             {L[indexs].map(function(ele,index){
                                 return(
-                                    <li key={index}>
+                                    <li key={index} className={ele.brandname == brandname ? 'active' : ''}>
                                        <a href="javascript:;" title={ele.brandid} onClick={self.upDatas}>
                                            {ele.brandname}
                                        </a>

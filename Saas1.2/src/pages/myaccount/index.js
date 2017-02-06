@@ -1,3 +1,5 @@
+import { Dialog} from 'react-weui'
+const { Confirm } = Dialog
 import React,{Component} from 'react'
 import { Tool, Alert} from '../../tool.js'
 import './index.less'
@@ -15,12 +17,31 @@ class MsgDemo extends React.Component {
             ance: 0,
             DATA:[],
             payid: 0,
-            pay: 0
+            pay: 0,
+            givenPay: 0,
+
+            valShow: false,
+            valMsg:'',
+            valBtn:[
+                {
+                    type: 'default',
+                    label: '关闭',
+                    onClick: this.hideValConfm.bind(this)
+                }
+            ]
         }
         this.DKNLVAL = this.DKNLVAL.bind(this)
         this.goPay = this.goPay.bind(this)
+        this.showConfirms = this.showConfirms.bind(this)
     }
-    
+    hideValConfm () {
+        this.setState({
+            valShow: false
+        })
+    }
+    showConfirms () {
+        this.setState({ valShow: true })
+    }
     getIns(){
         let json = {}
         if(typeof(Tool.SessionId) == 'string'){
@@ -31,9 +52,15 @@ class MsgDemo extends React.Component {
         Tool.get('User/GetAccountDetail.aspx',json,
             (res) => {
                 if(res.status == 1){
+                    let ANCE = Tool.localItem('ANCE')
                     this.setState({
                         ance: res.data.availablebalance
                     })
+                    if (ANCE > 0 && ANCE > res.data.availablebalance) {
+                        let acs = ANCE - res.data.availablebalance
+                        Tool.gaTo('充值流程','充值成功',acs)
+                    }
+                    Tool.localItem('ANCE',res.data.availablebalance)
                 }else if(res.status == 901){
                     alert(res.msg)
                     this.context.router.push({pathname: '/loading'})
@@ -53,6 +80,8 @@ class MsgDemo extends React.Component {
                         DATA: res.data.paymoney_syssetlist,
                         payid: res.data.paymoney_syssetlist[0].id,
                         pay: res.data.paymoney_syssetlist[0].paymoney,
+                        givenPay: res.data.paymoney_syssetlist[0].givenmoney,
+                        valMsg: res.infomsg,
                         loadingS: false
                     })
                 }else if(res.status == 901){
@@ -79,12 +108,15 @@ class MsgDemo extends React.Component {
         // console.log(e.target.dataset.pay,e.target.value)
         this.setState({
             payid: e.target.value,
-            pay: e.target.dataset.pay
+            pay: e.target.dataset.pay,
+            givenPay: e.target.dataset.givpay
         })
     }
     goPay() {
         let sessionid,url
         // let utl = window.location.href
+
+        Tool.gaTo('充值流程','点击立即充值',this.state.pay)
         if(typeof(Tool.SessionId) == 'string'){
             sessionid = Tool.SessionId
         }else{
@@ -100,7 +132,7 @@ class MsgDemo extends React.Component {
     render() {
         let oldData = JSON.parse(Tool.localItem('vipLodData')) || {}
         const {realname,dealername} = oldData
-        const {loadingS, DATA, ance, pay} = this.state
+        const {loadingS, DATA, ance, pay, givenPay, valBtn, valShow, valMsg} = this.state
         return (
         <div className="we_box">
             <ul className="we_height">
@@ -117,20 +149,31 @@ class MsgDemo extends React.Component {
                 <div className="weui_full">
                 {DATA.map( (db,index) =>
                     <label For={'RD'+db.id}  key={index}>
-                      <input type="radio" className="weui_check" name="RDCell" id={'RD'+db.id} value={db.id} data-pay={db.paymoney} defaultChecked={index === 0 ? true : false} onChange={this.DKNLVAL} />
+                      <input type="radio" className="weui_check" name="RDCell" id={'RD'+db.id} value={db.id} data-pay={db.paymoney} data-givpay={db.givenmoney} defaultChecked={index === 0 ? true : false} onChange={this.DKNLVAL} />
                       <i className="fcell">{db.paymoney}元</i>
                     </label>
                 )}
                 </div>
 
                 <div className="weui_cell">
-                    <div className="weui_cell_bd we_txt_left">本次充值暂不支持发票</div>
-                    <div className="weui_cell_ft we_txt_right">支付金额:<i>{pay}</i>元</div>
+                    <div className="weui_cell_bd we_txt_left">赠送</div>
+                    <div className="weui_cell_ft we_txt_right"><i>{givenPay}</i>元</div>
+                </div>
+
+                <div className="weui_cell">
+                    <div className="weui_cell_bd we_txt_left">到账金额</div>
+                    <div className="weui_cell_ft we_txt_right"><i>{parseFloat(pay) + parseFloat(givenPay)}</i>元</div>
+                </div>
+
+                <div className="weui_cell">
+                    <div className="weui_cell_bd we_txt_left">支付金额</div>
+                    <div className="weui_cell_ft we_txt_right"><i>{pay}</i>元</div>
                 </div>
 
                 <div className="weui_cell" style={{paddingTop: '20px'}}>
                     <button className="weui_btn weui_btn_plain_primary" onClick={this.goPay}>立即充值</button>
                 </div>
+                <div className="we_lookpay" onClick={this.showConfirms}>查看《充值说明》</div>
             </div>
 
 
@@ -148,6 +191,10 @@ class MsgDemo extends React.Component {
                     <span className="loading-ring"> </span>
                 </div>
             </div>
+
+            <Confirm title="充值说明" buttons={valBtn} show={valShow}>
+                <pre>{valMsg}</pre>
+            </Confirm>
         </div>
         )
     }
