@@ -1,0 +1,81 @@
+.weui_tabbar{
+    background: #fff;
+    box-shadow: 0 -1px 1px #D4D4D4;
+    &:before{ display:none;}
+}
+.weui_tabbar_icon+.weui_tabbar_label{
+    margin-bottom: 3px;
+    margin-top: 0;
+}
+.weui_article{padding: 0;}
+.weui_tabbar_icon{margin: 2px auto 0;}
+.weui_tabbar_icon i{
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-family: 'saas_ico';
+    &:before{
+        content: '\e605';
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        font-size: 24px;
+        line-height: 22px;
+        color: #979797;
+    }
+}
+.weui_tabbar_icon{
+    .crm_ico:before{
+        content: '\e603';
+        margin-left: 2px;
+    }
+    .count_ico:before{
+        content: '\e604';
+    }
+    .find_ico:before{
+        content: '\e606';
+    }
+}
+
+                    
+.weui_tabbar_item.weui_bar_item_on .weui_tabbar_icon i:before{
+    color: #09bb07;
+}
+.weui_tabbar_item.weui_bar_item_on{
+    .clue_ico:before{
+        content: '\e607';
+    }
+    .crm_ico:before{
+        content: '\e608';
+    }
+    .count_ico:before{
+        content: '\e60a';
+    }
+    .find_ico:before{
+        content: '\e609';
+    }
+}
+
+
+/*.initUrlKey{
+    position: fixed;
+    z-index: 1001;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    &:before{
+        content: ' ';
+        background: url(../../vcode.jpg) center center no-repeat;
+        background-size: 80px 80px;
+        display: block;
+        width: 128px;
+        height: 128px;
+        margin:50% auto 0;
+        padding-bottom: 20px;
+    }
+}*/

@@ -1,0 +1,141 @@
+.clueBody{
+    padding-top: 45px;
+    height: 100%;
+}
+.weui_media_hd{
+    float: right;
+    width: 10%;
+    height: 50px;
+    padding-left: 20px;
+    margin-top: 34px;
+    .weui_btn{
+        font-size: 14px;
+        line-height: 25px;
+        padding:0 10px;
+    }
+}
+
+.butX{
+    width: 45px;
+    height: 45px;
+    border-radius: 100px;
+    background: #09bb07;
+    box-shadow: 0 0 0 4px rgba(4,190,2,.2);
+    position: absolute;
+    bottom: 14%;
+    right: 20px;
+    z-index: 900;
+    font-family: 'saas_ico';
+}
+.butX:before{
+    content: '\e60d';
+    color: #fff;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    line-height: 45px;
+    text-align: center;
+    font-size: 26px;
+    -webkit-transition: transform .5s ease-out;
+        transition: transform .5s ease-out;
+}
+.clueBtnXbg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 889;
+    display: none;
+    background: rgba(0,0,0,.5);
+}
+.clueBtnX{
+    position: absolute;
+    width: 120px;
+    height: auto;
+    bottom: 20%;
+    right: 25px;
+    z-index: 900;
+    display: none;
+    span{
+        display: block;
+        width: 100%;
+        height: 40px;
+        margin:15px 0;
+        font-family: 'saas_ico';
+    }
+    span:before{
+        content: '速抢线索';
+        display:inline-block;
+        width: 60%;
+        height: 30px;
+        float: left;
+        color: #666;
+        background: #fff;
+        box-shadow: 0 0 6px #333;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 30px;
+        margin-top: 3px;
+    }
+    span:after{
+        content: '\e600';
+        display:inline-block;
+        width: 36px;
+        height: 36px;
+        color: #666;
+        font-size: 28px;
+        float: right;
+        background: #fff;
+        box-shadow: 0 0 6px #333;
+        border-radius: 100px;
+        text-align: center;
+        line-height: 36px;
+    }
+    .butX_add:before{
+        content: '添加线索';
+    }
+    .butX_add:after{
+        content: '\e60b';
+    }
+}
+.NM{
+    .XActiv:before{
+        -webkit-transform: rotate(225deg);
+        transform: rotate(225deg);
+    }
+    .XHide{display: none;}
+    .XbgActiv{
+        display: block;
+    }
+}
+
+
+.clueBody .weui_cell_ft:after {
+    content: " ";
+    display: inline-block;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    height: 12px;
+    width: 12px;
+    border-width: 2px 2px 0 0;
+    border-color: #c8c8cd;
+    border-style: solid;
+    position: relative;
+    top: -2px;
+    top: -1px;
+    margin-left: .3em;
+}
+
+.weui_media_box .del-origs{
+    text-decoration: line-through;
+    color: #ff7f7f;
+}
+.weui_btn i{
+    position: relative;
+    top: -5px;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+}

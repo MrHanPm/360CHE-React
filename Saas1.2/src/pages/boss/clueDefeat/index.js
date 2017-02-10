@@ -142,6 +142,7 @@ class Clues extends React.Component {
                                         {e.truckname}
                                     </MediaBoxDescription>
                                     <MediaBoxInfo>
+                                        <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>
                                         <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
                                         <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
                                     </MediaBoxInfo>

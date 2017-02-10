@@ -1,19 +1,19 @@
 //export const target = process.env.NODE_ENV !== 'production' ? 'http://192.168.0.247:804/' : 'http://didi.360che.com/saas/'; 
 const sessidS = {
     get:function(){
-        let oldData = JSON.parse(localStorage.getItem('vipLodData'));
+        let oldData = JSON.parse(localStorage.getItem('vipLodData'))
         //console.log(oldData,oldData.sessionid);
-        return oldData.sessionid;
+        return oldData.sessionid
     }
-};
+}
 export const getWxConfig = {
     get:function(){
-        let jsSDK = JSON.parse(localStorage.getItem('jsSDK'));
+        let jsSDK = JSON.parse(localStorage.getItem('jsSDK'))
         if(jsSDK !== null){
-            let json = {debug:false,appId:jsSDK.appId,timestamp:jsSDK.timestamp,nonceStr:jsSDK.nonceStr,signature:jsSDK.signature,jsApiList: ['hideOptionMenu','showOptionMenu','closeWindow','chooseWXPay',]};
-            return json;
+            let json = {debug:false,appId:jsSDK.appId,timestamp:jsSDK.timestamp,nonceStr:jsSDK.nonceStr,signature:jsSDK.signature,jsApiList: ['hideOptionMenu','showOptionMenu','closeWindow','chooseWXPay',]}
+            return json
         }else{
-            return {debug:false,appId:'',timestamp:'',nonceStr:'',signature:'',jsApiList: ['hideOptionMenu','showOptionMenu','closeWindow','chooseWXPay',]};
+            return {debug:false,appId:'',timestamp:'',nonceStr:'',signature:'',jsApiList: ['hideOptionMenu','showOptionMenu','closeWindow','chooseWXPay',]}
         }
     }
 }

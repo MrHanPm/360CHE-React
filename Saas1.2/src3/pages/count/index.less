@@ -1,0 +1,105 @@
+.countBox{
+    height: 100%;
+    overflow: hidden;
+    .BoxC{
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        -webkit-transform: translateZ(0);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 15px 10px;
+    }
+    .weui_cell_primary{
+        max-height: 100%;
+        height: auto;
+        overflow: hidden;
+        word-wrap: normal;
+        word-break: normal;
+    }
+    .weui_cells{border-radius: 6px;}
+    .user-title{
+        padding-top:20px;
+        text-align: center;
+        font-size: 30px; color: #3cc51f;font-weight: 300;
+    }
+    .button_sp_area{
+        text-align:center;
+        padding-top: 20px;
+        button{
+            width: 30%;
+            height: 37px;
+            overflow: hidden;
+            display: inline-block;
+            background: #fff;
+            text-align: center;
+            margin-left: 5%;
+            font-size: 16px;
+        }
+        button:first-child{margin: 0;}
+        .actv{
+            color: #3cc51f;
+        }
+        .weui_btn:after{
+
+        }
+    }
+    
+    .charts-list li {
+        margin-top: 20px;
+        float: left;
+        min-width: 50px;
+        width: 50%;
+        min-height: 140px;
+        text-align: center;
+        div{margin:0 auto;}
+    }
+    .chart{
+        min-height: 300px;
+        min-width: 100px;
+        width: 100%;
+        height: auto;
+        padding-top: 10px;
+    }
+    .weui_cells_title{
+        text-align: center;
+        margin:10px 0;
+        position: relative;
+        i{
+            position: absolute;
+            right: 0;
+        }
+    }
+    
+}
+.contMesBox{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .tables{
+        width:100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        -webkit-transform: translateZ(0);
+        ul{width: 100%; height: 40px;border-top: 1px solid #ccc;background: #fff;}
+        .titles{
+            background: #E5E5E5;
+            border-top: 0;
+        }
+        li{height: 40px;line-height: 40px;text-align: center;float: left; overflow: hidden;}
+        .dates{width: 30%;}
+        .adds{width: 17.5%;position: relative;}
+        .adds:before{
+            content: ' ';
+            width: 1px;
+            height: 40px;
+            background: #ccc;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+}

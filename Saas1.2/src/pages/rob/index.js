@@ -37,6 +37,7 @@ class Clues extends Component {
             SFCSv:'',
             size:'',
             nowpage:1,
+            isBuy: 0,
             DATA:[],
             isDatas:false,
             topnotice:'',
@@ -178,6 +179,7 @@ class Clues extends Component {
                     if(res.pagecount === page){
                         this.setState({loadingS:false,
                             DATA:ConData,
+                            isBuy: res.isbuyclues,
                             topnotice: res.topnotice,
                             isshowclickmsg:res.isshowclickmsg
                         });
@@ -186,6 +188,7 @@ class Clues extends Component {
                         page++
                         this.setState({
                             topnotice: res.topnotice,
+                            isBuy: res.isbuyclues,
                             nowpage:page,
                             DATA:ConData,
                             isshowclickmsg:res.isshowclickmsg
@@ -309,7 +312,7 @@ class Clues extends Component {
     }
     showBrand(){ this.setState({showBrands:Math.random()})}
     render() {
-        const {loadingS, DATA, topnotice,isDatas,payShow, payMsg, payTitle, payBtn,showAcom,alertShow,alertTitle,alertBtn, valShow, valBtn, valMsg} = this.state
+        const {loadingS, DATA, topnotice,isDatas,payShow, payMsg, payTitle, payBtn,showAcom,alertShow,alertTitle,alertBtn, valShow, valBtn, valMsg, isBuy} = this.state
         let self = this
         let footerS
         if(isDatas){
@@ -317,7 +320,6 @@ class Clues extends Component {
         }else{
             footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />
         }
-        let isShi = DATA.length > 0 ? DATA[0]['btncoupontxt'] : '' 
         return (
             <div className="robBody">
                 <ul className="robNav">
@@ -326,7 +328,7 @@ class Clues extends Component {
                 </ul>
                 <div className="robMsg">
                     <p>{topnotice}</p>
-                    <i style={{display: isShi.length > 0 ? 'none':''}} onClick={this.Alts}></i>
+                    <i style={{display: isBuy == '1' ? 'none' : ''}} onClick={this.Alts}></i>
                 </div>
                 <div className="clueBody cluePending" id="clueBody" style={{'paddingTop':'85px'}} onScroll={this.handleScroll}>
                     {DATA.map(function(e,index){

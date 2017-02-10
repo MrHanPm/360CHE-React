@@ -82,7 +82,7 @@ class Clues extends React.Component {
         const {show,tab,showBtns,red} = this.state;
         switch(tab){
             case 0 :
-                Pages = <Pending hideS={()=>this.setState({showBtns:false})} REDS={val=>this.setState({red:val})}/>;
+                Pages = <Pending hideS={()=>this.setState({showBtns:false})} REDS={val => this.setState({red:val})}/>;
                 break;
             case 1 :
                 Pages = <FollowUp hideS={()=>this.setState({showBtns:true})}/>;
