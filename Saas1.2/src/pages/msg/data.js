@@ -72,7 +72,6 @@ class MsgDemo extends React.Component {
                 (res) => {
                     if(res.status === 1){
                         Tool.localItem(names[k],JSON.stringify(res));
-                        //console.log(Tool.localItem(names[k]),names[k]);
                     }
                 },
                 (err) => {

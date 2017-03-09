@@ -74,20 +74,8 @@ class CellDemo extends React.Component {
                 (res) => {
                     if(res.status === 1){
                         let Vd = JSON.stringify(res.data);
+                        localStorage.clear();
                         Tool.localItem('vipLodData',Vd);
-                        Tool.removeLocalItem('okTel');
-                        Tool.removeLocalItem('okAZ');
-                        Tool.removeLocalItem('okTelFingerprint');
-                        Tool.removeLocalItem('noTel');
-                        Tool.removeLocalItem('noAZ');
-                        Tool.removeLocalItem('noTelFingerprint');
-                        Tool.removeLocalItem('coTel');
-                        Tool.removeLocalItem('coAZ');
-                        Tool.removeLocalItem('coTelFingerprint');
-                        Tool.removeLocalItem('reTel');
-                        Tool.removeLocalItem('reTelFingerprint');
-                        Tool.removeLocalItem('BrandKey');
-                        Tool.removeLocalItem('SearchData');
                         this.context.router.push({pathname: '/name'});
                     }else if(res.status == 901){
                         alert(res.msg);

@@ -139,7 +139,7 @@ class Clues extends React.Component {
                                         <i>{e.nextvisitlisttitle}</i>
                                     </MediaBoxTitle>
                                     <MediaBoxDescription>
-                                        {e.truckname}
+                                        {e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i>
                                     </MediaBoxDescription>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>

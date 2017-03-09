@@ -1,6 +1,6 @@
 //import * as config from './config.js';
 //import PreventOverScroll from 'preventoverscrolljs';
-import {target,SessionId,getWxConfig,shareURL} from './config.js';
+import {target, SessionId, getWxConfig, shareURL} from './config.js';
 
 const Tool = {};
 Tool.HTTPs = target;
@@ -12,20 +12,7 @@ window.routerChange = function(){
         wx.config(getWxConfig.get());
         wx.ready(function(){wx.hideOptionMenu();});
     }catch(err){}
-    // document.body.addEventListener('touchmove', function (event) {
-    //     event.preventDefault();
-    // }, false);
-    // let lastY;
-    // document.getElementById('container').addEventListener('touchstart', function (event) {
-    //     lastY = event.changedTouches[0].pageY;
-    // }, false);
-    //document.getElementById('container').addEventListener('touchmove', function (event) {
-        //let st = this.scrollTop;
-        //console.log(st);
-    //     if ( st < 0 || st > 0) {
-    //         event.preventDefault();
-    //     }
-    // }, false);
+
 }
 window.AlertTimeOut = '';
 window.XHRLIST = [];
@@ -51,7 +38,6 @@ Tool.gaTo = function (txt, name, lab) {
 }
         
 // window.addEventListener("click", function(e){});
-
 // window._IsAndroid =function(){
 //     var ua = navigator.userAgent.toLowerCase();
 //     if (ua.match(/Android/i)) {
@@ -72,13 +58,13 @@ Tool.gaTo = function (txt, name, lab) {
 Tool.ajax = function (mySetting) {
 
     var setting = {
-        url: window.location.pathname, //默认ajax请求地址
+        url: window.location.pathname, 
         async: true, //true。默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false
-        type: 'GET', //请求的方式
-        data: {}, //发给服务器的数据
+        type: 'GET',
+        data: {},
         dataType: 'json',
-        success: function (text) { }, //请求成功执行方法
-        error: function () { } //请求失败执行方法
+        success: function (text) { },
+        error: function () { }
     };
 
 

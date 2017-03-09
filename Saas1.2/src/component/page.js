@@ -1,7 +1,5 @@
-"use strict";
-
-import React from 'react';
-import './page.less';
+import React from 'react'
+import './page.less'
 import ShowAlert from './Alert.js'
 
 export default class Page extends React.Component {
@@ -25,6 +23,6 @@ export default class Page extends React.Component {
                 </div>
                 <ShowAlert />
             </section>
-        );
+        )
     }
-};
+}

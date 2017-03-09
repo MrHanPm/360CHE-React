@@ -60,7 +60,7 @@ export default class MsgDemo extends React.Component {
                     </MediaBox>
                 </PanelBody>
             </Panel>
-            <Panel>
+            <Panel style={{display: showC || showR ? '' : 'none'}}>
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
@@ -93,6 +93,13 @@ export default class MsgDemo extends React.Component {
                                 </CellBody>
                                 <CellFooter/>
                             </Cell>
+                            <Cell href="#feedback">
+                                <CellHeader><i className='findIcos'></i></CellHeader>
+                                <CellBody>
+                                    <p>意见反馈</p>
+                                </CellBody>
+                                <CellFooter/>
+                            </Cell>
                         </Cells>
                     </MediaBox>
                 </PanelBody>
@@ -101,10 +108,10 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="#feedback">
-                                <CellHeader><i className='findIcos'></i></CellHeader>
+                            <Cell href="https://didi.360che.com/saas/CC_CAR/index.html">
+                                <CellHeader><i className='findIcos buys-icon'></i></CellHeader>
                                 <CellBody>
-                                    <p>意见反馈</p>
+                                    <p style={{color: '#DA242A'}}>车商城</p>
                                 </CellBody>
                                 <CellFooter/>
                             </Cell>

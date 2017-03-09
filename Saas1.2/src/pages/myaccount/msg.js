@@ -104,9 +104,10 @@ class Lists extends React.Component {
             {DATA.map( (db,index) => 
            <ul className="we_height we_height_mt" key={index}>
                 <li className="we_list we_wh">{db.paydate}</li>
-                <li className="we_wh paycol">帐户充值:¥ {parseFloat(db.paymoney) + parseFloat(db.givenmoney)}</li>
+                <li className="we_wh paycol">到账金额:¥ {parseFloat(db.paymoney) + parseFloat(db.givenmoney)}</li>
                 <li className="we_list we_wh siz">{db.realname} {db.tel}</li>
                 <li className="we_wh siz">实付:¥ {db.paymoney}</li>
+                <li className="we_allw">充值帐户:{db.accountname}</li>
                 <li className="we_allw">订单号:{db.ordeerid}</li>
             </ul>
             )}

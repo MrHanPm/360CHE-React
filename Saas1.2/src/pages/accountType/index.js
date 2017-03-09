@@ -1,6 +1,4 @@
-"use strict";
-
-import React from 'react';
+import React from 'react'
 import {Button,
     Toast,
     TextArea,
@@ -16,27 +14,27 @@ import {Button,
     Dialog,
     CellBody,
     pre
-} from 'react-weui';
-const { Confirm } = Dialog;
-import Page from '../../component/page';
-import {Tool,Alert} from '../../tool.js';
-import './index.less';
+} from 'react-weui'
+const { Confirm } = Dialog
+import Page from '../../component/page'
+import {Tool,Alert} from '../../tool.js'
+import './index.less'
 
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             accountsType:""
-        };
+        }
     }
     componentWillMount(){ 
         // render之前执行的操作
-        let sessionid;
-        let _this = this;
+        let sessionid
+        let _this = this
         if(typeof(Tool.SessionId) == 'string'){
-            sessionid= Tool.SessionId;
+            sessionid= Tool.SessionId
         }else{
-            sessionid = Tool.SessionId.get();
+            sessionid = Tool.SessionId.get()
         }
         Tool.get('/User/GetAccountDetail.aspx',{'sessionid':sessionid},
             (res) => {
@@ -47,7 +45,7 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('加油包信息加载失败');               
+                Alert.to('加油包信息加载失败')            
             }
         )
 
@@ -61,9 +59,9 @@ class MsgDemo extends React.Component {
             <Page className="accountType">
                 <p dangerouslySetInnerHTML={{__html: this.state.accountsType}}></p>
             </Page>
-        );
+        )
     }
-};
+}
 
 MsgDemo.contextTypes = {
     router: React.PropTypes.object.isRequired

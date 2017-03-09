@@ -454,7 +454,7 @@ class NameList extends React.Component{
   render(){
     let self = this;
     let Fes = this.state.key;
-    const {visible} = this.state;
+    const {visible,L} = this.state;
       return(
           <aside className={visible ? "PubSidebar visible":"PubSidebar"} id="BossCom">
               <header>
@@ -463,8 +463,7 @@ class NameList extends React.Component{
               </header>
               <ul className="Fnav">
                 <li><span title="" onClick={self.upDatas}>全部</span></li>
-                {this.state.L.map(function(e,indexs){
-                  return(
+                {L.map((e,indexs) =>
                     <li key={indexs} 
                     className={e.username == Fes ? "active" :''}
                     >
@@ -476,8 +475,7 @@ class NameList extends React.Component{
                       </span>
                       <Icon value="success" />
                     </li>
-                  )
-                })}
+                )}
               </ul>
           </aside>
       )

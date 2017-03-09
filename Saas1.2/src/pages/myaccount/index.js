@@ -1,4 +1,10 @@
-import { Dialog} from 'react-weui'
+import { Dialog,
+    Form,
+    FormCell,
+    CellBody,
+    CellFooter,
+    Radio,
+} from 'react-weui'
 const { Confirm } = Dialog
 import React,{Component} from 'react'
 import { Tool, Alert} from '../../tool.js'
@@ -16,6 +22,9 @@ class MsgDemo extends React.Component {
             loadingS: true,
             ance: 0,
             DATA:[],
+            ACCOUNT:[],
+            isDsb: false,
+            banid: 0,
             payid: 0,
             pay: 0,
             givenPay: 0,
@@ -32,7 +41,9 @@ class MsgDemo extends React.Component {
         }
         this.DKNLVAL = this.DKNLVAL.bind(this)
         this.goPay = this.goPay.bind(this)
+        this.RADIO = this.RADIO.bind(this)
         this.showConfirms = this.showConfirms.bind(this)
+        this.switchChange = this.switchChange.bind(this)
     }
     hideValConfm () {
         this.setState({
@@ -78,7 +89,9 @@ class MsgDemo extends React.Component {
                 if(res.status == 1){
                     this.setState({
                         DATA: res.data.paymoney_syssetlist,
+                        ACCOUNT: res.data.brandlist,
                         payid: res.data.paymoney_syssetlist[0].id,
+                        banid: res.data.brandlist[0].brandid,
                         pay: res.data.paymoney_syssetlist[0].paymoney,
                         givenPay: res.data.paymoney_syssetlist[0].givenmoney,
                         valMsg: res.infomsg,
@@ -112,6 +125,17 @@ class MsgDemo extends React.Component {
             givenPay: e.target.dataset.givpay
         })
     }
+    switchChange (e) {
+        this.setState({
+            isDsb: !e.target.checked
+        })
+    }
+    RADIO (e) {
+        // console.log(e.target.value)
+        this.setState({
+            banid: e.target.value
+        })
+    }
     goPay() {
         let sessionid,url
         // let utl = window.location.href
@@ -122,7 +146,7 @@ class MsgDemo extends React.Component {
         }else{
             sessionid = Tool.SessionId.get()
         }
-        url = `wxpaymoney.aspx?sessionid=${sessionid}&goodsid=${this.state.payid}`
+        url = `wxpaymoney.aspx?sessionid=${sessionid}&goodsid=${this.state.payid}&brandid=${this.state.banid}`
         window.location.href = url
         
     }
@@ -136,15 +160,13 @@ class MsgDemo extends React.Component {
             overflowY: 'scroll'
         }
         const {realname,dealername} = oldData
-        const {loadingS, DATA, ance, pay, givenPay, valBtn, valShow, valMsg} = this.state
+        const {loadingS, DATA, ance,isDsb, pay, givenPay, ACCOUNT, valBtn, valShow, valMsg} = this.state
         return (
         <div style={{height: '100%', overflow: 'hidden'}}>
         <div className="we_box">
             <ul className="we_height">
-                <li className="we_list">{dealername}</li>
-                <li className="paycol">¥ {ance}</li>
-                <li className="we_list siz">当前帐号：{realname}</li>
-                <li className="siz">当前余额</li>
+                <li className="we_center sizbig">{dealername}</li>
+                <li className="we_center">当前帐号：{realname}</li>
             </ul>
             <div className="weui_cells" style={{marginTop: '10px'}}>
                 <div className="weui_cell">
@@ -159,7 +181,25 @@ class MsgDemo extends React.Component {
                     </label>
                 )}
                 </div>
-
+            </div>
+            <div className="weui_cells" style={{marginTop: '10px'}}>
+                <div className="weui_cell">
+                    <div className="weui_cell_bd">选择充值帐户</div>
+                </div>
+                <Form radio style={{marginTop: 0,fontSize: '14px'}}>
+                {ACCOUNT.map((db,index) =>
+                    <FormCell radio>
+                        <CellBody>{db.accountname}（剩余¥{db.availablebalance}）</CellBody>
+                        <CellFooter>
+                            <Radio name="radiopay" value={db.brandid} 
+                            onChange={this.RADIO} 
+                            defaultChecked={index == '0' ? true : false}/>
+                        </CellFooter>
+                    </FormCell>
+                 )}
+                </Form>
+            </div>
+            <div className="weui_cells" style={{marginTop: '10px'}}>
                 <div className="weui_cell">
                     <div className="weui_cell_bd we_txt_left">赠送</div>
                     <div className="weui_cell_ft we_txt_right"><i>{givenPay}</i>元</div>
@@ -172,15 +212,21 @@ class MsgDemo extends React.Component {
 
                 <div className="weui_cell">
                     <div className="weui_cell_bd we_txt_left">支付金额</div>
-                    <div className="weui_cell_ft we_txt_right"><i>{pay}</i>元</div>
+                    <div className="weui_cell_ft we_txt_right"><i className="reds">{pay}</i>元</div>
                 </div>
 
                 <div className="weui_cell" style={{paddingTop: '20px'}}>
-                    <button className="weui_btn weui_btn_plain_primary" onClick={this.goPay}>立即充值</button>
+                    <button className={isDsb ? "weui_btn weui_btn_disabled" : "weui_btn weui_btn_primary"}
+                    disabled={isDsb}
+                    onClick={this.goPay}>立即充值</button>
                 </div>
-                <div className="we_lookpay" onClick={this.showConfirms}>查看《充值说明》</div>
+                <div className="we_lookpay weui_cells_form">
+                    <input className="weui_switch we_switch" 
+                    type="checkbox" defaultChecked 
+                    onChange={this.switchChange}/>
+                    <em onClick={this.showConfirms}>我同意《<i style={{color:'#ff9f00'}}>用户充值协议</i>》</em>
+                </div>
             </div>
-
 
             <div className="weui_panel">
                 <div className="weui_panel_bd">
