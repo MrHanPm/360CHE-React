@@ -19,6 +19,7 @@ import {
 } from 'react-weui'
 import './index.less'
 import {Tool,Alert} from '../../tool.js'
+import {SAASDEV} from '../../config.js';
 export default class MsgDemo extends React.Component {
     constructor(){
         super()
@@ -62,7 +63,7 @@ export default class MsgDemo extends React.Component {
        Tool.gaTo('点击进入抢线索页面','发现-速抢线索','');
     }
     render() {
-        let {showR, showC} = this.state
+        let {showR, showC, devBug} = this.state
         return (
         <div className="findBodys findBoxs">
             <Panel>
@@ -140,7 +141,7 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="https://didi.360che.com/saas/CC_CAR/index.html">
+                            <Cell href={SAASDEV}>
                                 <CellHeader><i className='findIcos buys-icon'></i></CellHeader>
                                 <CellBody>
                                     <p style={{color: '#DA242A'}}>车商城</p>

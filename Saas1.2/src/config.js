@@ -18,13 +18,21 @@ export const getWxConfig = {
     }
 }
 
-const sessionid = '70115_94c08f870d6581088d017daa086fd00e5c74367d'
+const sessionid = '70115_62d2be4431a177fa3306e495a37a915ceafd8c32'
 
 // const sessionid = '70060_9958dc332841b0fe7bfff51ab99b518140df24c2'
 
 //boos
 // const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
 const devBug = false
+
+
+// export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
+
+export const SAASDEV =  'https://saasm.360che.com/carshop/index.html'
+
+
+
 
 //分享地址
 export const shareURL = 'http://dealersaas.m.360che.com/'

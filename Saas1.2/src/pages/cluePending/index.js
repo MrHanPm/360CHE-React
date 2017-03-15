@@ -24,7 +24,7 @@ import {
 } from 'react-weui'
 const { Confirm } = Dialog
 import {Alert,Tool} from '../../tool.js'
-import {LoadAd,NoMor} from '../../component/more.js'
+import {LoadAd} from '../../component/more.js'
 class Clues extends React.Component {
     static contextTypes = {
         router: React.PropTypes.object.isRequired
@@ -367,7 +367,7 @@ class Clues extends React.Component {
                 footerS = <NoIsDataS />
             }
         }else{
-            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />
+            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMorDataS />
         }
         return (
             <div className="clueBody cluePend">
@@ -470,6 +470,16 @@ class NoDataS extends Component{
                 <a href="#rob">更多询价线索 ></a>
             </p>
         </div>
+    )
+  }
+}
+class NoMorDataS extends Component{
+  render(){
+    return(
+        <p style={{fontSize: '13px',textAlign: 'center'}}>
+            <span>去抢购</span>
+            <a href="#rob">更多询价线索 ></a>
+        </p>
     )
   }
 }
