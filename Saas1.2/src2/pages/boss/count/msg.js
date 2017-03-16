@@ -4,9 +4,6 @@ import React from 'react';
 import {Tool,Alert} from '../../../tool.js';
 
 class Clues extends React.Component {
-    static contextTypes = {
-        router: React.PropTypes.object.isRequired
-    }
     constructor(){
         super();
         this.state = {

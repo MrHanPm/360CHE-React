@@ -1,4 +1,6 @@
-import React from 'react'
+"use strict";
+
+import React from 'react';
 import {Button,
     Toast,
     TextArea,
@@ -13,11 +15,11 @@ import {Button,
     CellFooter,
     Dialog,
     CellBody
-} from 'react-weui'
-const { Confirm } = Dialog
-import Page from '../../component/page'
-import {Tool,Alert} from '../../tool.js'
-import './index.less'
+} from 'react-weui';
+const { Confirm } = Dialog;
+import Page from '../../component/page';
+import {Tool,Alert} from '../../tool.js';
+import './index.less';
 
 class MsgDemo extends React.Component {
     constructor(props){
@@ -42,18 +44,18 @@ class MsgDemo extends React.Component {
                     }
                 ]
             }
-        }
+        };
 
-        this.showConfirm = this.showConfirm.bind(this)
+        this.showConfirm = this.showConfirm.bind(this);
     }
     componentWillMount(){ 
         // render之前执行的操作
-        let sessionid
-        let _this = this
+        let sessionid;
+        let _this = this;
         if(typeof(Tool.SessionId) == 'string'){
-            sessionid= Tool.SessionId
+            sessionid= Tool.SessionId;
         }else{
-            sessionid = Tool.SessionId.get()
+            sessionid = Tool.SessionId.get();
         }
 
         let oldData = JSON.parse(localStorage.getItem('vipLodData')) || null
@@ -77,7 +79,7 @@ class MsgDemo extends React.Component {
                 }
             },
             (err) => {
-                Alert.to('加油包信息加载失败')              
+                Alert.to('加油包信息加载失败');               
             }
         )
 
@@ -98,35 +100,35 @@ class MsgDemo extends React.Component {
         // document.body.appendChild(iframe);
     }
     showConfirm() {
-        this.setState({showConfirm: true})
+        this.setState({showConfirm: true});
     }
 
     hideConfirm() {
-        this.setState({showConfirm: false})
+        this.setState({showConfirm: false});
     }
     Quit(){
         let json={};
         if(typeof(Tool.SessionId) == 'string'){
-            json.sessionid = Tool.SessionId
+            json.sessionid = Tool.SessionId;
         }else{
-            json.sessionid = Tool.SessionId.get()
+            json.sessionid = Tool.SessionId.get();
         }
         Tool.get('WeiXin/Unbind.aspx',json,
             (res) => {
                 if(res.status == 1){
-                    Tool.localItem('vipLodData',null)
+                    Tool.localItem('vipLodData',null);
                     this.context.router.push({pathname: '/loading'});
                     //WeixinJSBridge.call('closeWindow');
                     //() => {wx.closeWindow();}
                 }else if(res.status == 901){
-                    alert(res.msg)
+                    alert(res.msg);
                     this.context.router.push({pathname: '/loading'});
                 }else{
-                    Alert.to(res.msg)
+                    Alert.to(res.msg);
                 }
             },
             (err) => {
-                Alert.to('请求超时，稍后重试。。')
+                Alert.to('请求超时，稍后重试。。');
             }
         )
     }
@@ -138,8 +140,8 @@ class MsgDemo extends React.Component {
         XHRLIST = [];
     }
     render() {
-        let oldData = JSON.parse(Tool.localItem('vipLodData'))
-        const {realname,tel,dealername,ishavingpwd} = oldData
+        let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        const {realname,tel,dealername,ishavingpwd} = oldData;
         return (
             <Page className="account">
                 <Form>
@@ -209,9 +211,9 @@ class MsgDemo extends React.Component {
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
             </Page>
-        )
+        );
     }
-}
+};
 
 MsgDemo.contextTypes = {
     router: React.PropTypes.object.isRequired

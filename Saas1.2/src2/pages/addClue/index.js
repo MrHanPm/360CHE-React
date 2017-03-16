@@ -1,4 +1,6 @@
-import React from 'react'
+"use strict";
+
+import React from 'react';
 import {Button,
     TextArea,
     ButtonArea,
@@ -13,8 +15,8 @@ import {Button,
     Dialog,
     Checkbox,
     CellBody
-} from 'react-weui'
-const { Confirm } = Dialog
+} from 'react-weui';
+const { Confirm } = Dialog;
 import ShowAlert from '../../component/Alert.js'
 import SF from '../sidebar/SF';//省份
 import LB from '../sidebar/LB';//类别
@@ -25,7 +27,7 @@ import JB from '../sidebar/JB';//客户级别
 import XS from '../sidebar/XS';//线索
 import YT from '../sidebar/YT';//用途
 import ZB from '../sidebar/ZB';//战败原因
-import {Tool,Alert,AllMsgToast} from '../../tool.js'
+import {Tool,Alert,AllMsgToast} from '../../tool.js';
 class MsgDemo extends React.Component {
     constructor(props){
         super(props);
@@ -72,7 +74,7 @@ class MsgDemo extends React.Component {
                     }
                 ],
             },
-        }
+        };
         this.nameInput = (e) => {this.setState({name:e.target.value});}
         this.phoneInput = (e) => {
             let phs = e.target.value;
@@ -637,9 +639,9 @@ class MsgDemo extends React.Component {
                     onClose={() => this.setState({ZBrandoms:''})}/>
                 <ShowAlert />
             </div>
-        )
+        );
     }
-}
+};
 
 
 MsgDemo.contextTypes = {

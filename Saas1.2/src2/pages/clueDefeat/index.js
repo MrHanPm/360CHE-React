@@ -18,8 +18,8 @@ import {
     Button,
 } from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
+import './index.less';
 import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
-
 class Clues extends React.Component {
     constructor(){
         super();
@@ -43,7 +43,7 @@ class Clues extends React.Component {
             json.sessionid = Tool.SessionId.get();
         }
         json.nowpage = this.state.nowpage;
-        json.cluesstatus = 5;
+        json.cluesstatus = 4;
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -85,7 +85,7 @@ class Clues extends React.Component {
     }
     RobLine(e){
         let GAs = '无|' + e.target.title + '|无|无|';
-        Tool.gaTo('点击已成交中线索','点击已成交中线索',GAs);
+        Tool.gaTo('点击已战败中线索','点击已战败中线索',GAs);
         let clusUrl = window.location.hash.replace(/#/g,'');
         let goUrlclus = clusUrl.split("?");
         Tool.localItem('clueURl',goUrlclus[0]);
@@ -145,12 +145,12 @@ class Clues extends React.Component {
                                 <MediaBoxBody>
                                     <MediaBoxTitle>{e.realname}</MediaBoxTitle>
                                     <MediaBoxDescription>
-                                        {e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i>
+                                        {e.truckname}
                                     </MediaBoxDescription>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>
                                         <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>成交价格:{e.transactionprice}万元</MediaBoxInfoMeta>
+                                        <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
                                     </MediaBoxInfo>
                                 </MediaBoxBody>
                             </MediaBox>

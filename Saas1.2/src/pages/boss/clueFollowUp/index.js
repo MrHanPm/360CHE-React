@@ -1,6 +1,4 @@
-"use strict";
-
-import React,{Component} from 'react';
+import React,{Component} from 'react'
 import {
     Panel,
     PanelHeader,
@@ -16,10 +14,10 @@ import {
     ActionSheet,
     CellFooter,
     Button,
-} from 'react-weui';
-import {Tool,Alert} from '../../../tool.js';
+} from 'react-weui'
+import {Tool,Alert} from '../../../tool.js'
 import Foll from '../../sidebar/Foll';//筛选
-import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
+import {LoadAd,NoMor,NoDataS} from '../../../component/more.js'
 
 class Clues extends React.Component {
     constructor(){
@@ -31,6 +29,9 @@ class Clues extends React.Component {
            buycarnum:1,
            p:1,
            pf:0,
+           clueslevel:1,
+           submitdate:1,
+           reccount:0,
            s_sorttype:1,
            s_sortfield:'zh',
            FollV:'',
@@ -39,11 +40,12 @@ class Clues extends React.Component {
            loadPage:true,
            loadTimes:'',
         }
-        this.handleScroll = this.handleScroll.bind(this);
-        this.RobLine = this.RobLine.bind(this);
-        this.FilterS = this.FilterS.bind(this);
-        this.FOLL = this.FOLL.bind(this);
-        this.FollSidebar = this.FollSidebar.bind(this);
+        this.handleScroll = this.handleScroll.bind(this)
+        this.RobLine = this.RobLine.bind(this)
+        this.FilterS = this.FilterS.bind(this)
+        this.FOLL = this.FOLL.bind(this)
+        this.FollSidebar = this.FollSidebar.bind(this)
+        this.goSearchPage = this.goSearchPage.bind(this)
     }
     upDATA(){
         this.state.loadPage = false;
@@ -63,14 +65,15 @@ class Clues extends React.Component {
             json.s_followstatus = this.state.FollV.s_followstatus;//跟进状态
             json.s_follownummin = this.state.FollV.s_follownummin;//跟进次数
             json.s_follownummax = this.state.FollV.s_follownummax;
-            json.s_expectedbycarnummin = this.state.FollV.s_expectedbycarnummin;//台数开始
-            json.s_expectedbycarnummax = this.state.FollV.s_expectedbycarnummax;
+            // json.s_expectedbycarnummin = this.state.FollV.s_expectedbycarnummin;//台数开始
+            // json.s_expectedbycarnummax = this.state.FollV.s_expectedbycarnummax;
             json.s_lastlinktimemin = this.state.FollV.s_lastlinktimemin;//时间开始
             json.s_lastlinktimemax = this.state.FollV.s_lastlinktimemax;
             json.s_brandids = this.state.FollV.s_brandids;//品牌id
             json.s_clueslevel = this.state.FollV.s_clueslevel;//级别
             json.s_clueresource = this.state.FollV.s_clueresource;//线索
             json.s_cheliangyongtuid = this.state.FollV.s_cheliangyongtuid;//用途
+            json.s_followId = this.state.FollV.s_followId;
         }
         //console.log(json);
         Tool.get('Clues/GetCluesList.aspx',json,
@@ -94,11 +97,13 @@ class Clues extends React.Component {
                     let ConData = this.state.DATA.concat(res.listdata);
 
                     if(res.pagecount == page){
-                        this.setState({loadingS:false,DATA:ConData});
+                        this.setState({loadingS:false,DATA:ConData,reccount: res.reccount});
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page,DATA:ConData
+                            nowpage:page,
+                            DATA:ConData,
+                            reccount: res.reccount
                         });
                         this.state.loadPage = true;
                     }
@@ -116,8 +121,7 @@ class Clues extends React.Component {
     }
     FollSidebar(val){
         //console.log(val);
-        if(val.s_levelsetstatus.length == 0 && val.s_followstatus.length == 0 && val.s_brandids.length ==0 && val.s_clueslevel.length ==0 && val.s_cheliangyongtuid.length ==0 && val.s_clueresource.length ==0 && val.s_expectedbycarnummax == -1 &&
-            val.s_expectedbycarnummin == -1 && val.s_follownummax == -1 && val.s_follownummin == -1 && val.s_lastlinktimemin == '' && val.s_lastlinktimemax == ''){
+        if(val.s_levelsetstatus.length == 0 && val.s_followstatus.length == 0 && val.s_brandids.length ==0 && val.s_clueslevel.length ==0 && val.s_cheliangyongtuid.length ==0 && val.s_clueresource.length ==0 && s_followId == '' && val.s_follownummax == -1 && val.s_follownummin == -1 && val.s_lastlinktimemin == '' && val.s_lastlinktimemax == ''){
             this.setState({pf:0});
         }else{
             this.setState({pf:1});
@@ -128,33 +132,33 @@ class Clues extends React.Component {
         this.upDATA();
     }
     FilterS(e){
-        this.state.DATA=[];
-        this.state.nowpage=1;
+        this.state.DATA=[]
+        this.state.nowpage=1
         if(e.target.title == 'zh'){
-            this.state.p=1;
-            this.state.s_sortfield='zh';
-        }else if(e.target.title == 'follownum'){
-            this.state.p=2;
-            this.state.s_sortfield='follownum';
-            if(this.state.follownum == 2){
-                this.state.follownum=1;
-                this.state.s_sorttype=1;
+            this.state.p=1
+            this.state.s_sortfield='zh'
+        }else if(e.target.title == 'clueslevel'){
+            this.state.p=2
+            this.state.s_sortfield='clueslevel'
+            if(this.state.clueslevel == 2){
+                this.state.clueslevel=1
+                this.state.s_sorttype=1
             }else{
-                this.state.follownum=2;
-                this.state.s_sorttype=2;
+                this.state.clueslevel=2
+                this.state.s_sorttype=2
             }
-        }else if(e.target.title == 'buycarnum'){
-            this.state.p=3;
-            this.state.s_sortfield='buycarnum';
-            if(this.state.buycarnum == 2){
-                this.state.buycarnum=1;
-                this.state.s_sorttype=1;
+        }else if(e.target.title == 'submitdate'){
+            this.state.p=3
+            this.state.s_sortfield='submitdate'
+            if(this.state.submitdate == 2){
+                this.state.submitdate=1
+                this.state.s_sorttype=1
             }else{
-                this.state.buycarnum=2;
-                this.state.s_sorttype=2;
+                this.state.submitdate=2
+                this.state.s_sorttype=2
             }
         }
-        this.upDATA();
+        this.upDATA()
     }
     FOLL(){
         document.getElementById('Folls').setAttribute('class','PubSidebar visible');
@@ -172,7 +176,7 @@ class Clues extends React.Component {
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-85;
+      Hit  = window.screen.height-126;
       LastLi = BodyMin.scrollTop;
       //console.log(DataMin,Hit,LastLi);
       goNumb = DataMin - Hit - LastLi;
@@ -187,7 +191,11 @@ class Clues extends React.Component {
         }
       }
     }
+    goSearchPage(){
+        this.context.router.push({pathname: '/searchClue'});
+    }
     componentDidMount() {
+        this.props.hideS();
         this.upDATA();
     }
     componentWillUnmount(){
@@ -198,7 +206,7 @@ class Clues extends React.Component {
         XHRLIST = [];
     }
     render() {
-        const {loadingS, DATA,p,buycarnum,follownum,pf,isDatas} = this.state;
+        const {loadingS, DATA,p,submitdate,clueslevel,pf,isDatas,reccount} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
@@ -208,19 +216,20 @@ class Clues extends React.Component {
         }
         return (
         <div className="clueBody cluePend">
-            <ul className="FollNavs">
+            <div className="goSear" onClick={this.goSearchPage}>共{reccount}条 搜索姓名或手机号</div>
+            <ul className="FollNavs" style={{top: '86px'}}>
                 <li className={p==1?'active':''} title="zh" onClick={this.FilterS}>综合</li>
                 <li className={p==2?'FollNavCss active':'FollNavCss'}>
-                    <span title="follownum" onClick={this.FilterS}>跟进次数</span>
-                    <i className={follownum ==1?'acs':''}></i>
+                    <span title="clueslevel" onClick={this.FilterS}>客户级别</span>
+                    <i className={clueslevel ==1?'acs':''}></i>
                 </li>
                 <li className={p==3?'FollNavCss active':'FollNavCss'}>
-                    <span title="buycarnum" onClick={this.FilterS}>购买台数</span>
-                    <i className={buycarnum ==1?'acs':''}></i>
+                    <span title="submitdate" onClick={this.FilterS}>询价时间</span>
+                    <i className={submitdate ==1?'acs':''}></i>
                 </li>
                 <li className={pf?'FollNavCssf active':'FollNavCssf'} onClick={this.FOLL}>筛选</li>
             </ul>
-            <div className="clueBody clueFollo"  onScroll={this.handleScroll}>
+            <div className="clueBody clueFollo" style={{paddingTop: '81px'}} onScroll={this.handleScroll}>
                 {DATA.map(function(e,index){
                     return(
                     <Panel key={index}>
@@ -235,7 +244,7 @@ class Clues extends React.Component {
                                         {e.realname}
                                         <i className={e.nextvisitday ==0 ? 'reds' : ''}>{e.nextvisitlisttitle}</i>
                                     </MediaBoxTitle>
-                                    <MediaBoxDescription>{e.truckname}</MediaBoxDescription>
+                                    <MediaBoxDescription>{e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i></MediaBoxDescription>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>
                                         <MediaBoxInfoMeta>已跟进{e.follownum}次 最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>

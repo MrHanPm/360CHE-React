@@ -17,9 +17,8 @@ import {
     CellFooter,
     Button,
 } from 'react-weui';
-import {Tool,Alert} from '../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
-
+import {Tool,Alert} from '../../../tool.js';
+import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
 class Clues extends React.Component {
     constructor(){
         super();
@@ -27,7 +26,6 @@ class Clues extends React.Component {
            loadingS:true,
            nowpage:1,
            DATA:[],
-           isDatas:false,
            loadPage:true,
            loadTimes:'',
         }
@@ -43,7 +41,7 @@ class Clues extends React.Component {
             json.sessionid = Tool.SessionId.get();
         }
         json.nowpage = this.state.nowpage;
-        json.cluesstatus = 5;
+        json.cluesstatus = 4;
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -66,14 +64,13 @@ class Clues extends React.Component {
                     }else{
                         page++;
                         this.setState({
-                            nowpage:page,
-                            DATA:ConData
+                            nowpage:page,DATA:ConData
                         });
                         this.state.loadPage = true;
                     }
                 }else if(res.status == 901){
-                    alert(res.msg);
-                    this.context.router.push({pathname: '/loading'});
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -84,12 +81,7 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
-        let GAs = '无|' + e.target.title + '|无|无|';
-        Tool.gaTo('点击已成交中线索','点击已成交中线索',GAs);
-        let clusUrl = window.location.hash.replace(/#/g,'');
-        let goUrlclus = clusUrl.split("?");
-        Tool.localItem('clueURl',goUrlclus[0]);
-        let urlTxt = '/robClue?id=' + e.target.title;
+        let urlTxt = '/boss/robClue?id=' + e.target.title;
         this.context.router.push({pathname: urlTxt});
     }
     handleScroll(e){
@@ -112,7 +104,6 @@ class Clues extends React.Component {
       }
     }
     componentDidMount() {
-        this.props.hideS();
         this.upDATA();
     }
     componentWillUnmount(){
@@ -123,7 +114,7 @@ class Clues extends React.Component {
         XHRLIST = [];
     }
     render() {
-        const {loadingS, DATA,isDatas} = this.state;
+        const {loadingS,DATA,isDatas} = this.state;
         let self = this;
         let footerS;
         if(isDatas){
@@ -132,7 +123,7 @@ class Clues extends React.Component {
             footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
         }
         return (
-            <div className="clueBody clueAlre"  onScroll={this.handleScroll}>
+            <div className="clueBody clueAlre BossTitle"  onScroll={this.handleScroll}>
                 {DATA.map(function(e,index){
                     return(
                     <Panel key={index}>
@@ -143,14 +134,17 @@ class Clues extends React.Component {
                                     <CellFooter/>
                                 </MediaBoxHeader>
                                 <MediaBoxBody>
-                                    <MediaBoxTitle>{e.realname}</MediaBoxTitle>
+                                    <MediaBoxTitle>
+                                        {e.realname}
+                                        <i>{e.nextvisitlisttitle}</i>
+                                    </MediaBoxTitle>
                                     <MediaBoxDescription>
-                                        {e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i>
+                                        {e.truckname}
                                     </MediaBoxDescription>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>
                                         <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>成交价格:{e.transactionprice}万元</MediaBoxInfoMeta>
+                                        <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
                                     </MediaBoxInfo>
                                 </MediaBoxBody>
                             </MediaBox>

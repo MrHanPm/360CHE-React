@@ -17,8 +17,9 @@ import {
     CellFooter,
     Button,
 } from 'react-weui';
-import {Tool,Alert} from '../../tool.js';
-import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
+import {Tool,Alert} from '../../../tool.js';
+import {LoadAd,NoMor,NoDataS} from '../../../component/more.js';
+import './index.less';
 
 class Clues extends React.Component {
     constructor(){
@@ -67,13 +68,13 @@ class Clues extends React.Component {
                         page++;
                         this.setState({
                             nowpage:page,
-                            DATA:ConData
+                            DATA:ConData,
                         });
                         this.state.loadPage = true;
                     }
                 }else if(res.status == 901){
-                    alert(res.msg);
-                    this.context.router.push({pathname: '/loading'});
+                        alert(res.msg);
+                        this.context.router.push({pathname: '/loading'});
                 }else{
                     Alert.to(res.msg);
                 }
@@ -84,13 +85,15 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
-        let GAs = '无|' + e.target.title + '|无|无|';
-        Tool.gaTo('点击已成交中线索','点击已成交中线索',GAs);
-        let clusUrl = window.location.hash.replace(/#/g,'');
-        let goUrlclus = clusUrl.split("?");
-        Tool.localItem('clueURl',goUrlclus[0]);
-        let urlTxt = '/robClue?id=' + e.target.title;
+        let urlTxt = '/boss/robClue?id=' + e.target.title;
         this.context.router.push({pathname: urlTxt});
+    }
+    componentWillUnmount(){
+        clearTimeout(AlertTimeOut);
+        for(let i=0;i<XHRLIST.length;i++){
+            XHRLIST[i].abort();
+        }
+        XHRLIST = [];
     }
     handleScroll(e){
       let BodyMin = e.target;
@@ -112,15 +115,7 @@ class Clues extends React.Component {
       }
     }
     componentDidMount() {
-        this.props.hideS();
         this.upDATA();
-    }
-    componentWillUnmount(){
-        clearTimeout(AlertTimeOut);
-        for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].abort();
-        }
-        XHRLIST = [];
     }
     render() {
         const {loadingS, DATA,isDatas} = this.state;
@@ -132,7 +127,7 @@ class Clues extends React.Component {
             footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
         }
         return (
-            <div className="clueBody clueAlre"  onScroll={this.handleScroll}>
+            <div className="clueBody clueAlre BossTitle"  onScroll={this.handleScroll}>
                 {DATA.map(function(e,index){
                     return(
                     <Panel key={index}>
@@ -143,9 +138,12 @@ class Clues extends React.Component {
                                     <CellFooter/>
                                 </MediaBoxHeader>
                                 <MediaBoxBody>
-                                    <MediaBoxTitle>{e.realname}</MediaBoxTitle>
+                                    <MediaBoxTitle>
+                                        {e.realname}
+                                        <i>{e.nextvisitlisttitle}</i>
+                                    </MediaBoxTitle>
                                     <MediaBoxDescription>
-                                        {e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i>
+                                        {e.dealttruckname}
                                     </MediaBoxDescription>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>

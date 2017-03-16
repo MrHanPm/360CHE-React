@@ -19,6 +19,7 @@ import {
 } from 'react-weui'
 import './index.less'
 import {Tool,Alert} from '../../tool.js'
+import {SAASDEV} from '../../config.js'
 export default class MsgDemo extends React.Component {
     constructor(){
         super()
@@ -89,7 +90,7 @@ export default class MsgDemo extends React.Component {
                     </MediaBox>
                 </PanelBody>
             </Panel>
-            <Panel>
+            <Panel style={{display: showC || showR ? '' : 'none'}}>
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
@@ -134,6 +135,22 @@ export default class MsgDemo extends React.Component {
                                 <CellHeader><i className='findIcos'></i></CellHeader>
                                 <CellBody>
                                     <p>意见反馈</p>
+                                </CellBody>
+                                <CellFooter/>
+                            </Cell>
+                        </Cells>
+                    </MediaBox>
+                </PanelBody>
+            </Panel>
+
+            <Panel>
+                <PanelBody>
+                    <MediaBox type="small_appmsg">
+                        <Cells access>
+                            <Cell href={SAASDEV}>
+                                <CellHeader><i className='findIcos buys-icon'></i></CellHeader>
+                                <CellBody>
+                                    <p style={{color: '#DA242A'}}>车商城</p>
                                 </CellBody>
                                 <CellFooter/>
                             </Cell>

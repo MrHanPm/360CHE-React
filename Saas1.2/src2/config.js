@@ -26,12 +26,6 @@ const sessionid = '68990_bf138d96fc812d5f7c62309ec079718981338f71'
 // const sessionid = '36859_ec2b304e3ad9052eb463fd168bf978b34f7e3047';
 const devBug = false
 
-
-// export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
-
-export const SAASDEV =  'https://saasm.360che.com/carshop/index.html'
-
-
 //分享地址
 export const shareURL = 'http://dealersaas.m.360che.com/'
 

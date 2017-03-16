@@ -23,6 +23,9 @@ import ShowAlert from '../../component/Alert.js';
 import './index.less';
 
 export default class Clues extends React.Component {
+    static contextTypes = {
+        router: React.PropTypes.object.isRequired
+    }
     constructor(){
         super();
         this.state = {
@@ -175,8 +178,3 @@ export default class Clues extends React.Component {
         );
     }
 };
-
-Clues.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
-export default Clues

@@ -184,20 +184,8 @@ class CellDemo extends React.Component {
                     switch(res.status){
                         case 1:
                             let Vd = JSON.stringify(res.data);
+                            localStorage.clear();
                             Tool.localItem('vipLodData',Vd);
-                            Tool.removeLocalItem('okTel');
-                            Tool.removeLocalItem('okAZ');
-                            Tool.removeLocalItem('okTelFingerprint');
-                            Tool.removeLocalItem('noTel');
-                            Tool.removeLocalItem('noAZ');
-                            Tool.removeLocalItem('noTelFingerprint');
-                            Tool.removeLocalItem('coTel');
-                            Tool.removeLocalItem('coAZ');
-                            Tool.removeLocalItem('coTelFingerprint');
-                            Tool.removeLocalItem('reTel');
-                            Tool.removeLocalItem('reTelFingerprint');
-                            Tool.removeLocalItem('BrandKey');
-                            Tool.removeLocalItem('SearchData');
                             this.context.router.push({pathname:'/loaddata'});
                             return;
                         case 912 :
@@ -227,14 +215,14 @@ class CellDemo extends React.Component {
                             <Input type="number" placeholder="输入手机号" onInput={this.phoneInput} value={this.state.phone}/>
                         </CellBody>
                     </FormCell>
-                    <FormCell>
+                    <FormCell vcode={true} warn={this.state.iscode}>
                         <CellHeader>
                            <Label>图形码</Label>
                         </CellHeader>
                         <CellBody>
                              <Input type="number" placeholder="输入图形码" onInput={this.vcodeInput}/>
                         </CellBody>
-                        <CellFooter>
+                        <CellFooter onClick={this.getVcode}>
                             <Icon value="warn" />
                             <img src={this.state.vcodeSrc} />
                         </CellFooter>

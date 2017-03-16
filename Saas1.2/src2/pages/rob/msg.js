@@ -46,7 +46,7 @@ class Clues extends React.Component {
         return (
             <div className="contMesBox robMsgPd">
                 {footerS}
-                <pre className="robMsgTxt">{DATA}</pre>
+                <pre className="robMsgTxt">{DATA}</pre> 
                 <ShowAlert />
             </div>
         );

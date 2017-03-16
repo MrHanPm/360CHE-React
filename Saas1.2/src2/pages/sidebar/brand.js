@@ -21,10 +21,6 @@ class Sidebar extends React.Component{
       this.upDatas = this.upDatas.bind(this);
       this.Liclick = this.Liclick.bind(this);
     }
-    componentWillMount () {
-      let robSearchPPname = Tool.localItem('robSearchPPname') || ''
-      this.setState({brandname: robSearchPPname})
-    }
     componentDidMount(){
         let allbrandlist = JSON.parse(Tool.localItem('allbrandlist'));
         var AZ = [];
@@ -116,13 +112,12 @@ class Sidebar extends React.Component{
     }
     upDatas(e){
       //console.log(e.target,e.target.title);
-      let tit = e.target.title
-      let tname = e.target.innerHTML
+      let tit = e.target.title;
         this.setState({
           brandid:e.target.title,
           brandname: e.target.innerHTML,
           visible:false
-        }, ()=> this.props.onChange(tit,tname));
+        }, ()=> this.props.onChange(tit));
     }
     closeSold(){this.setState({visible:false}, () => this.props.onClose())}
     componentWillReceiveProps(nextProps) {

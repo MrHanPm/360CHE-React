@@ -1,4 +1,6 @@
-import React,{Component} from 'react'
+"use strict";
+
+import React,{Component} from 'react';
 import {
     Panel,
     PanelHeader,
@@ -14,14 +16,13 @@ import {
     ActionSheet,
     Button,
     Dialog,
-} from 'react-weui'
+} from 'react-weui';
 const {Confirm } = Dialog
-import Brand from '../sidebar/brand'   //品牌
-import LBA from '../sidebar/LBA'   //类型
-import {Tool, Alert} from '../../tool.js'
-import {LoadAd,NoMor,NoDataS} from '../../component/more.js'
-import SF from '../sidebar/SFA'    //省份
-import './index.less'
+import Brand from '../sidebar/brand';//品牌
+import {Tool, Alert} from '../../tool.js';
+import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
+import SF from '../sidebar/SFA';//省份
+import './index.less';
 import ShowAlert from '../../component/Alert.js'
 
 class Clues extends Component {
@@ -34,22 +35,16 @@ class Clues extends Component {
             brandid:'',
             SFCSrandoms:'',
             SFCSv:'',
-            LBASrandoms:'',
-            LBASv:'',
             size:'',
             nowpage:1,
+            isBuy: 0,
             DATA:[],
             isDatas:false,
             topnotice:'',
-            isBuy: 0,
             maxrobnum:'',
             todayrobnum:'',
             loadPage:true,
             loadTimes:'',
-
-            PPname:'',   // 头部品牌名称
-            LBname:'',   // 头部类别名称
-            DQname:'',   // 头部地区名称
 
 
             showAcom: false, // 显示线索处理规则
@@ -100,10 +95,8 @@ class Clues extends Component {
         this.showBrand = this.showBrand.bind(this)
         this.Alts = this.Alts.bind(this)
         this.SFCS = this.SFCS.bind(this)
-        this.LBAS = this.LBAS.bind(this)
         this.upBrand = this.upBrand.bind(this)
         this.upSF = this.upSF.bind(this)
-        this.upLBA = this.upLBA.bind(this)
         this.handleScroll = this.handleScroll.bind(this)
 
         this.payConfirm = this.payConfirm.bind(this)
@@ -111,39 +104,15 @@ class Clues extends Component {
         this.hideAcom = this.hideAcom.bind(this)
     }
     componentWillMount () {
-        let robSearchSF = JSON.parse(Tool.localItem('robSearchSF')) || ''
-        let robSearchPP = Tool.localItem('robSearchPP') || ''
-        let robSearchPPname = Tool.localItem('robSearchPPname') || ''
-        let robSearchLB = JSON.parse(Tool.localItem('robSearchLB')) || ''
+        let robSearchSF = JSON.parse(Tool.localItem('robSearchSF')) || '';
+        let robSearchPP = Tool.localItem('robSearchPP');
         // let robSearchPP = null
         // console.log(robSearchSF, 'robSearchSF');
         // console.log(robSearchPP, 'robSearchPP');
         if (robSearchSF.provincesn !== '' && typeof(robSearchSF.provincesn) !== 'undefined') {
-            this.setState({
-                SFCSv: robSearchSF,
-                DQname: robSearchSF.cityname.substring(0,4),
-            })
-        } else {
-            this.setState({
-                SFCSv: robSearchSF,
-                DQname:'',
-            })
+            this.state.SFCSv = robSearchSF;
         }
-        if (robSearchLB.values !== '' && typeof(robSearchLB.values) !== 'undefined') {
-            this.setState({
-                LBASv: robSearchLB,
-                LBname: robSearchLB.key.substring(0,4),
-            })
-        } else {
-            this.setState({
-                LBASv: '',
-                LBname: '',
-            })
-        }
-        this.setState({
-            brandid: robSearchPP,
-            PPname: robSearchPPname.substring(0,4),
-        })
+        this.state.brandid = robSearchPP;
     }
     Alts(){
         this.context.router.push({pathname: '/robMsg'})
@@ -151,13 +120,8 @@ class Clues extends Component {
     SFCS(){
         this.setState({SFCSrandoms: Math.random()})
     }
-    LBAS(){
-        this.setState({LBASrandoms: Math.random()})
-    }
-    upBrand(val,name){
-        this.setState({PPname: name.substring(0,4)})
+    upBrand(val){
         Tool.localItem('robSearchPP', val)
-        Tool.localItem('robSearchPPname', name)
         this.state.brandid = val;
         this.state.nowpage = 1
         this.state.DATA = []
@@ -165,23 +129,12 @@ class Clues extends Component {
         this.upDATA();
     }
     upSF(val){
-        let txt = JSON.stringify(val)
-        this.setState({DQname: val.cityname.substring(0,4)})
+        let txt = JSON.stringify(val);
         Tool.localItem('robSearchSF', txt)
         this.state.SFCSv = val;
         this.state.nowpage = 1;
         this.state.DATA = [];
         this.state.SFCSrandoms = ''
-        this.upDATA();
-    }
-    upLBA(val){
-        let txt = JSON.stringify(val)
-        this.setState({LBname: val.key.substring(0,4)})
-        Tool.localItem('robSearchLB', txt)
-        this.state.LBASv = val
-        this.state.nowpage = 1
-        this.state.DATA = []
-        this.state.LBASrandoms = ''
         this.upDATA();
     }
     upDATA(){
@@ -203,9 +156,6 @@ class Clues extends Component {
             json.provincesn = '';
             json.citysn = '';
         }
-        if (this.state.LBASv !== '' && typeof(this.state.LBASv.values) !== 'undefined') { 
-            json.subcategoryid = this.state.LBASv.values
-        } else { json.subcategoryid = ''}
         Tool.get('PublicClues/GetCluesList.aspx',json,
             (res) => {
                 if(res.listdata.length === 0){
@@ -229,8 +179,8 @@ class Clues extends Component {
                     if(res.pagecount === page){
                         this.setState({loadingS:false,
                             DATA:ConData,
-                            topnotice: res.topnotice,
                             isBuy: res.isbuyclues,
+                            topnotice: res.topnotice,
                             isshowclickmsg:res.isshowclickmsg
                         });
                     }else{
@@ -362,7 +312,7 @@ class Clues extends Component {
     }
     showBrand(){ this.setState({showBrands:Math.random()})}
     render() {
-        const {loadingS, DATA, topnotice,isDatas,payShow, payMsg, payTitle, payBtn,showAcom,alertShow,alertTitle,alertBtn, valShow, valBtn, valMsg, PPname, LBname, DQname, isBuy} = this.state
+        const {loadingS, DATA, topnotice,isDatas,payShow, payMsg, payTitle, payBtn,showAcom,alertShow,alertTitle,alertBtn, valShow, valBtn, valMsg, isBuy} = this.state
         let self = this
         let footerS
         if(isDatas){
@@ -373,9 +323,8 @@ class Clues extends Component {
         return (
             <div className="robBody">
                 <ul className="robNav">
-                    <li onClick={this.showBrand}>{PPname == '' ? '品牌' : PPname}</li>
-                    <li onClick={this.LBAS}>{LBname == '' ? '类别' : LBname}</li>
-                    <li onClick={this.SFCS}>{DQname == '' ? '地区' : DQname}</li>
+                    <li onClick={this.showBrand}>品牌</li>
+                    <li onClick={this.SFCS}>地区</li>
                 </ul>
                 <div className="robMsg">
                     <p>{topnotice}</p>
@@ -427,12 +376,10 @@ class Clues extends Component {
                     {valMsg}
                 </Confirm>
 
-                <Brand Datas={this.state.showBrands}  onChange={(val,name) => this.upBrand(val,name)} 
+                <Brand Datas={this.state.showBrands}  onChange={val => this.upBrand(val)} 
                     onClose={() => this.setState({showBrands:''})}/>
                 <SF Datas={this.state.SFCSrandoms} onChange={val => this.upSF(val)} 
                     onClose={() => this.setState({SFCSrandoms:''})}/>
-                <LBA Datas={this.state.LBASrandoms} onChange={val => this.upLBA(val)} 
-                    onClose={() => this.setState({LBASrandoms:''})}/>
             </div>
         );
     }

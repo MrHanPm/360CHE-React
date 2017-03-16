@@ -145,7 +145,7 @@ class Clues extends React.Component {
                                 <MediaBoxBody>
                                     <MediaBoxTitle>{e.realname}</MediaBoxTitle>
                                     <MediaBoxDescription>
-                                        {e.truckname}
+                                        {e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i>
                                     </MediaBoxDescription>
                                     <MediaBoxInfo>
                                         <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>

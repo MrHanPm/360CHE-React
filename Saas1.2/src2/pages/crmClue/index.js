@@ -19,8 +19,10 @@ import {
 } from 'react-weui';
 import {Tool,Alert} from '../../tool.js';
 import {LoadAd,NoMor,NoDataS} from '../../component/more.js';
+import ShowAlert from '../../component/Alert.js';
+import './index.less';
 
-class Clues extends React.Component {
+export default class Clues extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -34,6 +36,7 @@ class Clues extends React.Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.RobLine = this.RobLine.bind(this);
     }
+
     upDATA(){
         this.state.loadPage = false;
         let json={};
@@ -43,7 +46,7 @@ class Clues extends React.Component {
             json.sessionid = Tool.SessionId.get();
         }
         json.nowpage = this.state.nowpage;
-        json.cluesstatus = 5;
+        json.customerid = Tool.getQueryString('id');
         Tool.get('Clues/GetCluesList.aspx',json,
             (res) => {
                 if(res.status == 1){
@@ -84,19 +87,21 @@ class Clues extends React.Component {
         )
     }
     RobLine(e){
-        let GAs = '无|' + e.target.title + '|无|无|';
-        Tool.gaTo('点击已成交中线索','点击已成交中线索',GAs);
-        let clusUrl = window.location.hash.replace(/#/g,'');
-        let goUrlclus = clusUrl.split("?");
-        Tool.localItem('clueURl',goUrlclus[0]);
-        let urlTxt = '/robClue?id=' + e.target.title;
+        let oldData = JSON.parse(Tool.localItem('vipLodData'));
+        let urlTxt;
+        if(oldData.usercategory == "2"){
+            urlTxt = '/boss/robClue?id=' + e.target.title;
+        }
+        if(oldData.usercategory == "1"){
+            urlTxt = '/robClue?id=' + e.target.title;
+        }
         this.context.router.push({pathname: urlTxt});
     }
     handleScroll(e){
       let BodyMin = e.target;
       let DataMin,Hit,LastLi,goNumb;
       DataMin = BodyMin.scrollHeight;
-      Hit  = window.screen.height-55;
+      Hit  = window.screen.height;
       LastLi = BodyMin.scrollTop;
       goNumb = DataMin - Hit - LastLi;
       if(goNumb <= 0){
@@ -112,15 +117,20 @@ class Clues extends React.Component {
       }
     }
     componentDidMount() {
-        this.props.hideS();
+        // document.title="联系人线索列表";
+        // var body = document.getElementsByTagName('body')[0];
+        // var iframe = document.createElement("iframe");
+        // iframe.style.display="none";
+        // iframe.setAttribute("src", "//m.360che.com/favicon.ico");
+        // var d = function() {
+        //   setTimeout(function() {
+        //     iframe.removeEventListener('load', d);
+        //     document.body.removeChild(iframe);
+        //   }, 0);
+        // };
+        // iframe.addEventListener('load', d);
+        // document.body.appendChild(iframe);
         this.upDATA();
-    }
-    componentWillUnmount(){
-        clearTimeout(AlertTimeOut);
-        for(let i=0;i<XHRLIST.length;i++){
-            XHRLIST[i].abort();
-        }
-        XHRLIST = [];
     }
     render() {
         const {loadingS, DATA,isDatas} = this.state;
@@ -129,36 +139,38 @@ class Clues extends React.Component {
         if(isDatas){
             footerS = <NoDataS />;
         }else{
-            footerS = loadingS ? <LoadAd DATA={DATA.length>0?false:true}/> : <NoMor />;
+            footerS = loadingS ? <LoadAd /> : <NoMor />;
         }
         return (
-            <div className="clueBody clueAlre"  onScroll={this.handleScroll}>
-                {DATA.map(function(e,index){
-                    return(
-                    <Panel key={index}>
-                        <PanelBody>
-                            <MediaBox className="Follov" title={e.cluesextendid} onClick={self.RobLine}></MediaBox>
-                            <MediaBox type="text">
-                                <MediaBoxHeader>
-                                    <CellFooter/>
-                                </MediaBoxHeader>
-                                <MediaBoxBody>
-                                    <MediaBoxTitle>{e.realname}</MediaBoxTitle>
-                                    <MediaBoxDescription>
-                                        {e.truckname} <i style={{color: '#F44336'}}>{e.clueaddsourcename}</i>
-                                    </MediaBoxDescription>
-                                    <MediaBoxInfo>
-                                        <MediaBoxInfoMeta style={{display: e.saleprice > 0 ? '' : 'none'}}>{e.saleprice}元</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
-                                        <MediaBoxInfoMeta>成交价格:{e.transactionprice}万元</MediaBoxInfoMeta>
-                                    </MediaBoxInfo>
-                                </MediaBoxBody>
-                            </MediaBox>
-                        </PanelBody>
-                    </Panel>
-                    )})
-                }
-                {footerS}
+            <div className="clueBody clueDef crmCols"  onScroll={this.handleScroll}>
+                <div className="CrmScoll">
+                    {DATA.map(function(e,index){
+                        return(
+                        <Panel key={index}>
+                            <PanelBody>
+                                <MediaBox className="Follov" title={e.cluesextendid} onClick={self.RobLine}></MediaBox>
+                                <MediaBox type="text">
+                                    <MediaBoxHeader>
+                                        <CellFooter/>
+                                    </MediaBoxHeader>
+                                    <MediaBoxBody>
+                                        <MediaBoxTitle>{e.realname}</MediaBoxTitle>
+                                        <MediaBoxDescription>
+                                            {e.truckname}
+                                        </MediaBoxDescription>
+                                        <MediaBoxInfo>
+                                            <MediaBoxInfoMeta>最后跟进:{e.lastlinktime}</MediaBoxInfoMeta>
+                                            <MediaBoxInfoMeta>线索来源:{e.clueresourcename}</MediaBoxInfoMeta>
+                                        </MediaBoxInfo>
+                                    </MediaBoxBody>
+                                </MediaBox>
+                            </PanelBody>
+                        </Panel>
+                        )})
+                    }
+                    {footerS}
+                </div>
+                <ShowAlert />
             </div>
         );
     }
