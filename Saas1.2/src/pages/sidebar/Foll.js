@@ -19,18 +19,18 @@ class Sidebar extends React.Component{
             isBoos: false,
             YG:[],
 
-            s_levelsetstatus:[],//级别状态
-            s_followstatus:[],//跟进状态
-            s_follownummin:-1,//跟进次数
-            s_follownummax:-1,
+            's_levelsetstatus':[],//级别状态
+            's_followstatus':[],//跟进状态
+            's_follownummin':-1,//跟进次数
+            's_follownummax':-1,
             // s_expectedbycarnummin:-1,//台数开始
             // s_expectedbycarnummax:-1,
-            s_lastlinktimemin:'',//时间开始
-            s_lastlinktimemax:'',
-            s_brandids:[],//品牌id
-            s_clueslevel:[],//级别
-            s_clueresource:[],//线索
-            s_cheliangyongtuid:[],//用途
+            's_lastlinktimemin':'',//时间开始
+            's_lastlinktimemax':'',
+            's_brandids':[],//品牌id
+            's_clueslevel':[],//级别
+            's_clueresource':[],//线索
+            's_cheliangyongtuid':[],//用途
             SCH:0,
             PP:[],
             LY:[],

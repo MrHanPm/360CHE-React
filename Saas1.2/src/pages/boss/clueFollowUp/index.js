@@ -195,7 +195,6 @@ class Clues extends React.Component {
         this.context.router.push({pathname: '/searchClue'});
     }
     componentDidMount() {
-        this.props.hideS();
         this.upDATA();
     }
     componentWillUnmount(){
