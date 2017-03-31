@@ -28,6 +28,7 @@ export default class MsgDemo extends React.Component {
             showC: false
         }
         this.Ga = this.Ga.bind(this)
+        this.GaCar = this.GaCar.bind(this)
     }
     componentWillMount(){
         let oldData = JSON.parse(localStorage.getItem('vipLodData')) || null
@@ -61,6 +62,9 @@ export default class MsgDemo extends React.Component {
     }
     Ga(){
        Tool.gaTo('点击进入抢线索页面','发现-速抢线索','');
+    }
+    GaCar(){
+       Tool.gaTo('点击车商城入口','发现页','');
     }
     render() {
         let {showR, showC} = this.state
@@ -147,10 +151,10 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href={SAASDEV}>
+                            <Cell href={SAASDEV} onClick={this.GaCar}>
                                 <CellHeader><i className='findIcos buys-icon'></i></CellHeader>
                                 <CellBody>
-                                    <p style={{color: '#DA242A'}}>车商城</p>
+                                    <p style={{color: '#DA242A'}}> 车商城</p>
                                 </CellBody>
                                 <CellFooter/>
                             </Cell>
