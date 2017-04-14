@@ -139,12 +139,12 @@ class Clues extends React.Component {
         )
     }
     hidePayConfm (){
-        this.setState({payShow: false,valShow: false})
+        this.setState({payShow: false,valShow: false,branLin:[]})
         let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
         Tool.gaTo('购买线索-点击放弃购买','待处理的线索',GAs)
     }
     hideValConfm (){
-        this.setState({valShow: false,payShow: false})
+        this.setState({valShow: false,payShow: false,branLin:[]})
         Tool.gaTo('充值流程','点击暂不充值','余额不足弹窗')
     }
     RADIO (e) {
@@ -186,6 +186,7 @@ class Clues extends React.Component {
             Tool.get('Clues/GetCluesPayInfo.aspx',json,
                 (res) => {
                     if (res.status == '1') {
+                        let ccnm
                         if (ele.dataset.type == 'DATA') {
                             this.setState({
                                 payMsg: this.state.DATA[ele.dataset.id].truckname,
@@ -197,10 +198,17 @@ class Clues extends React.Component {
                                 shearName: this.state.TJRO[ele.dataset.id].clueresourcename
                             })
                         }
+
+                        for(let ssc in res.data.brandlist){
+                            if(res.data.brandlist[ssc].canuse == 1){
+                                ccnm = res.data.brandlist[ssc].brandid
+                            }
+                        }
+
                         this.setState({
                             payShow: true,
                             branLin: res.data.brandlist,
-                            banid: res.data.brandlist[0].brandid,
+                            banid: ccnm,
                             isGore: res.data.gorecharge,
                             freeavailablerobnum: res.data.freeavailablerobnum,
                             payTitle: `¥ ${ele.dataset.pay}`,
@@ -241,7 +249,7 @@ class Clues extends React.Component {
         Tool.gaTo('充值流程','点击前去充值','余额不足弹窗')
     }
     RobLine(sruo){
-        this.setState({payShow: false})
+        this.setState({payShow: false,branLin:[]})
         let clusUrl = window.location.hash.replace(/#/g,'')
         let goUrlclus = clusUrl.split("?")
         Tool.localItem('clueURl',goUrlclus[0])
@@ -297,7 +305,7 @@ class Clues extends React.Component {
         )
     }
     MyRobLine(sruo){
-        this.setState({payShow: false})
+        this.setState({payShow: false,branLin:[]})
         let sessionid
         if(typeof(Tool.SessionId) == 'string'){
             sessionid= Tool.SessionId
@@ -438,9 +446,10 @@ class Clues extends React.Component {
                 <Form style={{marginTop: 0}} radio>
                 {branLin.map( (db,index) => 
                     <FormCell key={index} radio>
-                        <CellBody style={{display: db.canuse == '0' ? '' : 'none'}}>{db.accountname}（剩余¥{db.availablebalance}）<br/>余额不足</CellBody>
-                        <CellBody style={{display: db.canuse == '0' ? 'none' : '',color: db.canuse == '0' ? null : '#333'}}>{db.accountname}（剩余¥{db.availablebalance}）</CellBody>
-                        <Radio name="radiopay" value={db.brandid} onChange={this.RADIO} disabled={db.canuse == '0' ? true : false} defaultChecked={index == '0' && db.canuse == '1' ? true : false}/>
+                        <CellBody style={{display: db.canuse == 0 ? '' : 'none'}}>{db.accountname}（剩余¥{db.availablebalance}）<br/>余额不足</CellBody>
+                        <CellBody style={{display: db.canuse == 0 ? 'none' : '',color: db.canuse == '0' ? null : '#333'}}>{db.accountname}（剩余¥{db.availablebalance}）</CellBody>
+
+                        <Radio name="radiopay" value={db.brandid} onChange={this.RADIO} disabled={db.canuse == 0 ? true : false} defaultChecked={db.canuse == 1 ? true : false}/>
                     </FormCell>
                 )}
                 </Form>
@@ -461,6 +470,7 @@ class Clues extends React.Component {
         );
     }
 };
+
 class NoDataS extends Component{
   render(){
     return(

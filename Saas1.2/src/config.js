@@ -18,7 +18,7 @@ export const getWxConfig = {
     }
 }
 
-const sessionid = '70115_62d2be4431a177fa3306e495a37a915ceafd8c32'
+const sessionid = '70115_3282bd2c074efd399e40e67ab9841ad85454db81'
 
 // const sessionid = '70060_9958dc332841b0fe7bfff51ab99b518140df24c2'
 
@@ -41,7 +41,7 @@ export const SessionId = devBug ? sessionid : sessidS
 
 // export const target = devBug ? 'https://didi.360che.com/saas/' : 'https://didi.360che.com/saas/'
 // export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
-export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.360che.com/api/'
+export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.kcimg.cn/api/'
 //https://didi.360che.com/saas/
 //https://saasm.360che.com/api/
 

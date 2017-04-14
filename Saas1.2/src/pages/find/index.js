@@ -148,7 +148,7 @@ export default class MsgDemo extends React.Component {
                             <Cell href={SAASDEV} onClick={this.GaCar}>
                                 <CellHeader><i className='findIcos buys-icon'></i></CellHeader>
                                 <CellBody>
-                                    <p style={{color: '#DA242A'}}> 车商城</p>
+                                    <p style={{color: '#DA242A'}}> &nbsp;&nbsp;车商城</p>
                                 </CellBody>
                                 <CellFooter/>
                             </Cell>

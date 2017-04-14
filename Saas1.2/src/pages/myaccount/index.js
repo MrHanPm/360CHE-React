@@ -243,7 +243,7 @@ class MsgDemo extends React.Component {
                 </div>
             </div>
         </div>
-            <Confirm title="充值说明" buttons={valBtn} show={valShow}>
+            <Confirm title="用户充值协议" buttons={valBtn} show={valShow}>
                 <pre style={preStyle}>{valMsg}</pre>
             </Confirm>
         </div>
