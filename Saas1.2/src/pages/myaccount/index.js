@@ -200,7 +200,7 @@ class MsgDemo extends React.Component {
                 </Form>
             </div>
             <div className="weui_cells" style={{marginTop: '10px'}}>
-                <div className="weui_cell">
+                <div className="weui_cell" style={{display: givenPay > 0 ? '' : 'none'}}>
                     <div className="weui_cell_bd we_txt_left">赠送</div>
                     <div className="weui_cell_ft we_txt_right"><i>{givenPay}</i>元</div>
                 </div>

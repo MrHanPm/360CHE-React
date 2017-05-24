@@ -272,12 +272,12 @@ class Clues extends Component {
         )
     }
     hidePayConfm (){
-        this.setState({payShow: false})
+        this.setState({payShow: false,valShow: false,branLin:[]})
         let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
         Tool.gaTo('购买线索-点击放弃购买','抢线索页的线索',GAs)
     }
     hideValConfm (){
-        this.setState({valShow: false})
+        this.setState({valShow: false,payShow: false,branLin:[]})
         Tool.gaTo('充值流程','点击暂不充值','余额不足弹窗')
     }
     payConfirm (e) {
@@ -340,7 +340,7 @@ class Clues extends Component {
         Tool.gaTo('充值流程','点击前去充值','余额不足弹窗')
     }
     RobLine(sruo){
-        this.setState({payShow: false})
+        this.setState({payShow: false,branLin:[]})
         let sessionid
         if(typeof(Tool.SessionId) == 'string'){
             sessionid= Tool.SessionId

@@ -29,7 +29,9 @@ const devBug = false
 
 // export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
 
-export const SAASDEV =  'https://saasm.360che.com/carshop/index.html'
+// export const SAASDEV =  'https://saasm.360che.com/carshop/index.html'
+
+export const SAASDEV =  'https://saasm.kcimg.cn/carshop/index.html'
 
 
 
