@@ -17,7 +17,8 @@ import {
     CellBody,
     CellFooter
 } from 'react-weui'
-
+import {Tool} from '../../../tool.js'
+import {SAASDEV} from '../../../config.js'
 export default class MsgDemo extends React.Component {
     constructor(){
         super()
@@ -25,6 +26,9 @@ export default class MsgDemo extends React.Component {
             showR: false,
             showC: false
         }
+    }
+    GaCar(){
+       Tool.gaTo('点击车商城入口','老板账号发现页','');
     }
     componentWillMount(){
         let oldData = JSON.parse(localStorage.getItem('vipLodData')) || null
@@ -108,7 +112,7 @@ export default class MsgDemo extends React.Component {
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="https://didi.360che.com/saas/CC_CAR/index.html">
+                            <Cell href={SAASDEV} onClick={this.GaCar}>
                                 <CellHeader><i className='findIcos buys-icon'></i></CellHeader>
                                 <CellBody>
                                     <p style={{color: '#DA242A'}}>车商城</p>

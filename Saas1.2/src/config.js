@@ -18,7 +18,7 @@ export const getWxConfig = {
     }
 }
 
-const sessionid = '70115_3282bd2c074efd399e40e67ab9841ad85454db81'
+const sessionid = '41958_9c5ab605e2fd07abe0ed87922e9e46f8abd7250b'
 
 // const sessionid = '70060_9958dc332841b0fe7bfff51ab99b518140df24c2'
 
@@ -27,11 +27,11 @@ const sessionid = '70115_3282bd2c074efd399e40e67ab9841ad85454db81'
 const devBug = false
 
 
-// export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
+export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
 
 // export const SAASDEV =  'https://saasm.360che.com/carshop/index.html'
 
-export const SAASDEV =  'https://saasm.kcimg.cn/carshop/index.html'
+// export const SAASDEV =  'https://saasm.kcimg.cn/carshop/index.html'
 
 
 
@@ -41,9 +41,9 @@ export const shareURL = 'http://dealersaas.m.360che.com/'
 
 export const SessionId = devBug ? sessionid : sessidS
 
-// export const target = devBug ? 'https://didi.360che.com/saas/' : 'https://didi.360che.com/saas/'
+export const target = devBug ? 'https://didi.360che.com/saas/' : 'https://didi.360che.com/saas/'
 // export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
-export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.kcimg.cn/api/'
+// export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.kcimg.cn/api/'
 //https://didi.360che.com/saas/
 //https://saasm.360che.com/api/
 
