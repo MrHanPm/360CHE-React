@@ -21,6 +21,7 @@ import MdfPwd from './pages/mdfPwd/index'
 import AddPwd from './pages/addPwd/index'
 import Rob from './pages/rob/index'
 import RobClue from './pages/robClue/index'
+import RobBuy from './pages/robClue/buy'
 import AddClue from './pages/addClue/index'
 import AlterClue from './pages/alterClue/index'
 import AddPursue from './pages/addPursue/index'
@@ -89,6 +90,7 @@ ReactDOM.render((
 
             <Route path="addClue" component={AddClue}/>
             <Route path="robClue" component={RobClue}/>
+            <Route path="robBuy" component={RobBuy}/>
             <Route path="crmClue" component={CrmClue}/>
             <Route path="detailTel" component={DetailTel}/>
             <Route path="addPursue" component={AddPursue}/>

@@ -32,6 +32,8 @@ import JB from '../sidebar/JB';//客户级别
 import XS from '../sidebar/XS';//线索
 import YT from '../sidebar/YT';//用途
 import ZB from '../sidebar/ZB';//战败原因
+import DK from '../sidebar/DK';//贷款
+import BL from '../sidebar/BL';//贷款比例
 import {Tool,Alert,AllMsgToast} from '../../tool.js';
 import './index.less';
 class MsgDemo extends React.Component {
@@ -66,6 +68,10 @@ class MsgDemo extends React.Component {
             CLYTv:'',
             ZBrandoms:'',
             ZBv:'',
+            DKrandoms:'',
+            DKv:'',
+            BLrandoms:'',
+            BLv:'',
             name:'',
             phone:'',
             numb:0,
@@ -74,6 +80,7 @@ class MsgDemo extends React.Component {
             pay:'',
             faildate:'',
             id:'',
+            expcar:'',
             Checkboxs:'',
             showConfirm: false,
             linkCRM:false,
@@ -97,6 +104,8 @@ class MsgDemo extends React.Component {
         }
         this.msgInput = (e) => {this.setState({msg:e.target.value
         });}
+        this.expInput = (e) => {this.setState({expcar:e.target.value
+        });}
         this.dealInput = (e) => {this.setState({dealdate:e.target.value
         });}
         this.payInput = this.payInput.bind(this);
@@ -118,6 +127,8 @@ class MsgDemo extends React.Component {
         this.XSLY = this.XSLY.bind(this);
         this.CLYT = this.CLYT.bind(this);
         this.ZB = this.ZB.bind(this);
+        this.DKV = this.DKV.bind(this);
+        this.BLV = this.BLV.bind(this);
         this.onSaves = this.onSaves.bind(this);
     }
     payInput(e){
@@ -187,10 +198,19 @@ class MsgDemo extends React.Component {
                 values:RobClueVal.fail,
                 key:RobClueVal.failname
             },
+            DKv: {
+                values:RobClueVal.isloan,
+                key:RobClueVal.isloanname
+            },
+            BLv: {
+                values:RobClueVal.loanproportion,
+                key:RobClueVal.loanproportioname
+            },
             name:RobClueVal.realname,
             phone:RobClueVal.tel,
             numb:RobClueVal.expectedbycarnum,
             msg:RobClueVal.remark,
+            expcar:RobClueVal.expectedtimecar,
             dealdate:RobClueVal.dealtdate.replace(/\//g,'-'),
             faildate:RobClueVal.faildate.replace(/\//g,'-'),
         });
@@ -321,6 +341,12 @@ class MsgDemo extends React.Component {
     });}
     ZB(){this.setState({
         ZBrandoms: Math.random()
+    });}
+    DKV(){this.setState({
+        DKrandoms: Math.random()
+    });}
+    BLV(){this.setState({
+        BLrandoms: Math.random()
     });}
     showConfirm(){this.setState({showConfirm: true});}
     hideConfirm(){this.setState({showConfirm: false});}
@@ -483,7 +509,17 @@ class MsgDemo extends React.Component {
             }else{
                 json.addday = this.state.KHJBv.addday;
             }
-
+            if(this.state.DKv == '' || typeof(this.state.DKv.key) == 'undefined'){
+                json.isloan = '';
+            }else{
+                json.isloan = this.state.DKv.values;
+            }
+            if(this.state.BLv == '' || typeof(this.state.BLv.key) == 'undefined'){
+                json.loanproportion = '';
+            }else{
+                json.loanproportion = this.state.BLv.values;
+            }
+            json.expectedtimecar = this.state.expcar;
             json.isrelationcustomer = this.state.Checkboxs;
             json.remark = this.state.msg;
             json.expectedbycarnum = this.state.numb;
@@ -512,22 +548,7 @@ class MsgDemo extends React.Component {
         }
     }
     render() {
-        let CPLBval;
-        let QCPPval;
-        let QCXLval;
-        let QCCXval;
-
-        let DCPLBval;
-        let DQCPPval;
-        let DQCXLval;
-        let DQCCXval;
-        let SFCSval;
-        let KHJBval;
-        let XSLYval;
-        let CLYTval;
-        let ZBval;
-        let showDeal = false;
-        let showFail = false;
+        let CPLBval,QCPPval,QCXLval,QCCXval,DCPLBval,DQCPPval,DQCXLval,DQCCXval,SFCSval,KHJBval,XSLYval,CLYTval,ZBval,DKval,BLval,showDeal = false,showFail = false;
         if(this.state.CPLBv !== '' && this.state.CPLBv.subcategoryname !== ''){
              CPLBval = this.state.CPLBv.subcategoryname;
         }else{
@@ -599,7 +620,17 @@ class MsgDemo extends React.Component {
         }else{
             ZBval = '';
         }
-        const {name,phone,pay,dealdate,faildate,msg,XSLYv,linkCRM}=this.state;
+        if(this.state.DKv !== '' && this.state.DKv.key !== ''){
+             DKval = this.state.DKv.key;
+        }else{
+            DKval = '';
+        }
+        if(this.state.BLv !== '' && this.state.BLv.key !== ''){
+             BLval = this.state.BLv.key;
+        }else{
+            BLval = '';
+        }
+        const {name,phone,pay,dealdate,faildate,msg,XSLYv,linkCRM,expcar}=this.state;
         let numb;
         if(this.state.numb == '0'){
             numb=''
@@ -691,23 +722,46 @@ class MsgDemo extends React.Component {
                         </CellBody>
                         <CellFooter />
                     </Cell>
-                    <Cell>
-                        <CellHeader><Label>车辆用途</Label></CellHeader>
-                        <CellBody onClick={this.CLYT}>
-                            <Input type="text" placeholder="请选择车辆用途" value={CLYTval} disabled={true}/>
-                        </CellBody>
-                        <CellFooter />
-                    </Cell>
                 </Cells>
 
                 <Form>
                     <FormCell>
-                        <CellHeader><Label>购车数量</Label></CellHeader>
+                        <CellHeader><Label>拟购台数</Label></CellHeader>
                         <CellBody>
                             <Input type="number" placeholder="请填写购车数量"onInput={this.numbInput} value={numb}/>
                         </CellBody>
                         <CellFooter />
                     </FormCell>
+                    <FormCell>
+                        <CellHeader><Label>购车时间</Label></CellHeader>
+                        <CellBody>
+                            <Input type="text" placeholder="请填写预计购车时间"onInput={this.expInput} value={expcar}/>
+                        </CellBody>
+                        <CellFooter />
+                    </FormCell>
+                    <Cells style={{marginTop:'0'}} access>
+                        <Cell>
+                            <CellHeader><Label>是否贷款</Label></CellHeader>
+                            <CellBody onClick={this.DKV}>
+                                <Input type="text" placeholder="请选择是否贷款" value={DKval} disabled={true}/>
+                            </CellBody>
+                            <CellFooter />
+                        </Cell>
+                        <Cell style={{display: DKval == '不贷款' || DKval == '未知' ? 'none' : ''}}>
+                            <CellHeader><Label>贷款比例</Label></CellHeader>
+                            <CellBody onClick={this.BLV}>
+                                <Input type="text" placeholder="请选择贷款比例" value={BLval} disabled={true}/>
+                            </CellBody>
+                            <CellFooter />
+                        </Cell>
+                        <Cell>
+                            <CellHeader><Label>车辆用途</Label></CellHeader>
+                            <CellBody onClick={this.CLYT}>
+                                <Input type="text" placeholder="请选择车辆用途" value={CLYTval} disabled={true}/>
+                            </CellBody>
+                            <CellFooter />
+                        </Cell>
+                    </Cells>
                     <div className="showDeal" style={{'display':showDeal ? 'block':'none'}}>
                         <Cells access>
                             <Cell>
@@ -816,6 +870,10 @@ class MsgDemo extends React.Component {
                     onClose={() => this.setState({CLYTrandoms:''})}/>
                 <ZB Datas={this.state.ZBrandoms} onChange={val => this.setState({ZBv: val,ZBrandoms:''})} 
                     onClose={() => this.setState({ZBrandoms:''})}/>
+                <DK Datas={this.state.DKrandoms} onChange={val => this.setState({DKv: val,DKrandoms:''})} 
+                    onClose={() => this.setState({DKrandoms:''})}/>
+                <BL Datas={this.state.BLrandoms} onChange={val => this.setState({BLv: val,BLrandoms:''})} 
+                    onClose={() => this.setState({BLrandoms:''})}/>
 
                 <DLB Drandoms={this.state.DcPLBrandoms} onChange={val => this.setState({DcPLBv: val,DcPLBrandoms:'',DqCPPv:'',DqCXLv:'',DqCCXv:''})} 
                     onClose={() => this.setState({DcPLBrandoms:''})}/>

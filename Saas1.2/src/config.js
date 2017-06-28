@@ -41,8 +41,8 @@ export const shareURL = 'http://dealersaas.m.360che.com/'
 
 export const SessionId = devBug ? sessionid : sessidS
 
-export const target = devBug ? 'https://didi.360che.com/saas/' : 'https://didi.360che.com/saas/'
-// export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
+// export const target = devBug ? 'https://didi.360che.com/saas/' : 'https://didi.360che.com/saas/'
+export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
 // export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.kcimg.cn/api/'
 //https://didi.360che.com/saas/
 //https://saasm.360che.com/api/

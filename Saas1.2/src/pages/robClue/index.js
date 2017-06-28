@@ -110,31 +110,7 @@ class MsgDemo extends React.Component {
             }
         )
     }
-    //CoLines(e){
-        // let json={};
-        // if(typeof(Tool.SessionId) == 'string'){
-        //     json.sessionid = Tool.SessionId;
-        // }else{
-        //     json.sessionid = Tool.SessionId.get();
-        // }
-        // json.cluesextendid = e.target.title;
-        // Tool.get('Clues/AddCluesCallTel.aspx',json,
-        //     (res) => {
-        //         if(res.status == 1){
-        //         }else if(res.status == 901){
-        //             alert(res.msg);
-        //             this.context.router.push({pathname: '/loading'});
-        //         }else{
-        //             Alert.to(res.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         Alert.to('请求超时，稍后重试。。');
-        //     }
-        // );
-        // let comId = e.target.getAttribute('data-id');
-        // console.log(comId);
-    //}
+
     componentWillMount(){
         let persId = Tool.getQueryString('id');
         let json={};
@@ -146,7 +122,7 @@ class MsgDemo extends React.Component {
         }
         json.sessionid = sessionid;
         json.cluesextendid = persId;
-        Tool.get('Clues/GetCluesDetail.aspx',json,
+        Tool.get('Clues/GetEditCluesInfo.aspx',json,
             (res) => {
                 if(res.status == 1){
                     let dataRobClues = JSON.stringify(res.data)
@@ -262,19 +238,13 @@ class MsgDemo extends React.Component {
         )
     }
     render() {
-        let loadShow=true;
-        let self = this;
-        if(this.state.DATArob !== '' && typeof(this.state.DATArob.realname) !== 'undefined'){
-             
-        }else{
-            
-        }
-        const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm,showBtns} = this.state;
-        const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,customid} = this.state.DATArob;
-        if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
-        //如果电话号码不为纯数字，隐藏拨打电话icon
+        const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm,showBtns,DATArob} = this.state
+        let loadShow = true
+        let self = this
+        if(DATArob.tel !== '' && typeof(DATArob.tel) !== 'undefined'){loadShow = false;}
+        // 如果电话号码不为纯数字，隐藏拨打电话icon
         let telHidden = true;
-        if(/^\d+$/.test(tel)){
+        if(/^\d+$/.test(DATArob.tel)){
             telHidden = true;
         }else{
             telHidden = false;
@@ -286,133 +256,196 @@ class MsgDemo extends React.Component {
                         <FormCell>
                             <CellHeader><Label>意向车型</Label></CellHeader>
                             <CellBody>
-                                {truckname}
+                                {DATArob.truckname}
                             </CellBody>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>客户姓名</Label></CellHeader>
                             <CellBody>
-                                {realname}
+                                {DATArob.realname}
                             </CellBody>
-                            <CellFooter className={linkCrm?'cleAddAft':''} title={cluesextendid} style={{'display':clilinkCrm?'':'none'}} onClick={this.addCRM}/>
+                            <CellFooter className={DATArob.linkCrm?'cleAddAft':''} title={DATArob.cluesextendid} style={{'display':DATArob.clilinkCrm?'':'none'}} onClick={this.addCRM}/>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>客户电话</Label></CellHeader>
                             <CellBody>
-                                {tel}
+                                {DATArob.tel}
                             </CellBody>
                             <CellFooter className="cleAft" style={{'display': telHidden ? 'block' : 'none'}}>
-                                <a href={`tel:${tel}`} title={cluesextendid} data-id={customid}> </a>
+                                <a href={`tel:${DATArob.tel}`} title={DATArob.cluesextendid} data-id={DATArob.customid}> </a>
                             </CellFooter>
                         </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>提车地区</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.provincename +' '+DATArob.cityname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>询价时间</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.cluecreatedatetime}
+                            </CellBody>
+                        </FormCell>
                     </Form>
-                    <Form style={{'display':showDonwn?'block':'none'}}>
+                    <Form>
+                        <FormCell style={{'display':DATArob.expectedbycarnum != '' ?'':'none'}}>
+                            <CellHeader><Label>拟购台数</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.expectedbycarnum}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.isloanname != '' ?'':'none'}}>
+                            <CellHeader><Label>是否贷款</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.isloanname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader><Label>首付比例</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.loanproportioname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.cleanclueslevel > 0 && DATArob.expectedtimecar != ''?'':'none'}}>
+                            <CellHeader><Label>购车时间</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.expectedtimecar}
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <Form style={{'display':showDonwn?'':'none'}}>
+                        <FormCell style={{'display':DATArob.identitys != '' ?'':'none'}}>
+                            <CellHeader><Label>卡友身份</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.identitys}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.comparetruckname != '' ?'':'none'}}>
+                            <CellHeader><Label>对比车型</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.comparetruckname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.cheliangyongtuname != '' ?'':'none'}}>
+                            <CellHeader><Label>购车用途</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.cheliangyongtuname}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.consideration1 != '' ?'':'none'}}>
+                            <CellHeader><Label>考虑因素</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.consideration1}
+                            </CellBody>
+                        </FormCell>
+                        
+                        <FormCell style={{'display':DATArob.consideration2 != '' ?'':'none'}}>
+                            <CellHeader><Label>其他因素</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.consideration2}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.potential != '' ?'':'none'}}>
+                            <CellHeader><Label>购车倾向</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.potential}
+                            </CellBody>
+                        </FormCell>
+                        <FormCell style={{'display':DATArob.isbuysecondcar != '' ?'':'none'}}>
+                            <CellHeader><Label>二手车</Label></CellHeader>
+                            <CellBody>
+                                {DATArob.isbuysecondcar}
+                            </CellBody>
+                        </FormCell>
                         <FormCell>
                             <CellHeader><Label>所属类别</Label></CellHeader>
                             <CellBody>
-                                {subcategoryname}
+                                {DATArob.subcategoryname}
                             </CellBody>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>所属品牌</Label></CellHeader>
                             <CellBody>
-                                {brandname}
+                                {DATArob.brandname}
                             </CellBody>
                         </FormCell>
                         <FormCell>
                             <CellHeader><Label>所属系列</Label></CellHeader>
                             <CellBody>
-                                {seriesname}
+                                {DATArob.seriesname}
                             </CellBody>
                         </FormCell>
-                        <FormCell>
+                        <FormCell style={{'display':DATArob.clueslevelname != '' ?'':'none'}}>
                             <CellHeader><Label>客户级别</Label></CellHeader>
                             <CellBody>
-                                {clueslevelname}
+                                {DATArob.clueslevelname}
                             </CellBody>
                         </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>省份城市</Label></CellHeader>
-                            <CellBody>
-                                {provincename +' '+cityname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
+                        <FormCell style={{'display':DATArob.clueresourcename != '' ?'':'none'}}>
                             <CellHeader><Label>线索来源</Label></CellHeader>
                             <CellBody>
-                                {clueresourcename}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>车辆用途</Label></CellHeader>
-                            <CellBody>
-                                {cheliangyongtuname}
-                            </CellBody>
-                        </FormCell>
-                        <FormCell>
-                            <CellHeader><Label>购车数量</Label></CellHeader>
-                            <CellBody>
-                                {expectedbycarnum}
+                                {DATArob.clueresourcename}
                             </CellBody>
                         </FormCell>
 
-                        <Form style={{'display':clueslevel == 5?'block':'none'}}>
+                        <Form style={{'display':DATArob.clueslevel == 5?'block':'none'}}>
                             <FormCell>
                                 <CellHeader><Label>成交车型</Label></CellHeader>
                                 <CellBody>
-                                    {dealttruckname}
+                                    {DATArob.dealttruckname}
                                 </CellBody>
                             </FormCell>
                             <FormCell>
                                 <CellHeader><Label>成交类别</Label></CellHeader>
                                 <CellBody>
-                                    {dealtsubcategoryname}
+                                    {DATArob.dealtsubcategoryname}
                                 </CellBody>
                             </FormCell>
                             <FormCell>
                                 <CellHeader><Label>成交品牌</Label></CellHeader>
                                 <CellBody>
-                                    {dealtbrandname}
+                                    {DATArob.dealtbrandname}
                                 </CellBody>
                             </FormCell>
                             <FormCell>
                                 <CellHeader><Label>成交系列</Label></CellHeader>
                                 <CellBody>
-                                    {dealtseriesname}
+                                    {DATArob.dealtseriesname}
                                 </CellBody>
                             </FormCell>
                             <FormCell>
                                 <CellHeader><Label>成交价格</Label></CellHeader>
                                 <CellBody>
-                                    {transactionprice}
+                                    {DATArob.transactionprice}
                                 </CellBody>
                                 <CellFooter className="cleAft">万元</CellFooter>
                             </FormCell>
                             <FormCell>
                                 <CellHeader><Label>成交时间</Label></CellHeader>
                                 <CellBody>
-                                    {dealtdate}
+                                    {DATArob.dealtdate}
                                 </CellBody>
                             </FormCell>
                         </Form>
-                        <Form style={{'display':clueslevel == 6?'block':'none'}}>
+                        <Form style={{'display':DATArob.clueslevel == 6?'block':'none'}}>
                             <FormCell>
                                 <CellHeader><Label>战败原因</Label></CellHeader>
                                 <CellBody>
-                                    {failname}
+                                    {DATArob.failname}
                                 </CellBody>
                             </FormCell>
                             <FormCell>
                                 <CellHeader><Label>战败时间</Label></CellHeader>
                                 <CellBody>
-                                    {faildate}
+                                    {DATArob.faildate}
                                 </CellBody>
                             </FormCell>
                         </Form>
-                        <FormCell>
+                        <FormCell style={{'display':DATArob.remark != '' ?'':'none'}}>
                             <CellHeader><Label>备注</Label></CellHeader>
                             <CellBody>
-                                <pre>{remark}</pre>
+                                <pre>{DATArob.remark}</pre>
                             </CellBody>
                         </FormCell>
                     </Form>
@@ -437,13 +470,13 @@ class MsgDemo extends React.Component {
                     </div>
                 </div>
                 <ul className="FollBtn" style={{'display':showBtns?'none':'block'}}>
-                  <li title={cluesextendid} onClick={this.showConfirm}>放弃这条线索</li>
-                  <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
+                  <li title={DATArob.cluesextendid} onClick={this.showConfirm}>放弃这条线索</li>
+                  <li title={DATArob.cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
                 </ul>
                 <ul className="FollBtn Rightrob" style={{'display':showBtns?'block':'none'}}>
-                  <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
+                  <li title={DATArob.cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
                 </ul>
-                <span className="ChengClues" title={cluesextendid} onClick={this.goChengs}></span>
+                <span className="ChengClues" title={DATArob.cluesextendid} onClick={this.goChengs}></span>
                 <Confirm title={this.state.confirm.title} buttons={this.state.confirm.buttons} show={this.state.showConfirm}>
                 </Confirm>
                 <Confirm title={this.state.AlertCfmTitle} buttons={this.state.AlertCfmButtons} show={this.state.showAlertCfm}>
