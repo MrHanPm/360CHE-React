@@ -27,7 +27,7 @@ class MsgDemo extends React.Component {
             DATArob:'',
             Messrob:[],
             reccount:0,
-            showBtns: true,
+            showBtns: false,
             showConfirm: false,
             showDonwn:true,
             linkCrm:true,
@@ -157,7 +157,7 @@ class MsgDemo extends React.Component {
                     if (res.infomsg.length > 5) {
                         this.setState({
                             DATArob:res.data,
-                            showAlertCfm:true,
+                            // showAlertCfm:true,
                             AlertCfmTitle: res.infomsg,
                         })
                     } else {
@@ -270,7 +270,7 @@ class MsgDemo extends React.Component {
             
         }
         const {showDonwn,reccount,Messrob,linkCrm,clilinkCrm,showBtns} = this.state;
-        const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,customid} = this.state.DATArob;
+        const {truckname,realname,tel,subcategoryname,brandname,seriesname,clueslevelname,provincename,cityname,clueresourcename,cheliangyongtuname,expectedbycarnum,remark,dealttruckname,dealtsubcategoryname,dealtbrandname,dealtseriesname,transactionprice,dealtdate,failname,faildate,clueslevel,follownum,cluesextendid,customid,iscangiveup} = this.state.DATArob;
         if(tel !== '' && typeof(tel) !== 'undefined'){loadShow = false;}
         //如果电话号码不为纯数字，隐藏拨打电话icon
         let telHidden = true;
@@ -436,11 +436,11 @@ class MsgDemo extends React.Component {
                         </dl>
                     </div>
                 </div>
-                <ul className="FollBtn" style={{'display':showBtns?'none':'block'}}>
+                <ul className="FollBtn" style={{'display': iscangiveup ==0 ? 'none':''}}>
                   <li title={cluesextendid} onClick={this.showConfirm}>放弃这条线索</li>
                   <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
                 </ul>
-                <ul className="FollBtn Rightrob" style={{'display':showBtns?'block':'none'}}>
+                <ul className="FollBtn Rightrob" style={{'display': iscangiveup ==0 ? '':'none'}}>
                   <li title={cluesextendid} onClick={this.addPursue}>添加跟进记录</li>
                 </ul>
                 <span className="ChengClues" title={cluesextendid} onClick={this.goChengs}></span>

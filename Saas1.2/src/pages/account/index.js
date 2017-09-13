@@ -178,14 +178,7 @@ class MsgDemo extends React.Component {
                             <em className="findIcos account-type-icon"></em>
                         </CellFooter>
                     </FormCell>
-                    <FormCell style={{display: this.state.isGyoubao?'':'none'}}>
-                        <CellHeader>
-                            <Label>加油包剩余</Label>
-                        </CellHeader>
-                        <CellBody>
-                            <Input type="tel" placeholder="" disabled={true} value={this.state.comePackage}/>
-                        </CellBody>
-                    </FormCell>
+                    
                 </Form>
                 <Cells style={{'display':ishavingpwd=='0'?'none':''}} access>
                     <Cell href="#mdfPwd">
@@ -218,3 +211,14 @@ MsgDemo.contextTypes = {
 }
 
 export default MsgDemo 
+
+
+
+// <FormCell style={{display: this.state.isGyoubao?'':'none'}}>
+//     <CellHeader>
+//         <Label>加油包剩余</Label>
+//     </CellHeader>
+//     <CellBody>
+//         <Input type="tel" placeholder="" disabled={true} value={this.state.comePackage}/>
+//     </CellBody>
+// </FormCell>

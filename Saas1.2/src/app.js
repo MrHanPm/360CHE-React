@@ -37,6 +37,7 @@ import RobMsg from './pages/rob/msg'
 import Search from './pages/searchbar/index'
 import SearchClue from './pages/searchbar/clue'
 import MyAcut from './pages/myaccount/index'
+import MyClues from './pages/myaccount/cluespage'
 import MyAcutMsg from './pages/myaccount/msg'
 
 import BosNav from './pages/boss/nav/index'
@@ -93,6 +94,7 @@ ReactDOM.render((
             <Route path="detailTel" component={DetailTel}/>
             <Route path="addPursue" component={AddPursue}/>
             <Route path="myacut" component={MyAcut}/>
+            <Route path="myclues" component={MyClues}/>
             <Route path="mamsg" component={MyAcutMsg}/>
 
             <Route path="boss/robClue(/:name)" component={BosRobClue}/>

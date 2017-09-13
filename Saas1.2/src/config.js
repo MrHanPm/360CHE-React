@@ -18,7 +18,7 @@ export const getWxConfig = {
     }
 }
 
-const sessionid = '45742_7bbcd8684f2b93b8158a23e924a3970439044ab5'
+const sessionid = '41970_237bb41d9bebb4912273487f2114a0e03bdf66cc'
 
 // const sessionid = '70060_9958dc332841b0fe7bfff51ab99b518140df24c2'
 
@@ -27,12 +27,10 @@ const sessionid = '45742_7bbcd8684f2b93b8158a23e924a3970439044ab5'
 const devBug = false
 
 
-export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
+// export const SAASDEV = 'https://didi.360che.com/saas/CC_CAR/index.html'
 
-// export const SAASDEV =  'https://saasm.360che.com/carshop/index.html'
 
-// export const SAASDEV =  'https://saasm.kcimg.cn/carshop/index.html'
-
+export const SAASDEV =  'https://saasm.360che.com.cn/carshop/index.html'
 
 
 
@@ -42,10 +40,11 @@ export const shareURL = 'http://dealersaas.m.360che.com/'
 export const SessionId = devBug ? sessionid : sessidS
 
 // export const target = devBug ? 'https://didi.360che.com/saas/' : 'https://didi.360che.com/saas/'
-// export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/';
-export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.kcimg.cn/api/'
-//https://didi.360che.com/saas/
-//https://saasm.360che.com/api/
+
+// export const target = devBug ? 'http://192.168.0.247:804/' : 'https://didi.360che.com/saas/'
+
+export const target = devBug ? 'http://192.168.0.247:804/' : 'https://saasm.360che.com.cn/api/'
+
 
 /*本地存储数据名称表(Tool.localItem)
 jsSDK
@@ -58,8 +57,7 @@ jsSDK
 //fingerprint          初始指纹包
 //
 // SearchData   储存所有联系人信息
-
-// robSearchSF    公共池搜索记忆
+qe/ robSearchSF    公共池搜索记忆
 // robSearchPP    公共池搜索记忆
 
 crm储存区

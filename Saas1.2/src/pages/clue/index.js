@@ -29,7 +29,7 @@ class Clues extends React.Component {
             tab:0,
             show: false,
             red:false,
-            showBtns:false,
+            showBtns:false
         }
         this.show = this.show.bind(this);
     }

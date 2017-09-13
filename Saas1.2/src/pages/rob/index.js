@@ -158,7 +158,7 @@ class Clues extends Component {
         })
     }
     Alts(){
-        this.setState({valShow:true})
+        this.setState({valShow: false})
         // this.context.router.push({pathname: '/robMsg'})
     }
     SFCS(){
@@ -282,55 +282,55 @@ class Clues extends Component {
     }
     payConfirm (e) {
         let GAs = this.state.shearName+'|' + this.state.payId + '|无|无'
-        let sessionid
-        const ele = e.target
-        let json = {}
+        // let sessionid
+        // const ele = e.target
+        // let json = {}
         this.setState({typeTitle:e.target.dataset.type})
         Tool.gaTo('购买线索-点击线索价格','抢线索页的线索',GAs)
 
-        if (this.state.isshowclickmsg == '1') {
-            if(typeof(Tool.SessionId) == 'string'){
-                sessionid= Tool.SessionId
-            }else{
-                sessionid = Tool.SessionId.get()
-            }
-            json.sessionid = sessionid
-            json.paycluestype = 1
-            json.maincluesid = e.target.title
-            json.saleprice = e.target.dataset.pay
-            Tool.get('Clues/GetCluesPayInfo.aspx',json,
-                (res) => {
-                    if (res.status == '1') {
-                        this.setState({
-                            payShow: true,
-                            payMsg: this.state.DATA[ele.dataset.id].truckname,
-                            shearName: this.state.DATA[ele.dataset.id].clueresourcename,
-                            banid: res.data.brandlist[0].brandid,
-                            branLin: res.data.brandlist,
-                            isGore: res.data.gorecharge,
-                            freeavailablerobnum: res.data.freeavailablerobnum,
-                            payTitle: `¥ ${ele.dataset.pay}`,
-                            payId: ele.title,
-                            payPay: ele.dataset.pay
-                        })
-                    } else {
-                        this.setState({
-                            alertTitle: res.msg,
-                            alertShow: true
-                        })
-                    }
-                },
-                (err) => {
-                    Alert.to('请求超时，稍后重试。。')
-                }
-            )
-        } else {
-            this.state.payId = e.target.title
-            this.state.payPay = e.target.dataset.pay
-            Tool.gaTo('普通抢线索','抢线索页的线索',GAs)
-            this.state.shearName = this.state.DATA[e.target.dataset.id].clueresourcename
-            this.RobLine(2)
-        }
+        // if (this.state.isshowclickmsg == '1') {
+        //     if(typeof(Tool.SessionId) == 'string'){
+        //         sessionid= Tool.SessionId
+        //     }else{
+        //         sessionid = Tool.SessionId.get()
+        //     }
+        //     json.sessionid = sessionid
+        //     json.paycluestype = 1
+        //     json.maincluesid = e.target.title
+        //     json.saleprice = e.target.dataset.pay
+        //     Tool.get('Clues/GetCluesPayInfo.aspx',json,
+        //         (res) => {
+        //             if (res.status == '1') {
+        //                 this.setState({
+        //                     payShow: false,
+        //                     payMsg: this.state.DATA[ele.dataset.id].truckname,
+        //                     shearName: this.state.DATA[ele.dataset.id].clueresourcename,
+        //                     banid: res.data.brandlist[0].brandid,
+        //                     branLin: res.data.brandlist,
+        //                     isGore: res.data.gorecharge,
+        //                     freeavailablerobnum: res.data.freeavailablerobnum,
+        //                     payTitle: `¥ ${ele.dataset.pay}`,
+        //                     payId: ele.title,
+        //                     payPay: ele.dataset.pay
+        //                 })
+        //             } else {
+        //                 this.setState({
+        //                     alertTitle: res.msg,
+        //                     alertShow: true
+        //                 })
+        //             }
+        //         },
+        //         (err) => {
+        //             Alert.to('请求超时，稍后重试。。')
+        //         }
+        //     )
+        // } else {
+        this.state.payId = e.target.title
+        this.state.payPay = e.target.dataset.pay
+        Tool.gaTo('普通抢线索','抢线索页的线索',GAs)
+        this.state.shearName = this.state.DATA[e.target.dataset.id].clueresourcename
+        this.RobLine(2)
+        // }
     }
     showAcom () {this.setState({showAcom: true})}
     hideAcom () {this.setState({showAcom: false})}
@@ -375,7 +375,7 @@ class Clues extends Component {
                     if (res.errcode == '1000') {
                         this.setState({
                             valMsg: res.msg,
-                            valShow: true
+                            valShow: false
                         })
                         return false
                     }

@@ -24,8 +24,10 @@ export default class MsgDemo extends React.Component {
         super()
         this.state = {
             showR: false,
-            showC: false
+            showC: false,
+            showK: false
         }
+        this.GaCar = this.GaCar.bind(this)
     }
     GaCar(){
        Tool.gaTo('点击车商城入口','老板账号发现页','');
@@ -41,12 +43,15 @@ export default class MsgDemo extends React.Component {
                     if(oldData.permission[i].key == 'cluespage' && oldData.permission[i].value == '1'){
                         this.setState({showC: true})
                     }
+                    if(oldData.permission[i].key == 'chuespage' && oldData.permission[i].value == '1'){
+                        this.setState({showK: true})
+                    }
                 }
             }
         }
     }
     render() {
-        let {showR, showC} = this.state
+        let {showR, showC, showK} = this.state
         return (
         <div className="findBodys findBoxs">
             <Panel>
@@ -64,18 +69,18 @@ export default class MsgDemo extends React.Component {
                     </MediaBox>
                 </PanelBody>
             </Panel>
-            <Panel style={{display: showC || showR ? '' : 'none'}}>
+            <Panel style={{display: showC || showR || showK ? '' : 'none'}}>
                 <PanelBody>
                     <MediaBox type="small_appmsg">
                         <Cells access>
-                            <Cell href="#clueBag" style={{display: showC?'':'none'}}>
-                                <CellHeader><i className='findIcos clue-bag'></i></CellHeader>
-                                <CellBody>
-                                    <p>线索加油包</p>
-                                </CellBody>
-                                <CellFooter />
-                            </Cell>
                             <Cell href="#myacut" style={{display: showR?'':'none'}}>
+                                <CellHeader><i className='findIcos star-icon'></i></CellHeader>
+                                <CellBody>
+                                    <p>我的账户</p>
+                                </CellBody>
+                                <CellFooter/>
+                            </Cell>
+                            <Cell href="#myclues" style={{display: showK?'':'none'}}>
                                 <CellHeader><i className='findIcos star-icon'></i></CellHeader>
                                 <CellBody>
                                     <p>我的账户</p>
